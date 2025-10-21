@@ -1,0 +1,11 @@
+[[redirects]]
+  from = "https://cozyswap.netlify.app/*"
+  to = "https://cozyswap.net/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "http://cozyswap.netlify.app/*"
+  to = "https://cozyswap.net/:splat"
+  status = 301
+  force = true
