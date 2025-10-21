@@ -1,5 +1,8 @@
 User-agent: *
-Allow: /
-Allow: /.well-known/
+Disallow: /
 
-Sitemap: https://cozyswap1.github.io/Cozyswap/sitemap.xml
+# Allow cozyswap.net
+User-agent: *
+Allow: /
+Host: cozyswap.net
+Sitemap: https://cozyswap.net/sitemap.xml
