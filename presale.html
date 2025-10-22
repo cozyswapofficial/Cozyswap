@@ -1,0 +1,619 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>CozySwap Presale — Buy COZY</title>
+
+<!-- Ethers.js UMD -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.1/ethers.umd.min.js"></script>
+
+<style>
+  :root{
+    --bg:#07060a;
+    --card:#0f1116;
+    --muted:#9aa0a6;
+    --accent1:#6c63ff;
+    --accent2:#00c6ff;
+    --glass: rgba(255,255,255,0.03);
+    --success:#10b981;
+    --danger:#ef4444;
+  }
+
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    min-height:100vh;
+    background: radial-gradient(1200px 600px at 10% 10%, rgba(108,99,255,0.08), transparent 6%),
+                radial-gradient(1000px 400px at 90% 90%, rgba(0,198,255,0.04), transparent 8%),
+                var(--bg);
+    color:#e6eef8;
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:12px;
+    max-width:1100px;
+    margin:20px auto;
+    padding:12px;
+  }
+
+  .brand{
+    display:flex;
+    gap:12px;
+    align-items:center;
+  }
+
+  .logo{
+    width:48px;height:48px;border-radius:10px;object-fit:cover;border:1px solid rgba(255,255,255,0.04);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.02);
+  }
+
+  .brand .title{font-weight:700;font-size:18px}
+  .brand .subtitle{font-size:12px;color:var(--muted);margin-top:-4px}
+
+  .wallet-btn{
+    background:linear-gradient(90deg,var(--accent1),var(--accent2));
+    padding:10px 14px;border-radius:10px;border:none;color:white;font-weight:600;
+    cursor:pointer;box-shadow:0 6px 18px rgba(108,99,255,0.12);
+  }
+  .wallet-btn.small{padding:6px 10px;font-size:13px}
+
+  /* Main container */
+  .container{
+    max-width:1100px;
+    margin:18px auto;
+    padding:20px;
+  }
+
+  .grid{
+    display:grid;
+    grid-template-columns: 1fr;
+    gap:20px;
+  }
+
+  @media(min-width:1000px){
+    .grid{grid-template-columns: 1fr 420px}
+  }
+
+  /* Card */
+  .card{
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border-radius:14px;padding:18px;border:1px solid rgba(255,255,255,0.03);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+  }
+
+  /* Presale header */
+  .presale-header{display:flex;justify-content:space-between;align-items:center;gap:12px}
+  .price-row{display:flex;gap:12px;flex-wrap:wrap}
+  .price-pill{background:linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:8px 10px;border-radius:10px;font-size:13px;border:1px solid rgba(255,255,255,0.03)}
+  .muted{color:var(--muted);font-size:13px}
+  .big{font-size:22px;font-weight:700}
+
+  /* Progress */
+  .progress-wrap{margin-top:12px}
+  .progress-bar{
+    width:100%;height:14px;background:rgba(255,255,255,0.03);border-radius:999px;overflow:hidden;border:1px solid rgba(255,255,255,0.03)
+  }
+  .progress-fill{
+    height:100%;width:0%;background:linear-gradient(90deg,var(--accent1),var(--accent2));border-radius:999px;transition:width .8s ease;
+  }
+  .progress-meta{display:flex;justify-content:space-between;font-size:13px;margin-top:8px;color:var(--muted)}
+
+  /* Tabs */
+  .tabs{display:flex;gap:8px;margin-top:18px}
+  .tab{flex:1;padding:10px;border-radius:10px;background:transparent;border:1px solid transparent;color:var(--muted);cursor:pointer;text-align:center;font-weight:600}
+  .tab.active{background: linear-gradient(90deg, rgba(108,99,255,0.06), rgba(0,198,255,0.03));border:1px solid rgba(108,99,255,0.14);color:white;box-shadow:0 8px 20px rgba(12,12,20,0.6)}
+
+  /* Buy form */
+  .form-row{display:flex;gap:8px;margin-top:12px}
+  .input{
+    flex:1;padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit;font-size:16px;
+  }
+  .input:focus{outline:none;box-shadow:0 6px 18px rgba(108,99,255,0.06);border-color:rgba(108,99,255,0.16)}
+  .buy-btn{
+    padding:12px 14px;border-radius:10px;border:none;background:linear-gradient(90deg,var(--success), #059669);color:white;font-weight:700;cursor:pointer;
+    box-shadow:0 10px 30px rgba(16,185,129,0.08);
+  }
+  .buy-btn[disabled]{opacity:0.45;cursor:not-allowed;transform:none}
+
+  .info-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+  .info-box{padding:10px;border-radius:10px;background:rgba(255,255,255,0.01);border:1px solid rgba(255,255,255,0.02);font-size:13px}
+
+  .claim-box{margin-top:12px;padding:12px;border-radius:10px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.03)}
+  .claim-btn{padding:10px 12px;border-radius:10px;border:none;background:linear-gradient(90deg,var(--accent1),var(--accent2));color:white;font-weight:700;cursor:pointer}
+
+  footer{max-width:1100px;margin:18px auto;padding:12px;color:var(--muted);display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+  .socials a{color:var(--muted);margin-right:10px;text-decoration:none;font-weight:600}
+  .small{font-size:12px;color:var(--muted)}
+
+  /* tiny */
+  .center{display:flex;align-items:center;justify-content:center}
+  .hidden{display:none}
+  .badge{font-size:12px;padding:6px 8px;border-radius:8px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.03)}
+</style>
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <img class="logo" id="logoImg" src="https://photos.pinksale.finance/file/pinksale-logo-upload/1760207026339-3c980e075709984d5362d951f45695a5.png" alt="Cozy"/>
+      <div>
+        <div class="title">CozySwap Presale</div>
+        <div class="subtitle muted">Cozy Token (COZY) • Plasma 9745</div>
+      </div>
+    </div>
+
+    <div>
+      <button id="connectWallet" class="wallet-btn small">Connect Wallet</button>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="grid">
+      <!-- Left: main card -->
+      <div class="card">
+        <div class="presale-header">
+          <div>
+            <div class="big">CozySwap Genesis Presale</div>
+            <div class="muted" id="presaleStatus">Status: Not Active</div>
+          </div>
+
+          <div class="price-row">
+            <div class="price-pill">Presale Price: <strong>0.001 XPL / COZY</strong></div>
+            <div class="price-pill">Live Price: <strong>0.005 XPL</strong></div>
+            <div class="price-pill">Rate: <strong>1 XPL = 1000 COZY</strong></div>
+          </div>
+        </div>
+
+        <div class="progress-wrap">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div class="muted">Raised</div>
+            <div class="muted small">Softcap: 25,000 XPL • Hardcap: 50,000 XPL</div>
+          </div>
+
+          <div class="progress-bar" aria-hidden="true" style="margin-top:8px">
+            <div id="progressFill" class="progress-fill" style="width:0%"></div>
+          </div>
+
+          <div class="progress-meta">
+            <div><strong id="raisedDisplay">325</strong> XPL</div>
+            <div class="muted" id="capDisplay">/ 50,000 XPL</div>
+          </div>
+        </div>
+
+        <div style="margin-top:14px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+          <div class="badge">Network: Plasma (ChainId: 9745)</div>
+          <div class="muted" id="countdownArea">Presale not active</div>
+        </div>
+
+        <div class="tabs" role="tablist" aria-label="Presale tabs">
+          <div id="tabBuy" class="tab active" role="tab">Buy COZY</div>
+          <div id="tabClaim" class="tab" role="tab">Claim COZY</div>
+        </div>
+
+        <!-- BUY TAB -->
+        <div id="buyTab">
+          <div class="form-row">
+            <input id="amountInput" class="input" inputmode="numeric" pattern="[0-9]*" placeholder="Amount in XPL (integer only, min 1, max 1000)" />
+            <button id="buyBtn" class="buy-btn">Buy COZY</button>
+          </div>
+
+          <div style="margin-top:10px;color:var(--muted);font-size:13px">
+            You will receive: <strong id="willReceive">— COZY</strong>
+          </div>
+
+          <div class="info-grid">
+            <div class="info-box">
+              <div class="muted">Soft Cap</div>
+              <div style="font-weight:700">25,000 XPL</div>
+            </div>
+            <div class="info-box">
+              <div class="muted">Hard Cap</div>
+              <div style="font-weight:700">50,000 XPL</div>
+            </div>
+            <div class="info-box">
+              <div class="muted">Presale Price</div>
+              <div style="font-weight:700">0.001 XPL</div>
+            </div>
+            <div class="info-box">
+              <div class="muted">Total Raised</div>
+              <div style="font-weight:700"><span id="raisedSmall">325</span> XPL</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CLAIM TAB -->
+        <div id="claimTab" class="hidden">
+          <div class="claim-box">
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <div>
+                <div class="muted">Claimable Tokens</div>
+                <div style="font-weight:700;font-size:18px" id="claimableDisplay">— COZY</div>
+              </div>
+              <div>
+                <button id="claimBtn" class="claim-btn" disabled>Claim Tokens</button>
+              </div>
+            </div>
+
+            <div style="margin-top:10px;color:var(--muted);font-size:13px">
+              Vesting: Cliff 30 days after presale end, then linear 330 days.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: info / social -->
+      <div class="card">
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <div style="display:flex;gap:12px;align-items:center">
+            <img src="https://photos.pinksale.finance/file/pinksale-logo-upload/1760207026339-3c980e075709984d5362d951f45695a5.png" style="width:64px;height:64px;border-radius:12px"/>
+            <div>
+              <div style="font-weight:700">Cozy Token (COZY)</div>
+              <div class="muted small">Contract: <span id="tokenAddress" class="muted">0x06e2...f5c</span></div>
+            </div>
+          </div>
+
+          <div style="background:var(--glass);padding:10px;border-radius:10px">
+            <div class="muted">Presale Contract</div>
+            <div style="font-weight:700" id="presaleAddress">0x79a181f1Fe2d32bEeA74505A78ACAef1e1Bbe2C8</div>
+          </div>
+
+          <div style="display:flex;gap:8px;flex-direction:column">
+            <div class="muted small">Quick Actions</div>
+            <button id="explorerBtn" class="wallet-btn small" style="background:transparent;border:1px solid rgba(255,255,255,0.04)">View on Explorer</button>
+            <a href="https://bit.ly/CozySwap_Whitepaper" target="_blank" class="wallet-btn small" style="background:transparent;border:1px solid rgba(255,255,255,0.04);text-decoration:none;color:inherit;text-align:center;display:inline-block">Whitepaper</a>
+          </div>
+
+          <div style="margin-top:6px">
+            <div class="muted small">Social</div>
+            <div style="display:flex;gap:8px;margin-top:6px">
+              <a href="https://x.com/CozySwap" target="_blank" class="muted small">Twitter</a>
+              <a href="https://t.me/CozySwap" target="_blank" class="muted small">Telegram</a>
+              <a href="https://github.com/cozyswap1" target="_blank" class="muted small">GitHub</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="small">© CozySwap — Presale • Network: Plasma 9745</div>
+    <div class="socials">
+      <a href="https://bit.ly/CozySwap_Whitepaper" target="_blank">Whitepaper</a>
+      <a href="https://x.com/CozySwap" target="_blank">Twitter</a>
+      <a href="https://t.me/CozySwap" target="_blank">Telegram</a>
+      <a href="https://github.com/cozyswap1" target="_blank">GitHub</a>
+    </div>
+  </footer>
+
+<script>
+(async function(){
+  // Config
+  const PRESALE_ADDRESS = "0x79a181f1Fe2d32bEeA74505A78ACAef1e1Bbe2C8";
+  const TOKEN_ADDRESS = "0x06e2ef46662834f4e42dbf9ff9222b077c57df5c";
+  const CHAIN_ID = 9745;
+  const INITIAL_RAISED = ethers.BigNumber.from("325"); // display base (XPL)
+  const SOFT_CAP = ethers.BigNumber.from("25000");
+  const HARD_CAP = ethers.BigNumber.from("50000");
+  const TOKENS_PER_XPL = 1000; // informational
+
+  // Minimal ABI for interactions
+  const presaleAbi = [
+    "function presaleActive() view returns (bool)",
+    "function presaleFinalized() view returns (bool)",
+    "function startTime() view returns (uint256)",
+    "function endTime() view returns (uint256)",
+    "function totalRaised() view returns (uint256)",
+    "function getClaimableTokens(address) view returns (uint256)",
+    "function buyTokens() payable",
+    "function claimTokens()",
+    "event TokensPurchased(address indexed investor, uint256 xplAmount, uint256 cozyTokens)"
+  ];
+
+  // Helpers - DOM
+  const connectBtn = document.getElementById('connectWallet');
+  const raisedDisplay = document.getElementById('raisedDisplay');
+  const raisedSmall = document.getElementById('raisedSmall');
+  const progressFill = document.getElementById('progressFill');
+  const presaleStatusEl = document.getElementById('presaleStatus');
+  const countdownArea = document.getElementById('countdownArea');
+  const amountInput = document.getElementById('amountInput');
+  const willReceive = document.getElementById('willReceive');
+  const buyBtn = document.getElementById('buyBtn');
+  const claimableDisplay = document.getElementById('claimableDisplay');
+  const claimBtn = document.getElementById('claimBtn');
+  const tabBuy = document.getElementById('tabBuy');
+  const tabClaim = document.getElementById('tabClaim');
+  const buyTab = document.getElementById('buyTab');
+  const claimTab = document.getElementById('claimTab');
+  const presaleAddressEl = document.getElementById('presaleAddress');
+  const tokenAddressEl = document.getElementById('tokenAddress');
+  const explorerBtn = document.getElementById('explorerBtn');
+
+  presaleAddressEl.textContent = PRESALE_ADDRESS;
+  tokenAddressEl.textContent = TOKEN_ADDRESS.slice(0,6) + '...' + TOKEN_ADDRESS.slice(-4);
+
+  explorerBtn.addEventListener('click', () => {
+    window.open(`https://plasmascan.to/address/${PRESALE_ADDRESS}`, '_blank');
+  });
+
+  // Ethers provider & signer
+  let provider, signer, userAddress;
+  let presaleContract;
+
+  // Keep local displayedRaised (start at 325)
+  let displayedRaised = INITIAL_RAISED; // BigNumber (XPL units)
+  // But on-chain totalRaised is in wei presumably (xpl * 1e18). We'll fetch and convert.
+
+  // Format helpers
+  function bnToNumberWeiToXpl(bnWei) {
+    // bnWei is BigNumber of wei (1e18), return Number truncated to integer XPL
+    try {
+      const asEth = ethers.utils.formatEther(bnWei); // string
+      // Use integer part only
+      const intPart = asEth.split('.')[0];
+      return ethers.BigNumber.from(intPart);
+    } catch (e) {
+      return INITIAL_RAISED;
+    }
+  }
+
+  function displayRaisedFromBig(bnXplInteger) {
+    const n = bnXplInteger.toString();
+    raisedDisplay.textContent = n;
+    raisedSmall.textContent = n;
+    // progress percent relative to HARD_CAP (50,000)
+    const percent = Math.min(100, parseFloat(n) / parseFloat(HARD_CAP.toString()) * 100);
+    progressFill.style.width = percent + '%';
+  }
+
+  // Tabs
+  tabBuy.addEventListener('click', () => {
+    tabBuy.classList.add('active'); tabClaim.classList.remove('active');
+    buyTab.classList.remove('hidden'); claimTab.classList.add('hidden');
+  });
+  tabClaim.addEventListener('click', () => {
+    tabClaim.classList.add('active'); tabBuy.classList.remove('active');
+    claimTab.classList.remove('hidden'); buyTab.classList.add('hidden');
+  });
+
+  // Only allow integer input (no decimal)
+  amountInput.addEventListener('input', (e) => {
+    // remove non-digits
+    e.target.value = e.target.value.replace(/[^\d]/g,'');
+    const val = e.target.value;
+    if (!val || val === "0") {
+      willReceive.textContent = "— COZY";
+      return;
+    }
+    const intVal = parseInt(val,10);
+    const cozyAmount = intVal * TOKENS_PER_XPL;
+    willReceive.textContent = cozyAmount.toLocaleString() + " COZY";
+  });
+
+  // Connect wallet
+  async function connectWallet() {
+    if (!window.ethereum) {
+      alert('MetaMask / Wallet not found. Please install MetaMask.');
+      return;
+    }
+    provider = new ethers.providers.Web3Provider(window.ethereum, "any");
+    try {
+      await provider.send("eth_requestAccounts", []);
+      signer = provider.getSigner();
+      userAddress = await signer.getAddress();
+      connectBtn.textContent = userAddress.slice(0,6) + '...' + userAddress.slice(-4);
+      connectBtn.classList.add('wallet-active');
+      // check chain
+      const network = await provider.getNetwork();
+      if (network.chainId !== CHAIN_ID) {
+        presaleStatusEl.textContent = `Wrong network (need chainId ${CHAIN_ID}). Connect to Plasma 9745.`;
+      }
+      presaleContract = new ethers.Contract(PRESALE_ADDRESS, presaleAbi, signer);
+      await refreshAll();
+    } catch (err) {
+      console.error(err);
+      alert('Failed to connect wallet: ' + (err.message || err));
+    }
+  }
+
+  connectBtn.addEventListener('click', connectWallet);
+
+  // Buy tokens
+  buyBtn.addEventListener('click', async () => {
+    if (!presaleContract) {
+      alert('Connect wallet first');
+      return;
+    }
+    const v = amountInput.value.trim();
+    if (!v) { alert('Enter integer XPL amount'); return; }
+    const intVal = parseInt(v, 10);
+    if (isNaN(intVal) || intVal < 1 || intVal > 1000) {
+      alert('Amount must be integer between 1 and 1000 XPL');
+      return;
+    }
+    try {
+      buyBtn.disabled = true;
+      buyBtn.textContent = 'Processing...';
+
+      // call buyTokens with value
+      const tx = await presaleContract.buyTokens({ value: ethers.utils.parseEther(String(intVal)) });
+      await tx.wait();
+
+      // optimistic UI increment
+      displayedRaised = displayedRaised.add(ethers.BigNumber.from(String(intVal)));
+      displayRaisedFromBig(displayedRaised);
+
+      // clear input
+      amountInput.value = '';
+      willReceive.textContent = '— COZY';
+      alert('Purchase successful. Tx: ' + tx.hash);
+    } catch (err) {
+      console.error(err);
+      alert('Purchase failed: ' + (err && err.message ? err.message : err));
+    } finally {
+      buyBtn.disabled = false;
+      buyBtn.textContent = 'Buy COZY';
+      // refresh from chain
+      setTimeout(refreshRaisedFromChain, 2000);
+    }
+  });
+
+  // Claim tokens
+  claimBtn.addEventListener('click', async () => {
+    if (!presaleContract) { alert('Connect wallet first'); return; }
+    try {
+      claimBtn.disabled = true;
+      claimBtn.textContent = 'Processing...';
+      const tx = await presaleContract.claimTokens();
+      await tx.wait();
+      alert('Claim tx confirmed: ' + tx.hash);
+      // refresh
+      setTimeout(refreshClaimable, 1500);
+    } catch (err) {
+      console.error(err);
+      alert('Claim failed: ' + (err && err.message ? err.message : err));
+    } finally {
+      claimBtn.disabled = false;
+      claimBtn.textContent = 'Claim Tokens';
+    }
+  });
+
+  // Refresh functions
+  async function refreshRaisedFromChain() {
+    try {
+      if (!presaleContract) return;
+      const r = await presaleContract.totalRaised();
+      // totalRaised is wei; convert to integer XPL
+      const bn = ethers.BigNumber.from(r);
+      const intXpl = bnToNumberWeiToXpl(bn); // BigNumber integer
+      // choose max between on-chain and displayed (non-zero)
+      if (intXpl.gt(displayedRaised)) displayedRaised = intXpl;
+      displayRaisedFromBig(displayedRaised);
+    } catch (e) {
+      console.warn('refreshRaisedFromChain error', e);
+    }
+  }
+
+  async function refreshPresaleState() {
+    try {
+      if (!presaleContract) {
+        // show default 325
+        displayRaisedFromBig(displayedRaised);
+        presaleStatusEl.textContent = "Status: Not Active";
+        countdownArea.textContent = 'Presale not active';
+        return;
+      }
+
+      const active = await presaleContract.presaleActive();
+      const finalized = await presaleContract.presaleFinalized();
+      const start = await presaleContract.startTime();
+      const end = await presaleContract.endTime();
+
+      if (active) {
+        presaleStatusEl.textContent = 'Status: Active';
+        // show countdown
+        startCountdown(Number(end.toString()));
+      } else if (!active && !finalized) {
+        presaleStatusEl.textContent = 'Status: Not Active';
+        countdownArea.textContent = 'Presale not active';
+      } else {
+        presaleStatusEl.textContent = finalized ? 'Status: Finalized' : 'Status: Ended';
+        countdownArea.textContent = 'Presale ended';
+      }
+    } catch (e) {
+      console.warn('refreshPresaleState error', e);
+    }
+  }
+
+  async function refreshClaimable() {
+    try {
+      if (!presaleContract || !signer) {
+        claimableDisplay.textContent = '— COZY';
+        claimBtn.disabled = true;
+        return;
+      }
+      const addr = await signer.getAddress();
+      const c = await presaleContract.getClaimableTokens(addr);
+      // c is token amount in COZY units (wei), convert to integer tokens (COZY)
+      const asStr = ethers.utils.formatUnits(c, 18);
+      // show with commas and trim decimals
+      const intPart = asStr.split('.')[0];
+      claimableDisplay.textContent = intPart + ' COZY';
+      claimBtn.disabled = (parseInt(intPart || '0',10) === 0);
+    } catch (e) {
+      console.warn('refreshClaimable error', e);
+      claimableDisplay.textContent = '— COZY';
+      claimBtn.disabled = true;
+    }
+  }
+
+  // countdown timer
+  let countdownTimerInterval = null;
+  function startCountdown(endTimestampSec) {
+    if (countdownTimerInterval) clearInterval(countdownTimerInterval);
+    function update() {
+      const now = Math.floor(Date.now() / 1000);
+      const left = endTimestampSec - now;
+      if (left <= 0) {
+        countdownArea.textContent = 'Presale ended';
+        clearInterval(countdownTimerInterval);
+        countdownTimerInterval = null;
+        refreshPresaleState();
+        return;
+      }
+      const days = Math.floor(left / 86400);
+      const hours = Math.floor((left % 86400) / 3600);
+      const mins = Math.floor((left % 3600) / 60);
+      const secs = left % 60;
+      countdownArea.textContent = `Ends in: ${days}d ${hours}h ${mins}m ${secs}s`;
+    }
+    update();
+    countdownTimerInterval = setInterval(update, 1000);
+  }
+
+  // polling refresh
+  async function refreshAll(){
+    await refreshPresaleState();
+    await refreshRaisedFromChain();
+    await refreshClaimable();
+  }
+
+  // polling loop every 8s
+  setInterval(async ()=> {
+    try {
+      await refreshRaisedFromChain();
+      await refreshPresaleState();
+      await refreshClaimable();
+    } catch(e){}
+  }, 8000);
+
+  // initial UI: display 325 and progress
+  displayRaisedFromBig(displayedRaised);
+
+  // allow direct clicking address to open metamask
+  // auto-detect metamask accounts change
+  if (window.ethereum) {
+    window.ethereum.on && window.ethereum.on('accountsChanged', (accounts) => {
+      if (!accounts || accounts.length === 0) {
+        connectBtn.textContent = 'Connect Wallet';
+      } else {
+        connectBtn.textContent = accounts[0].slice(0,6) + '...' + accounts[0].slice(-4);
+      }
+    });
+    window.ethereum.on && window.ethereum.on('chainChanged', (chainIdHex) => {
+      // simple reload
+      setTimeout(()=>window.location.reload(), 500);
+    });
+  }
+
+  // Load: nothing to do until connect
+})();
+</script>
+</body>
+</html>
