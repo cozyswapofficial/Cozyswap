@@ -1,0 +1,478 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Cozy Token (COZY) — Whitepaper</title>
+  <meta name="description" content="Cozy Token (COZY) Whitepaper — Tokenomics, Roadmap, Technical Specs, and Ecosystem Vision for CozySwap on Plasma Chain." />
+  <link rel="icon" href="/favicon-96x96.png" />
+
+  <!-- Fonts + Tailwind -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Chart.js for tokenomics pie -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+  <style>
+    :root{
+      --bg-1: #120617;    /* deepest */
+      --bg-2: #2b1036;    /* dark plum */
+      --accent-from: #6a11cb; /* purple */
+      --accent-to: #f5af19;   /* warm gold */
+      --card: rgba(255,255,255,0.03);
+      --glass-border: rgba(255,255,255,0.04);
+      --muted: rgba(255,255,255,0.72);
+    }
+    html,body{height:100%;margin:0;font-family:'Poppins',system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;}
+    body{
+      background: linear-gradient(180deg, var(--bg-2) 0%, var(--bg-1) 100%);
+      color:#f3f4f6;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      line-height:1.6;
+    }
+    .container{max-width:1100px;margin:36px auto;padding:20px;}
+    .glass{
+      background: var(--card);
+      border: 1px solid var(--glass-border);
+      border-radius: 14px;
+      padding:20px;
+      backdrop-filter: blur(6px);
+    }
+    .accent-line{
+      height:4px;
+      border-radius:6px;
+      background: linear-gradient(90deg, var(--accent-from), var(--accent-to));
+      margin-bottom:14px;
+    }
+    h1,h2,h3{color: #fff; }
+    h1{font-size:28px}
+    .kicker{ color:var(--muted); font-size:13px; }
+    a.cta{
+      background: linear-gradient(90deg, rgba(106,17,203,0.12), rgba(245,175,25,0.08));
+      border: 1px solid rgba(245,175,25,0.18);
+      color: #fff;
+      padding:10px 14px;
+      border-radius:10px;
+      font-weight:600;
+      text-decoration:none;
+    }
+    nav.toc a{ display:block; padding:8px 0; color:var(--muted); text-decoration:none;}
+    nav.toc a:hover{ color:#fff; }
+    .two-col{ display:grid; grid-template-columns:320px 1fr; gap:24px; align-items:start; }
+    .stat{ font-weight:700; color: #fff; font-size:16px; }
+    .badge{ background: linear-gradient(90deg, var(--accent-from), var(--accent-to)); padding:6px 10px;border-radius:999px;font-weight:600;font-size:13px; }
+    .section{ margin-bottom:18px; opacity:0; transform:translateY(6px); animation:fadeIn 600ms ease forwards;}
+    @keyframes fadeIn{ to{ opacity:1; transform:none; } }
+    .card-grid{ display:grid; grid-template-columns: repeat(2, 1fr); gap:12px; }
+    .chip{ background: rgba(255,255,255,0.03); padding:8px 10px; border-radius:10px; border:1px solid rgba(255,255,255,0.02); }
+    table { width:100%; border-collapse:collapse; }
+    td, th { padding:10px; border-bottom: 1px dashed rgba(255,255,255,0.03); text-align:left; vertical-align:top; }
+    .muted-small{ color:var(--muted); font-size:13px; }
+    @media (max-width: 900px){
+      .two-col{ grid-template-columns: 1fr; }
+      .card-grid{ grid-template-columns: 1fr; }
+      h1{ font-size:22px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <header class="glass" style="display:flex;gap:18px;align-items:center;">
+      <img src="https://photos.pinksale.finance/file/pinksale-logo-upload/1760207026339-3c980e075709984d5362d951f45695a5.png" alt="CozySwap logo" class="w-16 h-16 rounded-md object-contain" />
+      <div style="flex:1">
+        <div class="badge">COZY TOKEN • Whitepaper</div>
+        <h1 class="mt-3">Cozy Token (COZY)</h1>
+        <div class="kicker mt-2">Native utility token powering CozySwap — a next-generation decentralized exchange on Plasma Chain.</div>
+      </div>
+      <div style="text-align:right">
+        <div class="stat">Total Supply</div>
+        <div style="font-size:18px;font-weight:700">120,000,000 COZY</div>
+        <div class="muted-small" style="margin-top:6px">Decimals: 18 • Network: Plasma</div>
+      </div>
+    </header>
+
+    <div class="accent-line" style="margin-top:14px"></div>
+
+    <!-- Two column layout -->
+    <div class="two-col" style="margin-top:20px;">
+      <!-- Sidebar / TOC -->
+      <aside class="glass" style="position:sticky; top:24px;">
+        <div style="margin-bottom:12px;">
+          <strong style="color:#fff">Contents</strong>
+          <nav class="toc" style="margin-top:8px">
+            <a href="#exec">Executive Summary</a>
+            <a href="#overview">Token Overview</a>
+            <a href="#tokenomics">Tokenomics (detailed)</a>
+            <a href="#utility">Token Utility</a>
+            <a href="#tech">Technical & Security</a>
+            <a href="#econ">Economic Model</a>
+            <a href="#integration">DEX Integration</a>
+            <a href="#roadmap">Roadmap</a>
+            <a href="#risk">Risk & Mitigation</a>
+            <a href="#conclusion">Conclusion</a>
+          </nav>
+        </div>
+
+        <div style="margin-top:12px;">
+          <strong style="color:#fff">Quick Facts</strong>
+          <ul style="margin-top:8px; color:var(--muted); font-size:13px; line-height:1.6">
+            <li>Total Supply: <strong>120,000,000 COZY</strong></li>
+            <li>Token Type: <strong>ERC-20</strong></li>
+            <li>Network: <strong>Plasma</strong></li>
+            <li>Decimals: <strong>18</strong></li>
+          </ul>
+        </div>
+
+        <div style="margin-top:12px;">
+          <a class="cta" href="/whitepaper.html#tokenomics" style="display:inline-block">Jump to Tokenomics</a>
+        </div>
+      </aside>
+
+      <!-- Main content -->
+      <main>
+        <!-- Executive Summary -->
+        <section id="exec" class="section glass" style="animation-delay:0ms">
+          <h2 style="color:var(--accent-to)">Executive Summary</h2>
+          <p class="muted-small">
+            Cozy Token (COZY) is the native utility token powering the CozySwap ecosystem — a next-generation DEX built on Plasma Chain technology.
+            COZY (120,000,000 total supply, 18 decimals) enables trading, governance, staking rewards, and ecosystem services across CozySwap.
+            This whitepaper outlines the token economics, technical design, security posture, and roadmap for sustainable growth.
+          </p>
+        </section>
+
+        <!-- Token Overview -->
+        <section id="overview" class="section glass" style="animation-delay:80ms">
+          <h2 style="color:var(--accent-to)">Token Overview</h2>
+          <table>
+            <tr><th style="width:180px">Token Name</th><td>Cozy Token</td></tr>
+            <tr><th>Symbol</th><td>COZY</td></tr>
+            <tr><th>Total Supply</th><td>120,000,000 COZY</td></tr>
+            <tr><th>Decimals</th><td>18</td></tr>
+            <tr><th>Network</th><td>Plasma</td></tr>
+            <tr><th>Standard</th><td>ERC-20</td></tr>
+          </table>
+        </section>
+
+        <!-- Tokenomics Detailed -->
+        <section id="tokenomics" class="section glass" style="animation-delay:160ms">
+          <h2 style="color:var(--accent-to)">Tokenomics — Detailed Allocation</h2>
+
+          <p class="muted-small">
+            The COZY distribution balances community allocation, liquidity, development funding, and long-term incentives to ensure healthy token economy and platform sustainability.
+          </p>
+
+          <!-- Summary cards -->
+          <div class="card-grid" style="margin-top:12px;">
+            <div class="chip">
+              <div class="muted-small">Presale</div>
+              <div style="font-weight:700">20%</div>
+              <div class="muted-small">24,000,000 COZY</div>
+            </div>
+            <div class="chip">
+              <div class="muted-small">Liquidity</div>
+              <div style="font-weight:700">20%</div>
+              <div class="muted-small">24,000,000 COZY</div>
+            </div>
+            <div class="chip">
+              <div class="muted-small">Research & Development</div>
+              <div style="font-weight:700">15%</div>
+              <div class="muted-small">18,000,000 COZY</div>
+            </div>
+            <div class="chip">
+              <div class="muted-small">Airdrop & Community</div>
+              <div style="font-weight:700">10%</div>
+              <div class="muted-small">12,000,000 COZY</div>
+            </div>
+            <div class="chip">
+              <div class="muted-small">Staking Rewards</div>
+              <div style="font-weight:700">30%</div>
+              <div class="muted-small">36,000,000 COZY</div>
+            </div>
+            <div class="chip">
+              <div class="muted-small">Reserve</div>
+              <div style="font-weight:700">5%</div>
+              <div class="muted-small">6,000,000 COZY</div>
+            </div>
+          </div>
+
+          <!-- Table with details -->
+          <div style="margin-top:16px; overflow:auto;">
+            <table>
+              <thead>
+                <tr>
+                  <th>Allocation</th>
+                  <th>Percent</th>
+                  <th>Amount (COZY)</th>
+                  <th>Purpose & Vesting</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Presale</td>
+                  <td>20%</td>
+                  <td>24,000,000</td>
+                  <td>Early funding and ecosystem bootstrap. Suggested vesting: 6–12 months linear for team/backers.</td>
+                </tr>
+                <tr>
+                  <td>Liquidity</td>
+                  <td>20%</td>
+                  <td>24,000,000</td>
+                  <td>Initial DEX liquidity & liquidity mining incentives to ensure market depth.</td>
+                </tr>
+                <tr>
+                  <td>Research & Development</td>
+                  <td>15%</td>
+                  <td>18,000,000</td>
+                  <td>Protocol development, audits, grants, tooling, and developer incentives.</td>
+                </tr>
+                <tr>
+                  <td>Airdrop & Community</td>
+                  <td>10%</td>
+                  <td>12,000,000</td>
+                  <td>Community growth, user acquisition, and ecosystem rewards.</td>
+                </tr>
+                <tr>
+                  <td>Staking Rewards</td>
+                  <td>30%</td>
+                  <td>36,000,000</td>
+                  <td>Long-term staking, yield farming, and incentives to secure liquidity.</td>
+                </tr>
+                <tr>
+                  <td>Reserve</td>
+                  <td>5%</td>
+                  <td>6,000,000</td>
+                  <td>Strategic reserve for partnerships, emergencies, or DAO decisions.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Chart + legend -->
+          <div style="display:flex;gap:20px;align-items:center;margin-top:18px;flex-wrap:wrap">
+            <div style="width:220px;flex:0 0 220px;">
+              <canvas id="cozyPie" width="220" height="220" aria-label="Token distribution chart"></canvas>
+            </div>
+            <div style="flex:1;min-width:220px">
+              <div style="display:flex;flex-direction:column;gap:8px;">
+                <div style="display:flex;align-items:center;gap:10px;">
+                  <span style="width:14px;height:14px;background:#b8860b;border-radius:4px;display:inline-block"></span>
+                  <div><strong>Presale</strong> — 20% (24M)</div>
+                </div>
+                <div style="display:flex;align-items:center;gap:10px;">
+                  <span style="width:14px;height:14px;background:#8e44ad;border-radius:4px;display:inline-block"></span>
+                  <div><strong>Liquidity</strong> — 20% (24M)</div>
+                </div>
+                <div style="display:flex;align-items:center;gap:10px;">
+                  <span style="width:14px;height:14px;background:#6366f1;border-radius:4px;display:inline-block"></span>
+                  <div><strong>Staking Rewards</strong> — 30% (36M)</div>
+                </div>
+                <div style="display:flex;align-items:center;gap:10px;">
+                  <span style="width:14px;height:14px;background:#7c3aed;border-radius:4px;display:inline-block"></span>
+                  <div><strong>R&D</strong> — 15% (18M)</div>
+                </div>
+                <div style="display:flex;align-items:center;gap:10px;">
+                  <span style="width:14px;height:14px;background:#2d3748;border-radius:4px;display:inline-block"></span>
+                  <div><strong>Airdrop</strong> — 10% (12M)</div>
+                </div>
+                <div style="display:flex;align-items:center;gap:10px;">
+                  <span style="width:14px;height:14px;background:#4b5563;border-radius:4px;display:inline-block"></span>
+                  <div><strong>Reserve</strong> — 5% (6M)</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Token Utility -->
+        <section id="utility" class="section glass" style="animation-delay:240ms">
+          <h2 style="color:var(--accent-to)">Token Utility</h2>
+          <ol style="color:var(--muted); margin-top:8px; padding-left:18px">
+            <li><strong>Governance</strong> — COZY holders vote on protocol upgrades, treasury use, and ecosystem parameters.</li>
+            <li><strong>Staking & Yield Farming</strong> — Earn trading-fee distributions and participate in liquidity mining.</li>
+            <li><strong>Platform Fees</strong> — Reduced trading fees for COZY payments; periodic burns / fee sharing to stakers.</li>
+            <li><strong>Ecosystem Integration</strong> — Native unit for CozySwap, collateral options in lending, and payments for platform services.</li>
+          </ol>
+        </section>
+
+        <!-- Technical & Security -->
+        <section id="tech" class="section glass" style="animation-delay:320ms">
+          <h2 style="color:var(--accent-to)">Technical Specifications & Security</h2>
+
+          <h3 style="color:#fff;margin-top:8px">Smart Contract Features</h3>
+          <ul style="color:var(--muted);padding-left:18px;margin-top:6px">
+            <li>ERC-20 compliant contract optimized for Plasma Chain.</li>
+            <li>Permit (EIP-2612) functionality for gasless approvals.</li>
+            <li>Intent: blacklist-free & non-upgradable core token contract for user trust.</li>
+            <li>Open-source & verifiable on-chain code.</li>
+          </ul>
+
+          <h3 style="color:#fff;margin-top:8px">Security Measures</h3>
+          <ul style="color:var(--muted);padding-left:18px;margin-top:6px">
+            <li>Independent security audits prior to mainnet launch.</li>
+            <li>Multi-signature treasury with time-lock for admin actions.</li>
+            <li>Bug-bounty programs & community security monitoring.</li>
+          </ul>
+        </section>
+
+        <!-- Economic Model -->
+        <section id="econ" class="section glass" style="animation-delay:400ms">
+          <h2 style="color:var(--accent-to)">Economic Model</h2>
+          <p style="color:var(--muted)">COZY's economic design focuses on sustainable value accrual through usage, fee capture, burns, and incentives:</p>
+          
+          <div style="margin-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+            <div class="chip">
+              <strong>Trading Fee Revenue</strong>
+              <div class="muted-small" style="margin-top:6px">A portion of swap fees distributed to stakers and protocol treasury.</div>
+            </div>
+            <div class="chip">
+              <strong>Token Burns</strong>
+              <div class="muted-small" style="margin-top:6px">Periodic burns to create deflationary pressure and long-term value accrual.</div>
+            </div>
+            <div class="chip">
+              <strong>Incentives</strong>
+              <div class="muted-small" style="margin-top:6px">Liquidity & staking incentives to bootstrap growth and reward long-term holders.</div>
+            </div>
+            <div class="chip">
+              <strong>Utility Demand</strong>
+              <div class="muted-small" style="margin-top:6px">Integration across DEX, lending, and services to increase real-world demand.</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Integration -->
+        <section id="integration" class="section glass" style="animation-delay:480ms">
+          <h2 style="color:var(--accent-to)">CozySwap DEX Integration</h2>
+          <p class="muted-small">COZY serves as the native platform token used for base trading pairs, rewards, fee discounts, and governance across the CozySwap DEX.</p>
+        </section>
+
+        <!-- Roadmap (professional expanded) -->
+        <section id="roadmap" class="section glass" style="animation-delay:560ms">
+          <h2 style="color:var(--accent-to)">Roadmap — Professional Phases</h2>
+          <p class="muted-small">A clear multi-phase plan to grow the CozySwap ecosystem and COZY utility.</p>
+
+          <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:12px" class="card-grid">
+            <div class="glass" style="padding:14px;">
+              <h3 style="color:#fff">Phase 1 — Foundation</h3>
+              <ul style="color:var(--muted);padding-left:18px;margin-top:8px">
+                <li>Token deployment & audits</li>
+                <li>Core DEX launch (alpha)</li>
+                <li>Initial liquidity pools & first farming programs</li>
+                <li>Community building & governance framework</li>
+              </ul>
+            </div>
+
+            <div class="glass" style="padding:14px;">
+              <h3 style="color:#fff">Phase 2 — Expansion</h3>
+              <ul style="color:var(--muted);padding-left:18px;margin-top:8px">
+                <li>Advanced trading features (limit orders, charts)</li>
+                <li>Cross-chain bridging & multi-chain liquidity</li>
+                <li>Enhanced yield strategies & partner integrations</li>
+                <li>Mobile UX & better analytics</li>
+              </ul>
+            </div>
+
+            <div class="glass" style="padding:14px;">
+              <h3 style="color:#fff">Phase 3 — Growth</h3>
+              <ul style="color:var(--muted);padding-left:18px;margin-top:8px">
+                <li>Full DAO governance & on-chain proposals</li>
+                <li>Institutional tooling & OTC liquidity options</li>
+                <li>DeFi product expansion: lending, leverage, options</li>
+                <li>Global marketing & exchange listings</li>
+              </ul>
+            </div>
+
+            <div class="glass" style="padding:14px;">
+              <h3 style="color:#fff">Phase 4 — Maturity</h3>
+              <ul style="color:var(--muted);padding-left:18px;margin-top:8px">
+                <li>Advanced financial products & derivatives</li>
+                <li>Interoperability at scale & compliance tooling</li>
+                <li>Sustainable treasury & long-term reserves</li>
+                <li>Community ownership & global adoption</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <!-- Risk & Mitigation -->
+        <section id="risk" class="section glass" style="animation-delay:640ms">
+          <h2 style="color:var(--accent-to)">Risk Factors & Mitigation</h2>
+          <h3 style="color:#fff;margin-top:8px">Market Risks</h3>
+          <ul style="color:var(--muted);padding-left:18px;margin-top:6px">
+            <li>Crypto market volatility</li>
+            <li>Regulatory changes</li>
+            <li>Competitive landscape</li>
+          </ul>
+
+          <h3 style="color:#fff;margin-top:8px">Technical Risks</h3>
+          <ul style="color:var(--muted);padding-left:18px;margin-top:6px">
+            <li>Smart contract bugs</li>
+            <li>Network-level threats</li>
+            <li>Integration scalability</li>
+          </ul>
+
+          <h3 style="color:#fff;margin-top:8px">Mitigation</h3>
+          <ul style="color:var(--muted);padding-left:18px;margin-top:6px">
+            <li>Regular audits & audits public report</li>
+            <li>Multi-sig treasury & timelocks</li>
+            <li>Community governance & transparent ops</li>
+          </ul>
+        </section>
+
+        <!-- Conclusion -->
+        <section id="conclusion" class="section glass" style="animation-delay:720ms">
+          <h2 style="color:var(--accent-to)">Conclusion</h2>
+          <p class="muted-small">Cozy Token (COZY) underpins the CozySwap ecosystem with thoughtful tokenomics, clear incentives, and a multi-phase roadmap. The design prioritizes liquidity, community participation, and sustainable growth. This whitepaper provides the high-level framework for COZY's role in a thriving Plasma-based DeFi ecosystem.</p>
+
+          <p class="muted-small" style="margin-top:12px;font-style:italic">Disclaimer: This whitepaper is for informational purposes only and does not constitute financial advice. Always perform your own research before making investment decisions.</p>
+        </section>
+
+        <footer class="muted-small" style="margin-top:20px; text-align:center">© 2025 CozySwap — Built on Plasma Chain — Whitepaper v1.0</footer>
+      </main>
+    </div>
+  </div>
+
+  <!-- Chart rendering -->
+  <script>
+    // Doughnut chart for tokenomics
+    const ctx = document.getElementById('cozyPie').getContext('2d');
+    const cozyPie = new Chart(ctx, {
+      type: 'doughnut',
+      data: {
+        labels: ['Presale 20%', 'Liquidity 20%', 'Staking 30%', 'R&D 15%', 'Airdrop 10%', 'Reserve 5%'],
+        datasets: [{
+          data: [20,20,30,15,10,5],
+          backgroundColor: [
+            '#b8860b', // gold
+            '#8e44ad', // purple
+            '#6366f1', // violet
+            '#7c3aed', // purple2
+            '#374151', // slate
+            '#4b5563'  // gray
+          ],
+          hoverOffset: 8,
+          borderWidth: 0
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: true,
+        cutout: '55%',
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            backgroundColor: '#0b1220',
+            titleColor: '#fff',
+            bodyColor: '#fff',
+            callbacks: {
+              label: (ctx) => `${ctx.label} — ${ctx.parsed}%`
+            }
+          }
+        }
+      }
+    });
+  </script>
+</body>
+</html>
