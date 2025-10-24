@@ -3,11 +3,9 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-
-<meta name="google-site-verification" content="7XULKztiphXCS0nzBXi2P6mK-F8-hqAVSxmkxZKqb-E" />
-
-
-<meta name="google-site-verification" content="6FBjhdnCVOh9PjkZPa-6C3jJ9ZvGNdwF6zCgJRsc6Ik" />
+  
+  <meta name="google-site-verification" content="7XULKztiphXCS0nzBXi2P6mK-F8-hqAVSxmkxZKqb-E" />
+  <meta name="google-site-verification" content="6FBjhdnCVOh9PjkZPa-6C3jJ9ZvGNdwF6zCgJRsc6Ik" />
 
   <!-- ✅ SEO META TAGS FOR COZYSWAP -->
   <title>Cozyswap - Plasma Swap DEX | Swap, Liquidity, and Earn COZY</title>
@@ -109,6 +107,24 @@
       background: rgba(255, 255, 255, 0.15);
     }
 
+    /* Tombol Unwrap (kuning) */
+    .unwrap-btn {
+      background: #f59e0b;
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 12px 24px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease-in-out;
+      box-shadow: 0 0 10px rgba(245, 158, 11, 0.5);
+    }
+
+    .unwrap-btn:hover {
+      transform: scale(1.03);
+      box-shadow: 0 0 16px rgba(245, 158, 11, 0.8);
+    }
+
     :root{--bg:#0b0b0f;--card:#111216;--muted:#9aa0a6;--accent1:#6c63ff;--accent2:#00c6ff}
     *{box-sizing:border-box}
     html,body{height:100%;margin:0;background:var(--bg);color:#e6eef8;font-family:Inter,system-ui,Arial}
@@ -139,116 +155,135 @@
     .smallbtn{background:transparent;border:1px solid rgba(255,255,255,0.04);padding:6px 8px;border-radius:8px;color:var(--muted);cursor:pointer}
     .txhash{word-break:break-all;color:var(--muted);margin-top:8px}
 
- /* Token Selector Styles */
-.token-select-container {
-  position: relative;
-  width: 100%;
-}
+    /* Token Selector Styles */
+    .token-select-container {
+      position: relative;
+      width: 100%;
+    }
 
-.selected-token {
-  display: flex;
-  align-items: center;
-  padding: 8px 12px;
-  border: 1px solid rgba(255,255,255,0.06);
-  border-radius: 10px;
-  cursor: pointer;
-  background: transparent;
-  transition: all 0.2s;
-  min-height: 40px;
-}
+    .selected-token {
+      display: flex;
+      align-items: center;
+      padding: 8px 12px;
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 10px;
+      cursor: pointer;
+      background: transparent;
+      transition: all 0.2s;
+      min-height: 40px;
+    }
 
-.selected-token:hover {
-  border-color: rgba(255,255,255,0.1);
-  background: rgba(255,255,255,0.02);
-}
+    .selected-token:hover {
+      border-color: rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.02);
+    }
 
-.token-logo-sm {
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  margin-right: 8px;
-  object-fit: cover;
-}
+    .token-logo-sm {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      margin-right: 8px;
+      object-fit: cover;
+    }
 
-.token-dropdown {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  background: #111216;
-  border: 1px solid rgba(255,255,255,0.06);
-  border-radius: 12px;
-  max-height: 300px;
-  overflow-y: auto;
-  display: none;
-  z-index: 1000;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-  margin-top: 5px;
-}
+    .token-dropdown {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: #111216;
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 12px;
+      max-height: 300px;
+      overflow-y: auto;
+      display: none;
+      z-index: 1000;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      margin-top: 5px;
+    }
 
-.token-option {
-  display: flex;
-  align-items: center;
-  justify-content: space-between; /* tombol copy di kanan */
-  padding: 10px 12px;
-  cursor: pointer;
-  border-bottom: 1px solid rgba(255,255,255,0.03);
-  transition: background 0.2s ease;
-}
+    .token-option {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 12px;
+      cursor: pointer;
+      border-bottom: 1px solid rgba(255,255,255,0.03);
+      transition: background 0.2s ease;
+    }
 
-.token-option:last-child {
-  border-bottom: none;
-}
+    .token-option:last-child {
+      border-bottom: none;
+    }
 
-.token-option:hover {
-  background: rgba(255,255,255,0.05);
-}
+    .token-option:hover {
+      background: rgba(255,255,255,0.05);
+    }
 
-.token-info {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  flex: 1;
-  margin-left: 8px;
-}
+    .token-info {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      flex: 1;
+      margin-left: 8px;
+    }
 
-.token-symbol {
-  font-weight: 500;
-  display: block;
-  font-size: 14px;
-}
+    .token-symbol {
+      font-weight: 500;
+      display: block;
+      font-size: 14px;
+    }
 
-.token-name {
-  font-size: 11px;
-  color: #9aa0a6;
-  display: block;
-}
+    .token-name {
+      font-size: 11px;
+      color: #9aa0a6;
+      display: block;
+    }
 
-.copy-btn {
-  background: none;
-  border: none;
-  color: #aaa;
-  font-size: 16px;
-  cursor: pointer;
-  transition: color 0.2s ease, transform 0.1s ease;
-  margin-left: auto;
-}
+    .copy-btn {
+      background: none;
+      border: none;
+      color: #aaa;
+      font-size: 16px;
+      cursor: pointer;
+      transition: color 0.2s ease, transform 0.1s ease;
+      margin-left: auto;
+    }
 
-.copy-btn:hover {
-  color: #fff;
-  transform: scale(1.1);
-}
+    .copy-btn:hover {
+      color: #fff;
+      transform: scale(1.1);
+    }
 
-.copy-btn:active {
-  transform: scale(0.95);
-}
+    .copy-btn:active {
+      transform: scale(0.95);
+    }
 
-.dropdown-arrow {
-  margin-left: auto;
-  font-size: 10px;
-  color: #9aa0a6;
-}
+    .dropdown-arrow {
+      margin-left: auto;
+      font-size: 10px;
+      color: #9aa0a6;
+    }
 
+    /* Toast Styles */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 10px 18px;
+      background: rgba(40, 167, 69, 0.9);
+      color: #fff;
+      font-size: 14px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+      z-index: 9999;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .toast.error {
+      background: rgba(220, 53, 69, 0.9);
     }
   </style>
 </head>
@@ -274,7 +309,10 @@
         <div class="card">
           <div style="display:flex;justify-content:space-between;align-items:center">
             <div><strong>Swap</strong><div class="small">Token to token</div></div>
-            <div style="text-align:right"><button id="toLiquidity" class="active-btn">Add Liquidity</button> <button id="toStaking" class="active-btn">Staking</button></div>
+            <div style="text-align:right">
+              <button id="toLiquidity" class="active-btn">Add Liquidity</button> 
+              <button id="toStaking" class="active-btn">Staking</button>
+            </div>
           </div>
 
           <div style="margin-top:12px">
@@ -286,16 +324,13 @@
                 <div class="small">Balance: <span id="fromBalance">—</span> <button id="maxFrom" class="maxbtn">Max</button></div>
               </div>
               <div style="width:220px;display:flex;gap:8px">
-                <!-- FROM TOKEN SELECTOR -->
                 <div class="token-select-container">
                   <div class="selected-token" onclick="toggleDropdown('from')">
                     <img id="selectedFromLogo" src="" class="token-logo-sm">
                     <span id="selectedFromSymbol">XPL</span>
                     <span class="dropdown-arrow">▼</span>
                   </div>
-                  <div id="fromDropdown" class="token-dropdown">
-                    <!-- Token list akan diisi JavaScript -->
-                  </div>
+                  <div id="fromDropdown" class="token-dropdown"></div>
                 </div>
                 <button id="addTokenBtn" class="smallbtn" title="Add custom token">＋</button>
               </div>
@@ -312,16 +347,13 @@
                 <div class="small">Balance: <span id="toBalance">—</span></div>
               </div>
               <div style="width:220px">
-                <!-- TO TOKEN SELECTOR -->
                 <div class="token-select-container">
                   <div class="selected-token" onclick="toggleDropdown('to')">
                     <img id="selectedToLogo" src="" class="token-logo-sm">
                     <span id="selectedToSymbol">COZY</span>
                     <span class="dropdown-arrow">▼</span>
                   </div>
-                  <div id="toDropdown" class="token-dropdown">
-                    <!-- Token list akan diisi JavaScript -->
-                  </div>
+                  <div id="toDropdown" class="token-dropdown"></div>
                 </div>
               </div>
             </div>
@@ -369,21 +401,18 @@
     </p>
   </footer>
 
-  <!-- ✅ FIX: FUNGSI GLOBAL UNTUK DROPDOWN -->
   <script>
-  // Fungsi global untuk toggle dropdown - HARUS DI LUAR IIFE
+  // Fungsi global untuk toggle dropdown
   function toggleDropdown(type) {
     const dropdown = document.getElementById(`${type}Dropdown`);
     const allDropdowns = document.querySelectorAll('.token-dropdown');
 
-    // Tutup semua dropdown lain
     allDropdowns.forEach(dd => {
       if (dd.id !== `${type}Dropdown`) {
         dd.style.display = 'none';
       }
     });
 
-    // Toggle dropdown saat ini
     if (dropdown.style.display === 'block') {
       dropdown.style.display = 'none';
     } else {
@@ -399,6 +428,28 @@
       });
     }
   });
+
+  // Fungsi global untuk copy address
+  function copyAddress(addr) {
+    if (!addr) return showToast("⚠️ Token address not found", true);
+    navigator.clipboard.writeText(addr)
+      .then(() => showToast("✅ Token address copied to clipboard"))
+      .catch(() => showToast("❌ Failed to copy address", true));
+  }
+
+  // Fungsi global untuk show toast
+  function showToast(message, isError = false) {
+    const toast = document.createElement("div");
+    toast.textContent = message;
+    toast.className = isError ? "toast error" : "toast";
+    document.body.appendChild(toast);
+    
+    setTimeout(() => toast.style.opacity = "1", 10);
+    setTimeout(() => {
+      toast.style.opacity = "0";
+      setTimeout(() => toast.remove(), 400);
+    }, 2500);
+  }
   </script>
 
   <script>
@@ -487,11 +538,11 @@
     let router = null;
     let factory = null;
 
-    // Default tokens dengan logoURI
+    // Default tokens dengan XPL dan COZY sebagai default
     const DEFAULTS = [
       {symbol: 'XPL', address: 'XPL_NATIVE', logoURI: 'https://cozyswap1.github.io/Cozyswap/assets/xpl.png'},
-      {symbol: 'WXPL', address: WXPL, logoURI: 'https://cozyswap1.github.io/Cozyswap/assets/xpl.png'},
       {symbol: 'COZY', address: '0x06e2ef46662834f4e42dbf9ff9222b077c57df5c', logoURI: 'https://photos.pinksale.finance/file/pinksale-logo-upload/1760207026339-3c980e075709984d5362d951f45695a5.png'},
+      {symbol: 'WXPL', address: WXPL, logoURI: 'https://cozyswap1.github.io/Cozyswap/assets/xpl.png'},
       {symbol: 'WETH', address: '0x9895D81bB462A195b4922ED7De0e3ACD007c32CB', logoURI: 'https://cozyswap1.github.io/Cozyswap/assets/weth.png'},
       {symbol: 'USDT0', address: '0xB8CE59FC3717ada4C02eaDF9682A9e934F625ebb', logoURI: 'https://cozyswap1.github.io/Cozyswap/assets/USDT0.png'},
       {symbol: 'CRY', address: '0x59cdd876f3b8a4e81ecb467078ea009f80052fa2', logoURI: 'https://cozyswap1.github.io/Cozyswap/assets/crybaby.png'}
@@ -512,8 +563,8 @@
     }
 
     let tokens = loadTokens();
-    let selectedFromToken = tokens[0];
-    let selectedToToken = tokens[1];
+    let selectedFromToken = tokens[0]; // XPL sebagai default
+    let selectedToToken = tokens[1];   // COZY sebagai default
 
     // Helper function untuk default logo
     function getDefaultLogo(symbol) {
@@ -525,6 +576,195 @@
       return defaultLogos[symbol] || 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCAyMCAyMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48Y2lyY2xlIGN4PSIxMCIgY3k9IjEwIiByPSIxMCIgZmlsbD0iIzlmOWY5ZiIvPjwvc3ZnPg==';
     }
 
+    // ✅ FUNGSI BARU: Auto ganti button Swap ↔ Unwrap
+    function updateSwapButton() {
+      const from = selectedFromToken.address;
+      const to = selectedToToken.address;
+      const isXPLPair = 
+        (from === 'XPL_NATIVE' && to === WXPL) ||
+        (from === WXPL && to === 'XPL_NATIVE');
+      
+      const swapBtn = document.getElementById('approveOrSwap');
+      
+      if (isXPLPair) {
+        swapBtn.textContent = 'Unwrap';
+        swapBtn.className = 'unwrap-btn';
+        swapBtn.onclick = executeUnwrap;
+      } else {
+        swapBtn.textContent = 'Swap';
+        swapBtn.className = 'btn';
+        swapBtn.onclick = executeSwap;
+      }
+    }
+
+    // ✅ FUNGSI BARU: Execute Unwrap WXPL → XPL
+    async function executeUnwrap() {
+      try {
+        if (!window.ethereum) return alert('Connect wallet first');
+        if (!signer) signer = new providers.Web3Provider(window.ethereum).getSigner();
+        
+        const owner = await signer.getAddress();
+        const from = selectedFromToken.address;
+        const to = selectedToToken.address;
+        const amtStr = (fromAmountEl.value || '').trim();
+
+        if (!amtStr) return alert('Enter amount');
+
+        // Pastikan ini benar XPL/WXPL pair
+        const isWrap = (from === 'XPL_NATIVE' && to === WXPL); // XPL → WXPL
+        const isUnwrap = (from === WXPL && to === 'XPL_NATIVE'); // WXPL → XPL
+        
+        if (!isUnwrap && !isWrap) {
+          alert('Invalid XPL/WXPL pair');
+          return;
+        }
+
+        if (isUnwrap) {
+          // UNWRAP: WXPL → XPL
+          const wxplContract = new Contract(WXPL, [
+            'function withdraw(uint wad) external',
+            'function balanceOf(address) view returns (uint)'
+          ], signer);
+          
+          const wxplBalance = await wxplContract.balanceOf(owner);
+          const amountIn = utils.parseUnits(amtStr, 18);
+          
+          if (wxplBalance.lt(amountIn)) {
+            alert('Insufficient WXPL balance');
+            return;
+          }
+
+          setStatus('Unwrapping WXPL...');
+          const tx = await wxplContract.withdraw(amountIn, { gasLimit: 100000 });
+          txHashEl.innerText = 'Tx: ' + tx.hash;
+          await tx.wait();
+          setStatus('Unwrap confirmed');
+          alert('WXPL unwrapped to XPL successfully!');
+          
+        } else {
+          // WRAP: XPL → WXPL  
+          const wxplContract = new Contract(WXPL, [
+            'function deposit() payable external',
+            'function balanceOf(address) view returns (uint)'
+          ], signer);
+          
+          const amountIn = utils.parseUnits(amtStr, 18);
+          const ethBalance = await provider.getBalance(owner);
+          
+          if (ethBalance.lt(amountIn)) {
+            alert('Insufficient XPL balance');
+            return;
+          }
+
+          setStatus('Wrapping XPL...');
+          const tx = await wxplContract.deposit({ value: amountIn, gasLimit: 100000 });
+          txHashEl.innerText = 'Tx: ' + tx.hash;
+          await tx.wait();
+          setStatus('Wrap confirmed');
+          alert('XPL wrapped to WXPL successfully!');
+        }
+
+        // Update balances
+        await updateBalances();
+        computeOutput();
+        
+      } catch (e) {
+        console.error('Unwrap error', e);
+        alert('Unwrap failed: ' + (e.message || e));
+        setStatus('Unwrap failed');
+      }
+    }
+
+    // ✅ FUNGSI BARU: Execute Swap biasa
+    async function executeSwap() {
+      try {
+        if (!provider) return alert('Provider missing');
+        if (!window.ethereum) return alert('Connect wallet first');
+        if (!signer) signer = new providers.Web3Provider(window.ethereum).getSigner();
+
+        const owner = await signer.getAddress();
+        const from = selectedFromToken.address;
+        const to = selectedToToken.address;
+        const amtStr = (fromAmountEl.value || '').trim();
+
+        if (!amtStr) return alert('Enter amount');
+
+        const decFrom = from === 'XPL_NATIVE' ? 18 : await (new Contract(from, ERC20, provider)).decimals();
+        const amountIn = utils.parseUnits(amtStr, decFrom);
+
+        const allowanceOk = await hasAllowance(from, owner, amountIn);
+        if (!allowanceOk) {
+          const ok = confirm('Token not approved. Approve unlimited to router?');
+          if (!ok) return;
+          const res = await approveToken(from);
+          if (!res) return;
+        }
+
+        const path = [from === 'XPL_NATIVE' ? WXPL : from, to === 'XPL_NATIVE' ? WXPL : to];
+        const routerSigner = router.connect(signer);
+
+        if (from === 'XPL_NATIVE') {
+          const amounts = await router.getAmountsOut(amountIn, path);
+          const out = amounts[amounts.length - 1];
+          const sl = parseFloat(document.getElementById('slippage').value || 0.5);
+          const slBps = Math.floor(sl * 100);
+          const amountOutMin = out.mul(10000 - slBps).div(10000);
+          const deadline = (await provider.getBlock('latest')).timestamp + (parseInt(document.getElementById('deadline').value || 10) * 60);
+
+          setStatus('Sending swap (ETH) ...');
+          const tx = await routerSigner.swapExactETHForTokens(amountOutMin, path, owner, deadline, { value: amountIn, gasLimit: 1500000 });
+          txHashEl.innerText = 'Tx: ' + tx.hash;
+          await tx.wait();
+          setStatus('Swap confirmed');
+          alert('Swap complete: ' + tx.hash);
+          txHashEl.innerText = 'Tx: ' + tx.hash;
+          updateBalances();
+          computeOutput();
+          return;
+        }
+
+        const amounts = await router.getAmountsOut(amountIn, path);
+        const out = amounts[amounts.length - 1];
+        const sl = parseFloat(document.getElementById('slippage').value || 0.5);
+        const slBps = Math.floor(sl * 100);
+        const amountOutMin = out.mul(10000 - slBps).div(10000);
+        const deadline = (await provider.getBlock('latest')).timestamp + (parseInt(document.getElementById('deadline').value || 10) * 60);
+
+        setStatus('Sending swap...');
+        let tx;
+
+        if (to === 'XPL_NATIVE') {
+          tx = await routerSigner.swapExactTokensForETH(amountIn, amountOutMin, path, owner, deadline, { gasLimit: 1500000 });
+        } else {
+          tx = await routerSigner.swapExactTokensForTokens(amountIn, amountOutMin, path, owner, deadline, { gasLimit: 1500000 });
+        }
+
+        const scanUrl = `https://plasmascan.to/tx/${tx.hash}`;
+        txHashEl.innerHTML = `
+          <span class="text-gray-300 text-sm">Tx:</span>
+          <a href="${scanUrl}" target="_blank" class="text-blue-400 hover:underline">
+            ${tx.hash.slice(0, 10)}...${tx.hash.slice(-8)}
+          </a>
+        `;
+        await tx.wait();
+        setStatus('Swap confirmed');
+        alert('Swap complete!');
+        txHashEl.innerHTML = `
+          <span class="text-gray-300 text-sm">Tx:</span>
+          <a href="${scanUrl}" target="_blank" class="text-blue-400 hover:underline">
+            ${tx.hash.slice(0, 10)}...${tx.hash.slice(-8)}
+          </a>
+        `;
+
+        updateBalances();
+        computeOutput();
+      } catch (e) {
+        console.error('Swap error', e);
+        alert('Swap failed: ' + (e.message || e));
+        setStatus('Swap failed');
+      }
+    }
+
     function refreshSelectors() {
       const fromDropdown = document.getElementById('fromDropdown');
       const toDropdown = document.getElementById('toDropdown');
@@ -533,56 +773,52 @@
       fromDropdown.innerHTML = '';
       toDropdown.innerHTML = '';
 
-      // ======================================================
-// ✅ Membuat token options untuk kedua dropdown + tombol salin
-// ======================================================
-tokens.forEach(token => {
-  // Untuk FROM dropdown
-  const fromOption = document.createElement('div');
-  fromOption.className = 'token-option';
-  fromOption.innerHTML = `
-    <img src="${token.logoURI || getDefaultLogo(token.symbol)}" 
-         alt="${token.symbol}" 
-         class="token-logo-sm"
-         onerror="this.src='${getDefaultLogo(token.symbol)}'">
-    <div class="token-info">
-      <span class="token-symbol">${token.symbol}</span>
-      <span class="token-name">${token.name || token.symbol} Token</span>
-    </div>
-    <button class="copy-btn" title="Salin alamat token" onclick="event.stopPropagation(); copyAddress('${token.address}')">📋</button>
-  `;
-  fromOption.onclick = (e) => {
-    // Hanya pilih token kalau yang diklik bukan tombol salin
-    if (!e.target.classList.contains("copy-btn")) {
-      e.stopPropagation();
-      selectToken('from', token);
-    }
-  };
-  fromDropdown.appendChild(fromOption);
+      // Membuat token options untuk kedua dropdown + tombol salin
+      tokens.forEach(token => {
+        // Untuk FROM dropdown
+        const fromOption = document.createElement('div');
+        fromOption.className = 'token-option';
+        fromOption.innerHTML = `
+          <img src="${token.logoURI || getDefaultLogo(token.symbol)}" 
+               alt="${token.symbol}" 
+               class="token-logo-sm"
+               onerror="this.src='${getDefaultLogo(token.symbol)}'">
+          <div class="token-info">
+            <span class="token-symbol">${token.symbol}</span>
+            <span class="token-name">${token.name || token.symbol} Token</span>
+          </div>
+          <button class="copy-btn" title="Salin alamat token" onclick="event.stopPropagation(); copyAddress('${token.address}')">📋</button>
+        `;
+        fromOption.onclick = (e) => {
+          if (!e.target.classList.contains("copy-btn")) {
+            e.stopPropagation();
+            selectToken('from', token);
+          }
+        };
+        fromDropdown.appendChild(fromOption);
 
-  // Untuk TO dropdown
-  const toOption = document.createElement('div');
-  toOption.className = 'token-option';
-  toOption.innerHTML = `
-    <img src="${token.logoURI || getDefaultLogo(token.symbol)}" 
-         alt="${token.symbol}" 
-         class="token-logo-sm"
-         onerror="this.src='${getDefaultLogo(token.symbol)}'">
-    <div class="token-info">
-      <span class="token-symbol">${token.symbol}</span>
-      <span class="token-name">${token.name || token.symbol} Token</span>
-    </div>
-    <button class="copy-btn" title="Salin alamat token" onclick="event.stopPropagation(); copyAddress('${token.address}')">📋</button>
-  `;
-  toOption.onclick = (e) => {
-    if (!e.target.classList.contains("copy-btn")) {
-      e.stopPropagation();
-      selectToken('to', token);
-    }
-  };
-  toDropdown.appendChild(toOption);
-});
-
+        // Untuk TO dropdown
+        const toOption = document.createElement('div');
+        toOption.className = 'token-option';
+        toOption.innerHTML = `
+          <img src="${token.logoURI || getDefaultLogo(token.symbol)}" 
+               alt="${token.symbol}" 
+               class="token-logo-sm"
+               onerror="this.src='${getDefaultLogo(token.symbol)}'">
+          <div class="token-info">
+            <span class="token-symbol">${token.symbol}</span>
+            <span class="token-name">${token.name || token.symbol} Token</span>
+          </div>
+          <button class="copy-btn" title="Salin alamat token" onclick="event.stopPropagation(); copyAddress('${token.address}')">📋</button>
+        `;
+        toOption.onclick = (e) => {
+          if (!e.target.classList.contains("copy-btn")) {
+            e.stopPropagation();
+            selectToken('to', token);
+          }
+        };
+        toDropdown.appendChild(toOption);
+      });
 
       // Set default tokens
       selectToken('from', selectedFromToken);
@@ -611,6 +847,9 @@ tokens.forEach(token => {
         selectedToToken = token;
       }
 
+      // ✅ UPDATE BUTTON SWAP/UNWRAP
+      updateSwapButton();
+
       // Update balances dan compute output
       updateBalances();
       computeOutput();
@@ -620,7 +859,7 @@ tokens.forEach(token => {
       if (statusEl) statusEl.innerText = s;
     }
 
-    // FIXED WALLET CONNECTION
+    // WALLET CONNECTION
     async function ensureProvider() {
       if (window.ethereum) {
         try {
@@ -678,7 +917,7 @@ tokens.forEach(token => {
       }
     }
 
-    // FIXED CONNECT BUTTON
+    // CONNECT BUTTON
     connectBtn.onclick = async () => {
       if (!window.ethereum) {
         alert('MetaMask not detected. Please install MetaMask to connect your wallet.');
@@ -923,95 +1162,6 @@ tokens.forEach(token => {
       }
     }
 
-    approveOrSwapBtn.addEventListener('click', async () => {
-      try {
-        if (!provider) return alert('Provider missing');
-        if (!window.ethereum) return alert('Connect wallet first');
-        if (!signer) signer = new providers.Web3Provider(window.ethereum).getSigner();
-
-        const owner = await signer.getAddress();
-        const from = selectedFromToken.address;
-        const to = selectedToToken.address;
-        const amtStr = (fromAmountEl.value || '').trim();
-
-        if (!amtStr) return alert('Enter amount');
-
-        const decFrom = from === 'XPL_NATIVE' ? 18 : await (new Contract(from, ERC20, provider)).decimals();
-        const amountIn = utils.parseUnits(amtStr, decFrom);
-
-        const allowanceOk = await hasAllowance(from, owner, amountIn);
-        if (!allowanceOk) {
-          const ok = confirm('Token not approved. Approve unlimited to router?');
-          if (!ok) return;
-          const res = await approveToken(from);
-          if (!res) return;
-        }
-
-        const path = [from === 'XPL_NATIVE' ? WXPL : from, to === 'XPL_NATIVE' ? WXPL : to];
-        const routerSigner = router.connect(signer);
-
-        if (from === 'XPL_NATIVE') {
-          const amounts = await router.getAmountsOut(amountIn, path);
-          const out = amounts[amounts.length - 1];
-          const sl = parseFloat(document.getElementById('slippage').value || 0.5);
-          const slBps = Math.floor(sl * 100);
-          const amountOutMin = out.mul(10000 - slBps).div(10000);
-          const deadline = (await provider.getBlock('latest')).timestamp + (parseInt(document.getElementById('deadline').value || 10) * 60);
-
-          setStatus('Sending swap (ETH) ...');
-          const tx = await routerSigner.swapExactETHForTokens(amountOutMin, path, owner, deadline, { value: amountIn, gasLimit: 1500000 });
-          txHashEl.innerText = 'Tx: ' + tx.hash;
-          await tx.wait();
-          setStatus('Swap confirmed');
-          alert('Swap complete: ' + tx.hash);
-          txHashEl.innerText = 'Tx: ' + tx.hash;
-          updateBalances();
-          computeOutput();
-          return;
-        }
-
-        const amounts = await router.getAmountsOut(amountIn, path);
-        const out = amounts[amounts.length - 1];
-        const sl = parseFloat(document.getElementById('slippage').value || 0.5);
-        const slBps = Math.floor(sl * 100);
-        const amountOutMin = out.mul(10000 - slBps).div(10000);
-        const deadline = (await provider.getBlock('latest')).timestamp + (parseInt(document.getElementById('deadline').value || 10) * 60);
-
-        setStatus('Sending swap...');
-        let tx;
-
-        if (to === 'XPL_NATIVE') {
-          tx = await routerSigner.swapExactTokensForETH(amountIn, amountOutMin, path, owner, deadline, { gasLimit: 1500000 });
-        } else {
-          tx = await routerSigner.swapExactTokensForTokens(amountIn, amountOutMin, path, owner, deadline, { gasLimit: 1500000 });
-        }
-
-        const scanUrl = `https://plasmascan.to/tx/${tx.hash}`;
-        txHashEl.innerHTML = `
-          <span class="text-gray-300 text-sm">Tx:</span>
-          <a href="${scanUrl}" target="_blank" class="text-blue-400 hover:underline">
-            ${tx.hash.slice(0, 10)}...${tx.hash.slice(-8)}
-          </a>
-        `;
-        await tx.wait();
-        setStatus('Swap confirmed');
-        alert('Swap complete!');
-        txHashEl.innerHTML = `
-          <span class="text-gray-300 text-sm">Tx:</span>
-          <a href="${scanUrl}" target="_blank" class="text-blue-400 hover:underline">
-            ${tx.hash.slice(0, 10)}...${tx.hash.slice(-8)}
-          </a>
-        `;
-
-        updateBalances();
-        computeOutput();
-      } catch (e) {
-        console.error('Swap error', e);
-        alert('Swap failed: ' + (e.message || e));
-        setStatus('Swap failed');
-      }
-    });
-
     async function refreshButtonState() {
       try {
         if (!provider) return;
@@ -1026,7 +1176,6 @@ tokens.forEach(token => {
         const amtStr = (fromAmountEl.value || '').trim();
 
         if (!amtStr) {
-          approveOrSwapBtn.innerText = 'Swap';
           return;
         }
 
@@ -1034,10 +1183,12 @@ tokens.forEach(token => {
         const amountIn = utils.parseUnits(amtStr, decFrom);
         const ok = await hasAllowance(from, owner, amountIn);
 
-        approveOrSwapBtn.innerText = ok ? 'Swap' : 'Approve';
+        // Hanya update text jika button dalam mode Swap
+        if (approveOrSwapBtn.textContent === 'Swap') {
+          approveOrSwapBtn.innerText = ok ? 'Swap' : 'Approve';
+        }
       } catch (e) {
         console.warn('Refresh button', e);
-        approveOrSwapBtn.innerText = 'Swap';
       }
     }
 
@@ -1051,7 +1202,7 @@ tokens.forEach(token => {
     await updateBalances();
     computeOutput();
 
-    // === Custom Navigation URLs ===
+    // Navigation URLs
     const addLiquidityUrl = 'https://cozyswap.net/liquidity';
     const stakingUrl = 'https://cozyswap.net/staking';
 
@@ -1080,39 +1231,6 @@ tokens.forEach(token => {
     }
 
   })();
-    function copyAddress(addr) {
-  if (!addr) return showToast("⚠️ Token address not found", true);
-  navigator.clipboard.writeText(addr)
-    .then(() => showToast("✅ Token address copied to clipboard"))
-    .catch(() => showToast("❌ Failed to copy address", true));
-}
-
-function showToast(message, isError = false) {
-  const toast = document.createElement("div");
-  toast.textContent = message;
-  toast.style.position = "fixed";
-  toast.style.bottom = "24px";
-  toast.style.left = "50%";
-  toast.style.transform = "translateX(-50%)";
-  toast.style.padding = "10px 18px";
-  toast.style.background = isError ? "rgba(220, 53, 69, 0.9)" : "rgba(40, 167, 69, 0.9)";
-  toast.style.color = "#fff";
-  toast.style.fontSize = "14px";
-  toast.style.borderRadius = "8px";
-  toast.style.boxShadow = "0 2px 6px rgba(0,0,0,0.3)";
-  toast.style.zIndex = "9999";
-  toast.style.opacity = "0";
-  toast.style.transition = "opacity 0.3s ease";
-
-  document.body.appendChild(toast);
-  setTimeout(() => toast.style.opacity = "1", 10);
-
-  setTimeout(() => {
-    toast.style.opacity = "0";
-    setTimeout(() => toast.remove(), 400);
-  }, 2500);
-}
-
   </script>
   <script src="appkit.bundle.js"></script>
 </body>
