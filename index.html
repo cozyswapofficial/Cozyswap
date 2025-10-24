@@ -150,40 +150,38 @@
   "url": "https://cozyswap.net/swap",
   "logo": "https://cozyswap.net/assets/cozy.png",
   "description": "CozySwap is a decentralized exchange (DEX) built on Plasma (XPL 9745) network. Swap tokens instantly, add liquidity, and earn COZY rewards — fast, secure, and community-driven.",
-  "currenciesAccepted": ["COZY", "XPL", "WXPL"],
+  "currenciesAccepted": ["XPL", "WXPL"],
   "paymentAccepted": ["COZY", "XPL"],
   "foundingDate": "2025",
   "parentOrganization": {
     "@type": "Organization",
     "name": "CozySwap",
-    "url": "https://cozyswap.net"
+    "url": "https://cozyswap.net/"
   },
   "sameAs": [
     "https://twitter.com/CozySwap_net",
     "https://t.me/CozySwap_net",
     "https://github.com/cozyswap1"
   ],
-  "offers": {
+  "hasProduct": {
     "@type": "Product",
-    "itemOffered": {
-      "@type": "Product",
-      "name": "Cozy Token",
-      "additionalProperty": [
-        {
-          "@type": "PropertyValue",
-          "name": "smartContractAddress",
-          "value": "0x06e2ef46662834f4e42dbf9ff9222b077c57df5c"
-        },
-        {
-          "@type": "PropertyValue",
-          "name": "blockchainNetwork",
-          "value": "Plasma (Chain ID: 9745)"
-        }
-      ]
-    }
+    "name": "Cozy Token",
+    "description": "Cozy Token ($COZY) is the native utility token of CozySwap — powering swaps, liquidity pools, and governance on the Plasma (XPL 9745) network.",
+    "image": "https://cozyswap.net/assets/cozy.png",
+    "additionalProperty": [{
+      "@type": "PropertyValue",
+      "name": "Smart Contract Address",
+      "value": "0x06e2ef46662834f4e42dbf9ff9222b077c57df5c"
+    },
+    {
+      "@type": "PropertyValue",
+      "name": "Blockchain Network",
+      "value": "Plasma (Chain ID: 9745)"
+    }]
   }
 }
 </script>
+
 
 <!-- 🔹 JSON-LD STRUCTURED DATA (DeFi Protocol) -->
 <script type="application/ld+json">
