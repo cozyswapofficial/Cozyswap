@@ -1189,7 +1189,7 @@ async function onSelectPool(metaA, metaB, pairAddr, originEl=null, isOwner=false
       }catch(e){ console.error('pmAdd err', e); alert('Add failed: ' + (e.message||e)); pmMsg.innerText = 'Add failed'; }
     });
 
-    // Remove liquidity if owner
+    // Remove liquidity if owner - WITH AUTO UNWRAP
     if(isOwner && pmRemove){
       pmRemove.addEventListener('click', async ()=>{
         try{
@@ -1202,22 +1202,56 @@ async function onSelectPool(metaA, metaB, pairAddr, originEl=null, isOwner=false
           const pctS = prompt('Percent to remove (0-100)', '25'); if(!pctS) return;
           const pct = Math.max(0, Math.min(100, Number(pctS)));
           const removeLP = lpBal.mul(pct).div(100);
+          
           try{
             const lpToken = new ethersLib.Contract(pairAddr, ERC20_ABI, provider);
             const allow = await lpToken.allowance(ownerAddr, ROUTER);
-            if(allow.lt(removeLP)){ const txa = await lpToken.connect(signer).approve(ROUTER, ethersLib.constants.MaxUint256); await txa.wait(); }
+            if(allow.lt(removeLP)){ 
+              const txa = await lpToken.connect(signer).approve(ROUTER, ethersLib.constants.MaxUint256); 
+              await txa.wait(); 
+            }
           }catch(e){ console.warn('lp approve skip', e); }
+          
           const routerS = routerContract.connect(signer);
           const deadline = (await provider.getBlock('latest')).timestamp + 60*10;
           pmMsg.innerText = 'Removing liquidity...';
+          
           const tx = await routerS.removeLiquidity(onA, onB, removeLP, 0, 0, ownerAddr, deadline);
           pmMsg.innerHTML = `Tx sent: <a class="tx-link" data-h="${tx.hash}">${shortAddr(tx.hash)}</a>`;
           pmMsg.querySelector('a.tx-link').onclick = (e)=>{ const h=e.currentTarget.getAttribute('data-h'); if(h) location.href = SCAN_BASE + h; };
           addTxToHistory(tx.hash, 'removeLiquidity');
           await tx.wait();
-          pmMsg.innerText = 'Removed: ' + tx.hash;
+          
+          // ✅ AUTO UNWRAP WXPL JIKA INI XPL PAIR
+          const isXPLPair = metaAf.address === 'XPL_NATIVE' || metaBf.address === 'XPL_NATIVE';
+          if (isXPLPair) {
+            pmMsg.innerText = 'Liquidity removed. Unwrapping WXPL to XPL...';
+            
+            // ABI untuk WXPL
+            const WXPL_ABI = [
+              "function withdraw(uint wad) external",
+              "function balanceOf(address) external view returns (uint)"
+            ];
+            
+            const wxplContract = new ethersLib.Contract(WXPL, WXPL_ABI, signer);
+            const wxplBalance = await wxplContract.balanceOf(ownerAddr);
+            
+            if (wxplBalance.gt(0)) {
+              const unwrapTx = await wxplContract.withdraw(wxplBalance);
+              await unwrapTx.wait();
+              pmMsg.innerText = '✅ Success! Liquidity removed and WXPL unwrapped to XPL!';
+            } else {
+              pmMsg.innerText = '✅ Liquidity removed! (No WXPL to unwrap)';
+            }
+          } else {
+            pmMsg.innerText = '✅ Liquidity removed!';
+          }
+          
           await renderMyPools();
-        }catch(e){ console.error('pmRemove err', e); alert('Remove failed: ' + (e.message||e)); }
+        }catch(e){ 
+          console.error('pmRemove err', e); 
+          pmMsg.innerText = 'Remove failed: ' + (e.message||e); 
+        }
       });
     }
 
