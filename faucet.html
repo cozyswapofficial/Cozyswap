@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CozySwap Faucet</title>
+
+<!-- Meta -->
+<meta name="description" content="Claim free TTA tokens from CozySwap Faucet on Plasma Chain." />
+<meta property="og:title" content="CozySwap Faucet" />
+<meta property="og:description" content="Claim free TTA tokens and explore CozySwap on Plasma Network." />
+<meta property="og:image" content="https://cozyswap.net/assets/cozy.png" />
+
+<!-- Styles -->
+<style>
+  body {
+    font-family: 'Segoe UI', sans-serif;
+    background: #0f172a;
+    color: #f8fafc;
+    margin: 0;
+    padding: 0;
+  }
+  .container {
+    max-width: 600px;
+    margin: 2.5rem auto;
+    background: #1e293b;
+    padding: 2rem;
+    border-radius: 1rem;
+    box-shadow: 0 0 15px rgba(0,0,0,0.3);
+    text-align: center;
+  }
+  h1 {
+    font-size: 1.8rem;
+    color: #38bdf8;
+    margin-top: 0.8rem;
+  }
+  img.logo {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    box-shadow: 0 0 15px #38bdf8;
+  }
+  .btn {
+    display: inline-block;
+    padding: 0.8rem 1.4rem;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    font-weight: bold;
+    margin: 0.4rem;
+  }
+  .btn-primary {
+    background: #38bdf8;
+    color: #0f172a;
+  }
+  .btn-primary:hover {
+    background: #0ea5e9;
+  }
+  .btn-outline {
+    background: transparent;
+    border: 2px solid #38bdf8;
+    color: #38bdf8;
+  }
+  .btn-outline:hover {
+    background: #38bdf8;
+    color: #0f172a;
+  }
+  .address-box {
+    background: #0f172a;
+    border: 1px solid #334155;
+    border-radius: 0.5rem;
+    padding: 0.8rem;
+    margin-bottom: 0.6rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.9rem;
+  }
+  .copy-btn {
+    background: #1e293b;
+    border: 1px solid #38bdf8;
+    color: #38bdf8;
+    border-radius: 5px;
+    cursor: pointer;
+    padding: 4px 10px;
+  }
+  .copy-btn:hover {
+    background: #38bdf8;
+    color: #0f172a;
+  }
+  .status {
+    text-align: center;
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    color: #94a3b8;
+  }
+  .top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+  @media(max-width: 600px) {
+    .container { margin: 1rem; padding: 1.5rem; }
+    h1 { font-size: 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="top-bar">
+    <img src="https://cozyswap.net/assets/cozy.png" alt="CozySwap Logo" class="logo" />
+    <button id="connectButton" class="btn btn-outline">🔗 Connect Wallet</button>
+  </div>
+
+  <h1>💧 CozySwap Faucet</h1>
+
+  <button id="exploreBtn" class="btn btn-outline" onclick="window.open('https://cozyswap.net','_blank')">
+    🌐 Explore CozySwap Now
+  </button>
+  <button id="claimButton" class="btn btn-primary" disabled>🎁 Claim Faucet</button>
+
+  <h3 style="margin-top:2rem;color:#38bdf8;">Token Addresses</h3>
+  <div class="address-box">
+    <span>TTA Token:</span>
+    <span>
+      <code id="ttaAddress">0x66..76</code>
+      <button class="copy-btn" onclick="copyToClipboardFull('0x742641b0C71E855A86eADC4978699c9d215DED5a')">Copy</button>
+    </span>
+  </div>
+  <div class="address-box">
+    <span>TTB Token:</span>
+    <span>
+      <code id="ttbAddress">0x66..76</code>
+      <button class="copy-btn" onclick="copyToClipboardFull('0x8D95E3a22c673A58C47608b9b9E76C7D29F1b58C')">Copy</button>
+    </span>
+  </div>
+
+  <div class="status" id="claimStatus">🔄 Connect your wallet to begin...</div>
+</div>
+
+<!-- Ethers.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.1/ethers.umd.min.js"></script>
+
+<script>
+const CONFIG = {
+  chainId: 9745,
+  rpcUrl: "https://rpc.plasmascan.org",
+  faucetAddress: "0x10992B84bA1f3E25a78663854001FEbe0538B3EF",
+  tokenAddress: "0x742641b0C71E855A86eADC4978699c9d215DED5a",
+  tokenSymbol: "TTA",
+  decimals: 18
+};
+
+const FAUCET_ABI = [
+  {"inputs":[],"name":"claimTokens","outputs":[],"stateMutability":"nonpayable","type":"function"},
+  {"inputs":[{"internalType":"address","name":"user","type":"address"}],"name":"getNextClaimTime","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
+  {"inputs":[{"internalType":"address","name":"user","type":"address"}],"name":"canUserClaim","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},
+  {"inputs":[],"name":"getFaucetBalance","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
+  {"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"lastClaimTime","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"}
+];
+
+let provider, signer, faucet;
+
+async function connectWallet() {
+  if (!window.ethereum) {
+    alert("Please install MetaMask!");
+    return;
+  }
+
+  provider = new ethers.providers.Web3Provider(window.ethereum);
+  await provider.send("eth_requestAccounts", []);
+  signer = provider.getSigner();
+
+  const network = await provider.getNetwork();
+  if (network.chainId !== CONFIG.chainId) {
+    alert("Please switch to Plasma Chain (Chain ID 9745)");
+    return;
+  }
+
+  faucet = new ethers.Contract(CONFIG.faucetAddress, FAUCET_ABI, signer);
+  document.getElementById("connectButton").textContent = "✅ Connected";
+  loadStatus();
+}
+
+async function loadStatus() {
+  const address = await signer.getAddress();
+  const canClaim = await faucet.canUserClaim(address);
+  const nextClaim = await faucet.getNextClaimTime(address);
+
+  if (canClaim) {
+    document.getElementById("claimButton").disabled = false;
+    document.getElementById("claimStatus").textContent = "✅ Ready to claim!";
+  } else {
+    const remaining = nextClaim - Math.floor(Date.now() / 1000);
+    const hours = Math.floor(remaining / 3600);
+    const mins = Math.floor((remaining % 3600) / 60);
+    document.getElementById("claimButton").disabled = true;
+    document.getElementById("claimStatus").textContent =
+      `⏳ Next claim in ${hours}h ${mins}m`;
+  }
+}
+
+document.getElementById("claimButton").addEventListener("click", async () => {
+  try {
+    document.getElementById("claimStatus").textContent = "⏳ Claiming tokens...";
+    const tx = await faucet.claimTokens();
+    await tx.wait();
+    document.getElementById("claimStatus").textContent = "🎉 Claim successful!";
+    loadStatus();
+  } catch (e) {
+    console.error(e);
+    document.getElementById("claimStatus").textContent = "❌ Claim failed.";
+  }
+});
+
+function copyToClipboardFull(address) {
+  navigator.clipboard.writeText(address);
+  alert("Copied: " + address);
+}
+
+document.getElementById("connectButton").addEventListener("click", connectWallet);
+</script>
+
+</body>
+</html>
