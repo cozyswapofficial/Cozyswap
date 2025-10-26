@@ -1,0 +1,804 @@
+versi 1
+
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>CozySwap — Real Auto Trading</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  :root{--bg:#0b0b0f;--card:#111216;--muted:#9aa0a6;--accent1:#6c63ff;--accent2:#00c6ff}
+  body{background:var(--bg);color:#e6eef8;font-family:Inter,system-ui,Segoe UI,Roboto,Arial;margin:0}
+  .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:14px;padding:16px;border:1px solid rgba(255,255,255,0.03)}
+  .muted{color:var(--muted)}
+  .small{font-size:13px}
+  .btn-grad{background:linear-gradient(90deg,var(--accent1),var(--accent2));color:white}
+  .rounded-full-img{width:48px;height:48px;border-radius:50%;object-fit:cover}
+  a.tx-link{color:#66b2ff;text-decoration:underline;cursor:pointer}
+  .auto-buy{background:linear-gradient(90deg,#10b981,#059669)}
+  .auto-sell{background:linear-gradient(90deg,#ef4444,#dc2626)}
+  .wallet-active{background:linear-gradient(90deg,#3b82f6,#1d4ed8)}
+</style>
+</head>
+<body class="p-4">
+  <div class="max-w-6xl mx-auto">
+    <header class="flex items-center justify-between mb-6">
+      <div class="flex items-center gap-4">
+        <img src="https://photos.pinksale.finance/file/pinksale-logo-upload/1759992605150-e3175ba3ea1d9672e44128a60a685807.JPG" class="rounded-full-img" alt="Cozy"/>
+        <div>
+          <div class="text-2xl font-semibold">CozySwap — Real Auto Trading</div>
+          <div class="muted small">Plasma (9745) • Trading Real COZY/CRY</div>
+        </div>
+      </div>
+      <div class="flex items-center gap-3">
+        <div id="walletAddress" class="muted small">Not connected</div>
+        <button id="connectBtn" class="px-3 py-2 rounded-lg btn-grad">Connect Wallet</button>
+      </div>
+    </header>
+
+    <nav class="flex gap-2 mb-4">
+      <button id="tabMy" class="px-4 py-2 text-gray-300">My Pools</button>
+      <button id="tabRealTrade" class="px-4 py-2 text-blue-400 border-b-2 border-blue-400">Real Auto Trade</button>
+    </nav>
+
+    <!-- Real Auto Trading -->
+    <section id="viewRealTrade">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <!-- Trading Configuration -->
+        <div class="card lg:col-span-2">
+          <div class="font-semibold mb-4">Real Auto Trading Configuration</div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <div>
+              <label class="small muted">Trading Pair</label>
+              <select id="tradePair" class="w-full bg-transparent border rounded-lg px-3 py-2 mt-1">
+                <option value="COZY_XPL">COZY/XPL</option>
+                <option value="CRY_XPL">CRY BABY/XPL</option>
+                <option value="COZY_CRY">COZY/CRY BABY</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="small muted">Trade Mode</label>
+              <select id="tradeMode" class="w-full bg-transparent border rounded-lg px-3 py-2 mt-1">
+                <option value="BUY_ONLY">Buy Only</option>
+                <option value="SELL_ONLY">Sell Only</option>
+                <option value="BUY_SELL">Buy & Sell</option>
+                <option value="RANDOM">Random</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+            <div>
+              <label class="small muted">Min Amount (XPL)</label>
+              <input id="minAmount" type="number" step="0.001" value="0.01" class="w-full bg-transparent border rounded-lg px-3 py-2 mt-1"/>
+            </div>
+
+            <div>
+              <label class="small muted">Max Amount (XPL)</label>
+              <input id="maxAmount" type="number" step="0.001" value="0.1" class="w-full bg-transparent border rounded-lg px-3 py-2 mt-1"/>
+            </div>
+
+            <div>
+              <label class="small muted">Interval (seconds)</label>
+              <input id="tradeInterval" type="number" value="45" class="w-full bg-transparent border rounded-lg px-3 py-2 mt-1"/>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <div>
+              <label class="small muted">Slippage (%)</label>
+              <input id="slippage" type="number" value="3" class="w-full bg-transparent border rounded-lg px-3 py-2 mt-1"/>
+            </div>
+
+            <div>
+              <label class="small muted">Max Trades per Wallet</label>
+              <input id="maxTrades" type="number" value="10" class="w-full bg-transparent border rounded-lg px-3 py-2 mt-1"/>
+            </div>
+          </div>
+
+          <div class="flex gap-3">
+            <button id="btnStartRealTrade" class="flex-1 px-4 py-3 rounded-lg auto-buy font-semibold">Start Real Trading</button>
+            <button id="btnStopRealTrade" class="flex-1 px-4 py-3 rounded-lg auto-sell font-semibold">Stop Trading</button>
+            <button id="btnEmergencyStop" class="px-4 py-3 rounded-lg bg-red-600 font-semibold">EMERGENCY STOP</button>
+          </div>
+        </div>
+
+        <!-- Wallet Management -->
+        <div class="card">
+          <div class="font-semibold mb-4">Trading Wallets</div>
+
+          <div class="space-y-3 mb-4">
+            <div class="flex items-center justify-between p-3 bg-black bg-opacity-30 rounded-lg">
+              <div>
+                <div class="font-medium">Main Wallet</div>
+                <div class="muted small" id="mainWalletBalance">Balance: —</div>
+              </div>
+              <div class="text-green-400 text-sm">Active</div>
+            </div>
+
+            <div id="botWalletsList" class="space-y-2">
+              <!-- Bot wallets will be added here dynamically -->
+            </div>
+          </div>
+
+          <div class="space-y-3">
+            <button id="btnAddBotWallet" class="w-full px-3 py-2 rounded-lg border border-dashed border-gray-600 text-gray-400 hover:text-white">
+              + Add Bot Wallet
+            </button>
+
+            <div class="bg-yellow-900 bg-opacity-20 rounded-lg p-3">
+              <div class="small text-yellow-400">
+                ⚠️ Warning: Store private keys securely
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Trading Statistics -->
+      <div class="card mt-4">
+        <div class="font-semibold mb-4">Trading Statistics</div>
+
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div class="text-center p-3 bg-black bg-opacity-20 rounded-lg">
+            <div class="text-2xl font-bold text-green-400" id="totalBuys">0</div>
+            <div class="muted small">Total Buys</div>
+          </div>
+
+          <div class="text-center p-3 bg-black bg-opacity-20 rounded-lg">
+            <div class="text-2xl font-bold text-red-400" id="totalSells">0</div>
+            <div class="muted small">Total Sells</div>
+          </div>
+
+          <div class="text-center p-3 bg-black bg-opacity-20 rounded-lg">
+            <div class="text-2xl font-bold text-blue-400" id="activeWallets">1</div>
+            <div class="muted small">Active Wallets</div>
+          </div>
+
+          <div class="text-center p-3 bg-black bg-opacity-20 rounded-lg">
+            <div class="text-2xl font-bold text-purple-400" id="totalVolume">0</div>
+            <div class="muted small">Total Volume</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Live Trading Activity -->
+      <div class="card mt-4">
+        <div class="font-semibold mb-4">Live Real Trading Activity</div>
+        <div id="realActivityLog" class="max-h-80 overflow-y-auto space-y-2 small">
+          <div class="text-center muted py-8">No real trading activity yet</div>
+        </div>
+      </div>
+
+      <!-- Add Wallet Modal -->
+      <div id="addWalletModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-gray-900 rounded-lg p-6 w-full max-w-md">
+          <div class="font-semibold mb-4">Add Bot Wallet</div>
+
+          <div class="space-y-3">
+            <div>
+              <label class="small muted">Private Key</label>
+              <input id="newWalletPrivateKey" type="password" placeholder="Enter private key" class="w-full bg-transparent border rounded-lg px-3 py-2 mt-1"/>
+            </div>
+
+            <div>
+              <label class="small muted">Wallet Name (optional)</label>
+              <input id="newWalletName" placeholder="Bot Wallet 1" class="w-full bg-transparent border rounded-lg px-3 py-2 mt-1"/>
+            </div>
+
+            <div class="flex gap-2 mt-4">
+              <button id="btnConfirmAddWallet" class="flex-1 px-3 py-2 rounded-lg btn-grad">Add Wallet</button>
+              <button id="btnCancelAddWallet" class="flex-1 px-3 py-2 rounded-lg border muted">Cancel</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+<script>
+/* ============================
+  Config & Dependencies
+   ============================ */
+const RPC = 'https://plasma-mainnet.g.alchemy.com/v2/MuLXFm60Tsz3ntyrSC1O4';
+const CHAIN_ID_HEX = '0x2611';
+const ROUTER = '0x89E695B38610e78a77Fb310458Dfd855505AD239';
+const FACTORY = '0xa252e44D3478CeBb1a3D59C9146CD860cb09Ec93';
+const WXPL = '0x6100E367285b01F48D07953803A2d8dCA5D19873';
+const SCAN_BASE = 'https://plasmascan.to/tx/';
+
+// Token Addresses
+const TOKENS = {
+  XPL: { symbol: 'XPL', address: 'XPL_NATIVE', decimals: 18 },
+  COZY: { symbol: 'COZY', address: '0x06e2ef46662834f4e42dbf9ff9222b077c57df5c', decimals: 18 },
+  CRY: { symbol: 'CRY BABY', address: '0x59cdd876f3b8a4e81ecb467078ea009f80052fa2', decimals: 18 }
+};
+
+const TRADING_PAIRS = {
+  'COZY_XPL': { base: TOKENS.COZY, quote: TOKENS.XPL },
+  'CRY_XPL': { base: TOKENS.CRY, quote: TOKENS.XPL },
+  'COZY_CRY': { base: TOKENS.COZY, quote: TOKENS.CRY }
+};
+
+const ERC20_ABI = [
+  'function decimals() view returns (uint8)',
+  'function symbol() view returns (string)',
+  'function balanceOf(address) view returns (uint256)',
+  'function approve(address spender,uint256 amount) returns (bool)',
+  'function allowance(address owner,address spender) view returns (uint256)',
+  'function transfer(address to, uint256 amount) returns (bool)'
+];
+
+const ROUTER_ABI = [
+  'function swapExactETHForTokens(uint amountOutMin, address[] path, address to, uint deadline) payable returns (uint[] amounts)',
+  'function swapExactTokensForETH(uint amountIn, uint amountOutMin, address[] path, address to, uint deadline) returns (uint[] amounts)',
+  'function swapExactTokensForTokens(uint amountIn, uint amountOutMin, address[] path, address to, uint deadline) returns (uint[] amounts)',
+  'function getAmountsOut(uint amountIn, address[] path) view returns (uint[] amounts)'
+];
+
+/* ============================
+  Global Variables
+   ============================ */
+let ethersLib, provider, mainSigner, mainAccount;
+let routerContract;
+let realTradeInterval = null;
+let isRealTrading = false;
+let tradingStats = {
+  totalBuys: 0,
+  totalSells: 0,
+  totalVolume: 0,
+  activeWallets: 1
+};
+
+// Wallet management
+let botWallets = [];
+const LS_BOT_WALLETS = 'cozy_bot_wallets';
+
+/* ============================
+  DOM Elements
+   ============================ */
+const tabRealTrade = document.getElementById('tabRealTrade');
+const viewRealTrade = document.getElementById('viewRealTrade');
+const tradePair = document.getElementById('tradePair');
+const tradeMode = document.getElementById('tradeMode');
+const minAmount = document.getElementById('minAmount');
+const maxAmount = document.getElementById('maxAmount');
+const tradeInterval = document.getElementById('tradeInterval');
+const slippage = document.getElementById('slippage');
+const maxTrades = document.getElementById('maxTrades');
+const btnStartRealTrade = document.getElementById('btnStartRealTrade');
+const btnStopRealTrade = document.getElementById('btnStopRealTrade');
+const btnEmergencyStop = document.getElementById('btnEmergencyStop');
+const mainWalletBalance = document.getElementById('mainWalletBalance');
+const botWalletsList = document.getElementById('botWalletsList');
+const btnAddBotWallet = document.getElementById('btnAddBotWallet');
+const totalBuys = document.getElementById('totalBuys');
+const totalSells = document.getElementById('totalSells');
+const activeWallets = document.getElementById('activeWallets');
+const totalVolume = document.getElementById('totalVolume');
+const realActivityLog = document.getElementById('realActivityLog');
+const addWalletModal = document.getElementById('addWalletModal');
+const newWalletPrivateKey = document.getElementById('newWalletPrivateKey');
+const newWalletName = document.getElementById('newWalletName');
+const btnConfirmAddWallet = document.getElementById('btnConfirmAddWallet');
+const btnCancelAddWallet = document.getElementById('btnCancelAddWallet');
+
+/* ============================
+  Helper Functions
+   ============================ */
+function loadLS(k, d) { 
+  try { 
+    const v = localStorage.getItem(k); 
+    return v ? JSON.parse(v) : d;
+  } catch(e) { 
+    return d; 
+  } 
+}
+
+function saveLS(k, v) { 
+  try { 
+    localStorage.setItem(k, JSON.stringify(v)); 
+  } catch(e) {} 
+}
+
+function shortAddr(a) { 
+  if(!a) return '-'; 
+  return a.slice(0,6) + '...' + a.slice(-4); 
+}
+
+function addRealActivityLog(message, type = 'info') {
+  const logEntry = document.createElement('div');
+  const timestamp = new Date().toLocaleTimeString();
+  const colors = {
+    buy: 'text-green-400',
+    sell: 'text-red-400',
+    info: 'text-blue-400',
+    error: 'text-yellow-400'
+  };
+
+  logEntry.innerHTML = `
+    <div class="flex justify-between items-center p-2 bg-black bg-opacity-20 rounded">
+      <span class="${colors[type] || 'text-gray-400'}">${message}</span>
+      <span class="muted text-xs">${timestamp}</span>
+    </div>
+  `;
+
+  realActivityLog.insertBefore(logEntry, realActivityLog.firstChild);
+
+  // Keep only last 50 entries
+  if (realActivityLog.children.length > 50) {
+    realActivityLog.removeChild(realActivityLog.lastChild);
+  }
+}
+
+function updateTradingStats() {
+  totalBuys.textContent = tradingStats.totalBuys;
+  totalSells.textContent = tradingStats.totalSells;
+  activeWallets.textContent = tradingStats.activeWallets;
+  totalVolume.textContent = tradingStats.totalVolume.toFixed(4);
+}
+
+/* ============================
+  Wallet Management
+   ============================ */
+function loadBotWallets() {
+  botWallets = loadLS(LS_BOT_WALLETS, []);
+  renderBotWallets();
+}
+
+function saveBotWallets() {
+  saveLS(LS_BOT_WALLETS, botWallets);
+}
+
+function renderBotWallets() {
+  botWalletsList.innerHTML = '';
+
+  botWallets.forEach((wallet, index) => {
+    const walletEl = document.createElement('div');
+    walletEl.className = 'flex items-center justify-between p-3 bg-black bg-opacity-20 rounded-lg';
+    walletEl.innerHTML = `
+      <div>
+        <div class="font-medium">${wallet.name || `Bot ${index + 1}`}</div>
+        <div class="muted small">${shortAddr(wallet.address)} • Balance: <span id="botBalance${index}">—</span></div>
+      </div>
+      <div class="flex gap-2">
+        <button class="remove-wallet text-red-400 text-xs px-2 py-1 border border-red-400 rounded" data-index="${index}">Remove</button>
+      </div>
+    `;
+    botWalletsList.appendChild(walletEl);
+  });
+
+  // Add event listeners for remove buttons
+  document.querySelectorAll('.remove-wallet').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      const index = parseInt(e.target.getAttribute('data-index'));
+      removeBotWallet(index);
+    });
+  });
+
+  tradingStats.activeWallets = 1 + botWallets.length; // Main wallet + bot wallets
+  updateTradingStats();
+  updateWalletBalances();
+}
+
+function removeBotWallet(index) {
+  if (confirm('Are you sure you want to remove this wallet? This cannot be undone.')) {
+    botWallets.splice(index, 1);
+    saveBotWallets();
+    renderBotWallets();
+    addRealActivityLog(`Removed bot wallet ${index + 1}`, 'info');
+  }
+}
+
+async function updateWalletBalances() {
+  try {
+    // Update main wallet balance
+    if (mainAccount) {
+      const balance = await provider.getBalance(mainAccount);
+      mainWalletBalance.textContent = `Balance: ${ethersLib.utils.formatUnits(balance, 18)} XPL`;
+    }
+
+    // Update bot wallet balances
+    for (let i = 0; i < botWallets.length; i++) {
+      const wallet = botWallets[i];
+      try {
+        const walletSigner = new ethersLib.Wallet(wallet.privateKey, provider);
+        const balance = await provider.getBalance(walletSigner.address);
+        const balanceEl = document.getElementById(`botBalance${i}`);
+        if (balanceEl) {
+          balanceEl.textContent = `${ethersLib.utils.formatUnits(balance, 18)} XPL`;
+        }
+      } catch (e) {
+        console.error('Error updating bot wallet balance:', e);
+      }
+    }
+  } catch (e) {
+    console.error('Error updating wallet balances:', e);
+  }
+}
+
+/* ============================
+  Trading Functions
+   ============================ */
+async function executeRealTrade() {
+  if (!isRealTrading) return;
+
+  const selectedPair = TRADING_PAIRS[tradePair.value];
+  const mode = tradeMode.value;
+  const minAmt = parseFloat(minAmount.value) || 0.01;
+  const maxAmt = parseFloat(maxAmount.value) || 0.1;
+  const slippagePct = parseFloat(slippage.value) || 3;
+
+  // Determine trade type based on mode
+  let tradeType;
+  if (mode === 'BUY_ONLY') tradeType = 'BUY';
+  else if (mode === 'SELL_ONLY') tradeType = 'SELL';
+  else if (mode === 'RANDOM') tradeType = Math.random() > 0.5 ? 'BUY' : 'SELL';
+  else tradeType = 'BUY'; // Default for BUY_SELL
+
+  // Select random wallet (main wallet or bot wallet)
+  const allWallets = [
+    { signer: mainSigner, address: mainAccount, name: 'Main Wallet' },
+    ...botWallets.map(w => ({
+      signer: new ethersLib.Wallet(w.privateKey, provider),
+      address: w.address,
+      name: w.name || 'Bot Wallet'
+    }))
+  ].filter(w => w.signer);
+
+  if (allWallets.length === 0) {
+    addRealActivityLog('No wallets available for trading', 'error');
+    return;
+  }
+
+  const selectedWallet = allWallets[Math.floor(Math.random() * allWallets.length)];
+  const tradeAmount = minAmt + Math.random() * (maxAmt - minAmt);
+
+  try {
+    if (tradeType === 'BUY') {
+      await executeBuy(selectedWallet, selectedPair, tradeAmount, slippagePct);
+    } else {
+      await executeSell(selectedWallet, selectedPair, tradeAmount, slippagePct);
+    }
+  } catch (error) {
+    addRealActivityLog(`Trade failed: ${error.message}`, 'error');
+    console.error('Trade execution error:', error);
+  }
+}
+
+async function executeBuy(wallet, pair, amount, slippagePct) {
+  const amountIn = ethersLib.utils.parseEther(amount.toString());
+  const path = pair.quote.address === 'XPL_NATIVE' 
+    ? [WXPL, pair.base.address]
+    : [pair.quote.address, pair.base.address];
+
+  // Get expected output
+  const amounts = await routerContract.getAmountsOut(amountIn, path);
+  const expectedOut = amounts[1];
+  const minOut = expectedOut.mul(100 - slippagePct).div(100);
+
+  const deadline = Math.floor(Date.now() / 1000) + 300; // 5 minutes
+
+  let tx;
+  if (pair.quote.address === 'XPL_NATIVE') {
+    // Buy with native XPL
+    tx = await routerContract.connect(wallet.signer).swapExactETHForTokens(
+      minOut,
+      path,
+      wallet.address,
+      deadline,
+      { value: amountIn }
+    );
+  } else {
+    // Buy with other token
+    // First check allowance
+    const tokenContract = new ethersLib.Contract(pair.quote.address, ERC20_ABI, provider);
+    const allowance = await tokenContract.allowance(wallet.address, ROUTER);
+
+    if (allowance.lt(amountIn)) {
+      const approveTx = await tokenContract.connect(wallet.signer).approve(ROUTER, ethersLib.constants.MaxUint256);
+      await approveTx.wait();
+    }
+
+    tx = await routerContract.connect(wallet.signer).swapExactTokensForTokens(
+      amountIn,
+      minOut,
+      path,
+      wallet.address,
+      deadline
+    );
+  }
+
+  addRealActivityLog(
+    `🟢 ${wallet.name} BUY ${amount} ${pair.quote.symbol} → ${pair.base.symbol} • ${shortAddr(tx.hash)}`,
+    'buy'
+  );
+
+  tradingStats.totalBuys++;
+  tradingStats.totalVolume += amount;
+  updateTradingStats();
+
+  await tx.wait();
+  addRealActivityLog(`✅ Buy confirmed: ${shortAddr(tx.hash)}`, 'info');
+}
+
+async function executeSell(wallet, pair, amount, slippagePct) {
+  // For selling, we need to check the token balance first
+  const tokenContract = new ethersLib.Contract(pair.base.address, ERC20_ABI, provider);
+  const tokenBalance = await tokenContract.balanceOf(wallet.address);
+
+  if (tokenBalance.isZero()) {
+    addRealActivityLog(`❌ ${wallet.name} has no ${pair.base.symbol} to sell`, 'error');
+    return;
+  }
+
+  // Convert percentage amount to token amount (simplified)
+  const tokenDecimals = await tokenContract.decimals();
+  const sellPercentage = 0.1 + Math.random() * 0.3; // Sell 10-40% of balance
+  const amountIn = tokenBalance.mul(Math.floor(sellPercentage * 100)).div(100);
+
+  const path = pair.quote.address === 'XPL_NATIVE'
+    ? [pair.base.address, WXPL]
+    : [pair.base.address, pair.quote.address];
+
+  // Get expected output
+  const amounts = await routerContract.getAmountsOut(amountIn, path);
+  const expectedOut = amounts[1];
+  const minOut = expectedOut.mul(100 - slippagePct).div(100);
+
+  const deadline = Math.floor(Date.now() / 1000) + 300; // 5 minutes
+
+  // Check allowance
+  const allowance = await tokenContract.allowance(wallet.address, ROUTER);
+  if (allowance.lt(amountIn)) {
+    const approveTx = await tokenContract.connect(wallet.signer).approve(ROUTER, ethersLib.constants.MaxUint256);
+    await approveTx.wait();
+  }
+
+  let tx;
+  if (pair.quote.address === 'XPL_NATIVE') {
+    // Sell for native XPL
+    tx = await routerContract.connect(wallet.signer).swapExactTokensForETH(
+      amountIn,
+      minOut,
+      path,
+      wallet.address,
+      deadline
+    );
+  } else {
+    // Sell for other token
+    tx = await routerContract.connect(wallet.signer).swapExactTokensForTokens(
+      amountIn,
+      minOut,
+      path,
+      wallet.address,
+      deadline
+    );
+  }
+
+  const amountInFormatted = ethersLib.utils.formatUnits(amountIn, tokenDecimals);
+  addRealActivityLog(
+    `🔴 ${wallet.name} SELL ${amountInFormatted} ${pair.base.symbol} → ${pair.quote.symbol} • ${shortAddr(tx.hash)}`,
+    'sell'
+  );
+
+  tradingStats.totalSells++;
+  tradingStats.totalVolume += parseFloat(amountInFormatted);
+  updateTradingStats();
+
+  await tx.wait();
+  addRealActivityLog(`✅ Sell confirmed: ${shortAddr(tx.hash)}`, 'info');
+}
+
+/* ============================
+  Main Initialization
+   ============================ */
+async function init() {
+  try {
+    // Load ethers
+    if (window.ethers) {
+      ethersLib = window.ethers;
+    } else {
+      // Try to load from CDN
+      await loadEthersFromCDN();
+    }
+
+    provider = new ethersLib.providers.JsonRpcProvider(RPC);
+    routerContract = new ethersLib.Contract(ROUTER, ROUTER_ABI, provider);
+
+    // Load bot wallets
+    loadBotWallets();
+
+    // Bind UI events
+    bindUI();
+
+    addRealActivityLog('Real trading system initialized', 'info');
+
+  } catch (error) {
+    console.error('Initialization error:', error);
+    addRealActivityLog(`Initialization failed: ${error.message}`, 'error');
+  }
+}
+
+async function loadEthersFromCDN() {
+  return new Promise((resolve, reject) => {
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/ethers@5.7.1/dist/ethers.umd.min.js';
+    script.onload = () => {
+      ethersLib = window.ethers;
+      resolve();
+    };
+    script.onerror = reject;
+    document.head.appendChild(script);
+  });
+}
+
+function bindUI() {
+  // Tab switching
+  document.getElementById('tabMy').onclick = () => switchTab('my');
+  tabRealTrade.onclick = () => switchTab('realtrade');
+
+  // Trading controls
+  btnStartRealTrade.onclick = startRealTrading;
+  btnStopRealTrade.onclick = stopRealTrading;
+  btnEmergencyStop.onclick = emergencyStop;
+
+  // Wallet management
+  btnAddBotWallet.onclick = () => addWalletModal.classList.remove('hidden');
+  btnConfirmAddWallet.onclick = confirmAddWallet;
+  btnCancelAddWallet.onclick = () => addWalletModal.classList.add('hidden');
+
+  // Connect wallet
+  document.getElementById('connectBtn').onclick = connectMainWallet;
+}
+
+function switchTab(name) {
+  // Hide all views
+  document.querySelectorAll('[id^="view"]').forEach(view => {
+    view.style.display = 'none';
+  });
+
+  // Remove active classes from all tabs
+  document.querySelectorAll('nav button').forEach(tab => {
+    tab.classList.remove('text-blue-400', 'border-b-2');
+  });
+
+  // Show selected view and activate tab
+  if (name === 'realtrade') {
+    viewRealTrade.style.display = 'block';
+    tabRealTrade.classList.add('text-blue-400', 'border-b-2');
+  }
+}
+
+async function connectMainWallet() {
+  try {
+    if (!window.ethereum) {
+      alert('MetaMask or similar wallet required');
+      return;
+    }
+
+    await window.ethereum.request({ method: 'eth_requestAccounts' });
+
+    // Switch to Plasma network
+    try {
+      await window.ethereum.request({
+        method: 'wallet_switchEthereumChain',
+        params: [{ chainId: CHAIN_ID_HEX }]
+      });
+    } catch (switchError) {
+      console.warn('Network switch failed:', switchError);
+    }
+
+    const web3Provider = new ethersLib.providers.Web3Provider(window.ethereum);
+    mainSigner = web3Provider.getSigner();
+    mainAccount = await mainSigner.getAddress();
+
+    document.getElementById('walletAddress').textContent = shortAddr(mainAccount);
+    document.getElementById('connectBtn').textContent = 'Connected';
+
+    // Update main provider to use Web3Provider for real transactions
+    provider = web3Provider;
+    routerContract = new ethersLib.Contract(ROUTER, ROUTER_ABI, provider);
+
+    updateWalletBalances();
+    addRealActivityLog(`Main wallet connected: ${shortAddr(mainAccount)}`, 'info');
+
+  } catch (error) {
+    console.error('Wallet connection error:', error);
+    addRealActivityLog(`Wallet connection failed: ${error.message}`, 'error');
+  }
+}
+
+function startRealTrading() {
+  if (isRealTrading) return;
+
+  if (!mainAccount && botWallets.length === 0) {
+    alert('Please connect a wallet or add bot wallets first');
+    return;
+  }
+
+  isRealTrading = true;
+  const interval = parseInt(tradeInterval.value) || 45;
+
+  realTradeInterval = setInterval(() => {
+    executeRealTrade();
+  }, interval * 1000);
+
+  btnStartRealTrade.disabled = true;
+  btnStopRealTrade.disabled = false;
+
+  addRealActivityLog('Real trading started', 'info');
+
+  // Execute first trade immediately
+  setTimeout(executeRealTrade, 2000);
+}
+
+function stopRealTrading() {
+  if (!isRealTrading) return;
+
+  isRealTrading = false;
+  if (realTradeInterval) {
+    clearInterval(realTradeInterval);
+    realTradeInterval = null;
+  }
+
+  btnStartRealTrade.disabled = false;
+  btnStopRealTrade.disabled = true;
+
+  addRealActivityLog('Real trading stopped', 'info');
+}
+
+function emergencyStop() {
+  stopRealTrading();
+  addRealActivityLog('🛑 EMERGENCY STOP - All trading halted', 'error');
+}
+
+async function confirmAddWallet() {
+  const privateKey = newWalletPrivateKey.value.trim();
+  const name = newWalletName.value.trim();
+
+  if (!privateKey) {
+    alert('Please enter a private key');
+    return;
+  }
+
+  try {
+    // Validate private key
+    const wallet = new ethersLib.Wallet(privateKey);
+
+    // Check if wallet already exists
+    if (botWallets.some(w => w.address.toLowerCase() === wallet.address.toLowerCase())) {
+      alert('This wallet is already added');
+      return;
+    }
+
+    // Add to bot wallets
+    botWallets.push({
+      privateKey: privateKey,
+      address: wallet.address,
+      name: name || `Bot ${botWallets.length + 1}`
+    });
+
+    saveBotWallets();
+    renderBotWallets();
+
+    // Clear form and close modal
+    newWalletPrivateKey.value = '';
+    newWalletName.value = '';
+    addWalletModal.classList.add('hidden');
+
+    addRealActivityLog(`Added bot wallet: ${shortAddr(wallet.address)}`, 'info');
+
+  } catch (error) {
+    alert('Invalid private key: ' + error.message);
+  }
+}
+
+// Initialize the application
+init();
+</script>
+</body>
+</html>
