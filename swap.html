@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  
+
   <meta name="google-site-verification" content="7XULKztiphXCS0nzBXi2P6mK-F8-hqAVSxmkxZKqb-E" />
   <meta name="google-site-verification" content="6FBjhdnCVOh9PjkZPa-6C3jJ9ZvGNdwF6zCgJRsc6Ik" />
 
@@ -133,8 +133,8 @@
     header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
     .brand{display:flex;align-items:center;gap:12px}
     .logo{width:48px;height:48px;border-radius:50%;object-fit:cover}
-    .actions{display:flex;gap:10px;align-items:center}
-    .btn{background:linear-gradient(90deg,var(--accent1),var(--accent2));border:0;color:#fff;padding:10px 14px;border-radius:10px;cursor:pointer}
+    .actions{display:flex;gap:10px;align-items:center;position:relative}
+    .btn{background:linear-gradient(90deg,var(--accent1),var(--accent2));border:0;color:#fff;padding:10px 14px;border-radius:10px;cursor:pointer;transition:all 0.2s ease}
     .ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);padding:8px 12px;border-radius:10px;color:var(--muted)}
     .container{display:grid;grid-template-columns:1fr;gap:16px}
     .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:14px;padding:18px;border:1px solid rgba(255,255,255,0.03)}
@@ -155,7 +155,7 @@
     .smallbtn{background:transparent;border:1px solid rgba(255,255,255,0.04);padding:6px 8px;border-radius:8px;color:var(--muted);cursor:pointer}
     .txhash{word-break:break-all;color:var(--muted);margin-top:8px}
 
-    /* Token Selector Styles */
+    /* ==================== TOKEN SELECTOR STYLES ==================== */
     .token-select-container {
       position: relative;
       width: 100%;
@@ -164,13 +164,13 @@
     .selected-token {
       display: flex;
       align-items: center;
-      padding: 8px 12px;
+      padding: 10px 12px;
       border: 1px solid rgba(255,255,255,0.06);
       border-radius: 10px;
       cursor: pointer;
       background: transparent;
       transition: all 0.2s;
-      min-height: 40px;
+      min-height: 44px;
     }
 
     .selected-token:hover {
@@ -179,37 +179,58 @@
     }
 
     .token-logo-sm {
-      width: 20px;
-      height: 20px;
+      width: 24px;
+      height: 24px;
       border-radius: 50%;
-      margin-right: 8px;
+      margin-right: 10px;
       object-fit: cover;
     }
 
+    /* Scrollable Dropdown */
     .token-dropdown {
       position: absolute;
       top: 100%;
       left: 0;
       right: 0;
       background: #111216;
-      border: 1px solid rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
       border-radius: 12px;
-      max-height: 300px;
+      max-height: 320px;
       overflow-y: auto;
+      overflow-x: hidden;
       display: none;
       z-index: 1000;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.4);
       margin-top: 5px;
     }
 
+    /* Custom Scrollbar */
+    .token-dropdown::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .token-dropdown::-webkit-scrollbar-track {
+      background: rgba(255,255,255,0.05);
+      border-radius: 3px;
+    }
+
+    .token-dropdown::-webkit-scrollbar-thumb {
+      background: rgba(255,255,255,0.2);
+      border-radius: 3px;
+    }
+
+    .token-dropdown::-webkit-scrollbar-thumb:hover {
+      background: rgba(255,255,255,0.3);
+    }
+
+    /* Token List Items */
     .token-option {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      padding: 10px 12px;
+      padding: 12px 15px;
       cursor: pointer;
       border-bottom: 1px solid rgba(255,255,255,0.03);
-      transition: background 0.2s ease;
+      transition: all 0.2s ease;
     }
 
     .token-option:last-child {
@@ -220,49 +241,145 @@
       background: rgba(255,255,255,0.05);
     }
 
+    .token-option.active {
+      background: rgba(59, 130, 246, 0.1);
+      border-left: 3px solid #3b82f6;
+    }
+
     .token-info {
       display: flex;
       flex-direction: column;
       gap: 2px;
       flex: 1;
-      margin-left: 8px;
+      margin-left: 10px;
+      min-width: 0;
     }
 
     .token-symbol {
-      font-weight: 500;
-      display: block;
+      font-weight: 600;
       font-size: 14px;
+      color: #fff;
     }
 
     .token-name {
       font-size: 11px;
       color: #9aa0a6;
-      display: block;
+    }
+
+    .token-balance {
+      font-size: 12px;
+      color: #9aa0a6;
+      text-align: right;
+      margin-left: 10px;
     }
 
     .copy-btn {
       background: none;
       border: none;
-      color: #aaa;
-      font-size: 16px;
+      color: #6b7280;
+      font-size: 12px;
       cursor: pointer;
-      transition: color 0.2s ease, transform 0.1s ease;
-      margin-left: auto;
+      padding: 4px 6px;
+      border-radius: 4px;
+      transition: all 0.2s ease;
+      margin-left: 8px;
     }
 
     .copy-btn:hover {
+      background: rgba(255,255,255,0.1);
       color: #fff;
-      transform: scale(1.1);
-    }
-
-    .copy-btn:active {
-      transform: scale(0.95);
     }
 
     .dropdown-arrow {
       margin-left: auto;
-      font-size: 10px;
+      font-size: 12px;
       color: #9aa0a6;
+      transition: transform 0.2s ease;
+    }
+
+    .token-select-container.open .dropdown-arrow {
+      transform: rotate(180deg);
+    }
+
+    /* Search Bar for Tokens */
+    .token-search {
+      padding: 10px 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      background: rgba(255,255,255,0.02);
+    }
+
+    .token-search input {
+      width: 100%;
+      padding: 6px 10px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 6px;
+      color: #fff;
+      font-size: 13px;
+    }
+
+    .token-search input::placeholder {
+      color: #6b7280;
+    }
+
+    .token-search input:focus {
+      outline: none;
+      border-color: rgba(59, 130, 246, 0.5);
+    }
+
+    /* No tokens found message */
+    .no-tokens {
+      padding: 15px;
+      text-align: center;
+      color: #6b7280;
+      font-size: 13px;
+    }
+
+    /* Token list header */
+    .token-list-header {
+      padding: 8px 12px;
+      font-size: 11px;
+      color: #6b7280;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      background: rgba(255,255,255,0.02);
+    }
+
+    /* Wallet Dropdown Styles */
+    .wallet-dropdown {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      background: #111216;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 12px;
+      padding: 8px 0;
+      min-width: 180px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+      display: none;
+      z-index: 1000;
+      margin-top: 5px;
+    }
+
+    .wallet-option {
+      padding: 10px 15px;
+      cursor: pointer;
+      transition: background 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+    }
+
+    .wallet-option:hover {
+      background: rgba(255,255,255,0.05);
+    }
+
+    .wallet-option.disconnect {
+      color: #ef4444;
+    }
+
+    .wallet-option.disconnect:hover {
+      background: rgba(239, 68, 68, 0.1);
     }
 
     /* Toast Styles */
@@ -300,7 +417,19 @@
         </div>
         <div class="actions">
           <div class="small">@CozySwap</div>
-          <button id="connectBtn" class="btn">Connect Wallet</button>
+          <div style="position:relative">
+            <button id="connectBtn" class="btn">Connect Wallet</button>
+            <div id="walletDropdown" class="wallet-dropdown">
+              <div class="wallet-option" onclick="copyAddress(window.account)">
+                <span>📋</span>
+                <span>Copy Address</span>
+              </div>
+              <div class="wallet-option disconnect" onclick="disconnectWallet()">
+                <span>🚪</span>
+                <span>Disconnect</span>
+              </div>
+            </div>
+          </div>
           <span id="status" class="status">init</span>
         </div>
       </header>
@@ -402,17 +531,34 @@
   </footer>
 
   <script>
+  // ==================== FUNGSI GLOBAL ====================
+  let account = null;
+
   // Fungsi global untuk toggle dropdown
   function toggleDropdown(type) {
     const dropdown = document.getElementById(`${type}Dropdown`);
+    const container = dropdown.closest('.token-select-container');
     const allDropdowns = document.querySelectorAll('.token-dropdown');
 
     allDropdowns.forEach(dd => {
       if (dd.id !== `${type}Dropdown`) {
         dd.style.display = 'none';
+        dd.closest('.token-select-container')?.classList.remove('open');
       }
     });
 
+    if (dropdown.style.display === 'block') {
+      dropdown.style.display = 'none';
+      container.classList.remove('open');
+    } else {
+      dropdown.style.display = 'block';
+      container.classList.add('open');
+    }
+  }
+
+  // Fungsi untuk toggle wallet dropdown
+  function toggleWalletDropdown() {
+    const dropdown = document.getElementById('walletDropdown');
     if (dropdown.style.display === 'block') {
       dropdown.style.display = 'none';
     } else {
@@ -425,15 +571,19 @@
     if (!e.target.closest('.token-select-container')) {
       document.querySelectorAll('.token-dropdown').forEach(dd => {
         dd.style.display = 'none';
+        dd.closest('.token-select-container')?.classList.remove('open');
       });
+    }
+    if (!e.target.closest('#connectBtn') && !e.target.closest('#walletDropdown')) {
+      document.getElementById('walletDropdown').style.display = 'none';
     }
   });
 
   // Fungsi global untuk copy address
   function copyAddress(addr) {
-    if (!addr) return showToast("⚠️ Token address not found", true);
+    if (!addr) return showToast("⚠️ Address not found", true);
     navigator.clipboard.writeText(addr)
-      .then(() => showToast("✅ Token address copied to clipboard"))
+      .then(() => showToast("✅ Address copied to clipboard"))
       .catch(() => showToast("❌ Failed to copy address", true));
   }
 
@@ -443,12 +593,55 @@
     toast.textContent = message;
     toast.className = isError ? "toast error" : "toast";
     document.body.appendChild(toast);
-    
+
     setTimeout(() => toast.style.opacity = "1", 10);
     setTimeout(() => {
       toast.style.opacity = "0";
       setTimeout(() => toast.remove(), 400);
     }, 2500);
+  }
+
+  // Fungsi disconnect wallet
+  function disconnectWallet() {
+    account = null;
+    window.account = null;
+    document.getElementById('connectBtn').innerText = 'Connect Wallet';
+    document.getElementById('connectBtn').onclick = connectWallet;
+    document.getElementById('walletDropdown').style.display = 'none';
+    document.getElementById('status').innerText = 'Disconnected';
+    document.getElementById('fromBalance').innerText = '—';
+    document.getElementById('toBalance').innerText = '—';
+    showToast("Wallet disconnected");
+
+    // Reset UI state
+    if (window.provider) {
+      window.provider = null;
+      window.signer = null;
+    }
+  }
+
+  // Fungsi filter tokens
+  window.filterTokens = function(type, searchTerm) {
+    const dropdown = document.getElementById(`${type}Dropdown`);
+    const options = dropdown.querySelectorAll('.token-option[data-address]');
+    let hasVisible = false;
+
+    options.forEach(option => {
+      const symbol = option.querySelector('.token-symbol')?.textContent.toLowerCase() || '';
+      const name = option.querySelector('.token-name')?.textContent.toLowerCase() || '';
+
+      const matches = symbol.includes(searchTerm.toLowerCase()) || 
+                     name.includes(searchTerm.toLowerCase());
+
+      option.style.display = matches ? 'flex' : 'none';
+      if (matches) hasVisible = true;
+    });
+
+    // Show/hide no tokens message
+    const noTokens = dropdown.querySelector('.no-tokens');
+    if (noTokens) {
+      noTokens.style.display = hasVisible ? 'none' : 'block';
+    }
   }
   </script>
 
@@ -534,7 +727,6 @@
 
     let provider = null;
     let signer = null;
-    let account = null;
     let router = null;
     let factory = null;
 
@@ -576,18 +768,189 @@
       return defaultLogos[symbol] || 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCAyMCAyMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48Y2lyY2xlIGN4PSIxMCIgY3k9IjEwIiByPSIxMCIgZmlsbD0iIzlmOWY5ZiIvPjwvc3ZnPg==';
     }
 
-    // ✅ FUNGSI BARU: Auto ganti button Swap ↔ Unwrap
+    // ✅ FUNGSI: Refresh selectors dengan balance display
+    function refreshSelectors() {
+      const fromDropdown = document.getElementById('fromDropdown');
+      const toDropdown = document.getElementById('toDropdown');
+
+      // Clear existing options
+      fromDropdown.innerHTML = '';
+      toDropdown.innerHTML = '';
+
+      // Add search bar to both dropdowns
+      const searchHTML = `
+        <div class="token-search">
+          <input type="text" placeholder="Search token..." 
+                 oninput="filterTokens('${'from'}', this.value)">
+        </div>
+        <div class="token-list-header">Select Token (${tokens.length})</div>
+      `;
+
+      fromDropdown.innerHTML = searchHTML;
+      toDropdown.innerHTML = searchHTML.replace("filterTokens('from',", "filterTokens('to',");
+
+      // Create token options untuk kedua dropdown dengan balance
+      tokens.forEach(token => {
+        const displayAddress = token.address === 'XPL_NATIVE' ? 'Native Token' : 
+                              `${token.address.substring(0, 6)}...${token.address.substring(38)}`;
+
+        const tokenHTML = `
+          <div class="token-option" data-address="${token.address}">
+            <img src="${token.logoURI || getDefaultLogo(token.symbol)}" 
+                 alt="${token.symbol}" 
+                 class="token-logo-sm"
+                 onerror="this.src='${getDefaultLogo(token.symbol)}'">
+            <div class="token-info">
+              <span class="token-symbol">${token.symbol}</span>
+              <span class="token-name">${displayAddress}</span>
+            </div>
+            <div class="token-balance" id="dropdownBalance-${token.symbol}-${token.address.substring(0, 6)}">—</div>
+            <button class="copy-btn" title="Copy address" 
+                    onclick="event.stopPropagation(); copyAddress('${token.address}')">📋</button>
+          </div>
+        `;
+
+        fromDropdown.innerHTML += tokenHTML;
+        toDropdown.innerHTML += tokenHTML;
+      });
+
+      // Add no tokens message
+      fromDropdown.innerHTML += '<div class="no-tokens" style="display: none;">No tokens found</div>';
+      toDropdown.innerHTML += '<div class="no-tokens" style="display: none;">No tokens found</div>';
+
+      // Re-attach event listeners
+      reattachTokenEventListeners();
+
+      // Set default tokens
+      selectToken('from', selectedFromToken);
+      selectToken('to', selectedToToken);
+
+      // Update dropdown balances
+      updateDropdownBalances();
+    }
+
+    // ✅ FUNGSI: Update balances di dropdown
+    async function updateDropdownBalances() {
+      if (!account || !provider) return;
+
+      try {
+        for (const token of tokens) {
+          let balance = '—';
+
+          if (token.address === 'XPL_NATIVE') {
+            const bal = await provider.getBalance(account);
+            balance = parseFloat(utils.formatUnits(bal, 18)).toFixed(4);
+          } else {
+            try {
+              const c = new Contract(token.address, ERC20, provider);
+              const dec = await c.decimals();
+              const bal = await c.balanceOf(account);
+              balance = parseFloat(utils.formatUnits(bal, dec)).toFixed(4);
+            } catch (e) {
+              balance = '0';
+            }
+          }
+
+          // Update balance di kedua dropdown
+          const balanceEls = document.querySelectorAll(`#dropdownBalance-${token.symbol}-${token.address.substring(0, 6)}`);
+          balanceEls.forEach(el => {
+            el.textContent = balance;
+          });
+        }
+      } catch (e) {
+        console.warn('Dropdown balance error:', e);
+      }
+    }
+
+    // ✅ FUNGSI: Reattach event listeners
+    function reattachTokenEventListeners() {
+      const fromDropdown = document.getElementById('fromDropdown');
+      const toDropdown = document.getElementById('toDropdown');
+
+      // Untuk FROM dropdown
+      fromDropdown.querySelectorAll('.token-option[data-address]').forEach(option => {
+        const address = option.getAttribute('data-address');
+        option.onclick = (e) => {
+          if (!e.target.classList.contains("copy-btn")) {
+            const token = tokens.find(t => t.address === address);
+            if (token) selectToken('from', token);
+          }
+        };
+      });
+
+      // Untuk TO dropdown  
+      toDropdown.querySelectorAll('.token-option[data-address]').forEach(option => {
+        const address = option.getAttribute('data-address');
+        option.onclick = (e) => {
+          if (!e.target.classList.contains("copy-btn")) {
+            const token = tokens.find(t => t.address === address);
+            if (token) selectToken('to', token);
+          }
+        };
+      });
+    }
+
+    // ✅ FUNGSI: Select token
+    function selectToken(type, token) {
+      const logoEl = document.getElementById(`selected${type.charAt(0).toUpperCase() + type.slice(1)}Logo`);
+      const symbolEl = document.getElementById(`selected${type.charAt(0).toUpperCase() + type.slice(1)}Symbol`);
+      const dropdownEl = document.getElementById(`${type}Dropdown`);
+      const container = dropdownEl.closest('.token-select-container');
+
+      // Update selected token display
+      logoEl.src = token.logoURI || getDefaultLogo(token.symbol);
+      logoEl.onerror = function() {
+        this.src = getDefaultLogo(token.symbol);
+      };
+      symbolEl.textContent = token.symbol;
+
+      // Close dropdown
+      dropdownEl.style.display = 'none';
+      container.classList.remove('open');
+
+      // Clear search input
+      const searchInput = dropdownEl.querySelector('.token-search input');
+      if (searchInput) searchInput.value = '';
+
+      // Reset filter
+      window.filterTokens(type, '');
+
+      // Update active states
+      dropdownEl.querySelectorAll('.token-option').forEach(option => {
+        option.classList.remove('active');
+        const address = option.getAttribute('data-address');
+        if (address === token.address) {
+          option.classList.add('active');
+        }
+      });
+
+      // Store selected tokens
+      if (type === 'from') {
+        selectedFromToken = token;
+      } else {
+        selectedToToken = token;
+      }
+
+      // Update button Swap/Unwrap
+      updateSwapButton();
+
+      // Update balances dan compute output
+      updateBalances();
+      computeOutput();
+    }
+
+    // ✅ FUNGSI: Auto ganti button Swap ↔ Unwrap
     function updateSwapButton() {
       const from = selectedFromToken.address;
       const to = selectedToToken.address;
       const isXPLPair = 
         (from === 'XPL_NATIVE' && to === WXPL) ||
         (from === WXPL && to === 'XPL_NATIVE');
-      
+
       const swapBtn = document.getElementById('approveOrSwap');
-      
+
       if (isXPLPair) {
-        swapBtn.textContent = 'Unwrap';
+        swapBtn.textContent = from === 'XPL_NATIVE' ? 'Wrap' : 'Unwrap';
         swapBtn.className = 'unwrap-btn';
         swapBtn.onclick = executeUnwrap;
       } else {
@@ -597,12 +960,12 @@
       }
     }
 
-    // ✅ FUNGSI BARU: Execute Unwrap WXPL → XPL
+    // ✅ FUNGSI: Execute Unwrap WXPL → XPL
     async function executeUnwrap() {
       try {
         if (!window.ethereum) return alert('Connect wallet first');
         if (!signer) signer = new providers.Web3Provider(window.ethereum).getSigner();
-        
+
         const owner = await signer.getAddress();
         const from = selectedFromToken.address;
         const to = selectedToToken.address;
@@ -613,7 +976,7 @@
         // Pastikan ini benar XPL/WXPL pair
         const isWrap = (from === 'XPL_NATIVE' && to === WXPL); // XPL → WXPL
         const isUnwrap = (from === WXPL && to === 'XPL_NATIVE'); // WXPL → XPL
-        
+
         if (!isUnwrap && !isWrap) {
           alert('Invalid XPL/WXPL pair');
           return;
@@ -625,10 +988,10 @@
             'function withdraw(uint wad) external',
             'function balanceOf(address) view returns (uint)'
           ], signer);
-          
+
           const wxplBalance = await wxplContract.balanceOf(owner);
           const amountIn = utils.parseUnits(amtStr, 18);
-          
+
           if (wxplBalance.lt(amountIn)) {
             alert('Insufficient WXPL balance');
             return;
@@ -640,17 +1003,17 @@
           await tx.wait();
           setStatus('Unwrap confirmed');
           alert('WXPL unwrapped to XPL successfully!');
-          
+
         } else {
           // WRAP: XPL → WXPL  
           const wxplContract = new Contract(WXPL, [
             'function deposit() payable external',
             'function balanceOf(address) view returns (uint)'
           ], signer);
-          
+
           const amountIn = utils.parseUnits(amtStr, 18);
           const ethBalance = await provider.getBalance(owner);
-          
+
           if (ethBalance.lt(amountIn)) {
             alert('Insufficient XPL balance');
             return;
@@ -667,7 +1030,7 @@
         // Update balances
         await updateBalances();
         computeOutput();
-        
+
       } catch (e) {
         console.error('Unwrap error', e);
         alert('Unwrap failed: ' + (e.message || e));
@@ -675,7 +1038,7 @@
       }
     }
 
-    // ✅ FUNGSI BARU: Execute Swap biasa
+    // ✅ FUNGSI: Execute Swap biasa
     async function executeSwap() {
       try {
         if (!provider) return alert('Provider missing');
@@ -765,96 +1128,6 @@
       }
     }
 
-    function refreshSelectors() {
-      const fromDropdown = document.getElementById('fromDropdown');
-      const toDropdown = document.getElementById('toDropdown');
-
-      // Clear existing options
-      fromDropdown.innerHTML = '';
-      toDropdown.innerHTML = '';
-
-      // Membuat token options untuk kedua dropdown + tombol salin
-      tokens.forEach(token => {
-        // Untuk FROM dropdown
-        const fromOption = document.createElement('div');
-        fromOption.className = 'token-option';
-        fromOption.innerHTML = `
-          <img src="${token.logoURI || getDefaultLogo(token.symbol)}" 
-               alt="${token.symbol}" 
-               class="token-logo-sm"
-               onerror="this.src='${getDefaultLogo(token.symbol)}'">
-          <div class="token-info">
-            <span class="token-symbol">${token.symbol}</span>
-            <span class="token-name">${token.name || token.symbol} Token</span>
-          </div>
-          <button class="copy-btn" title="Salin alamat token" onclick="event.stopPropagation(); copyAddress('${token.address}')">📋</button>
-        `;
-        fromOption.onclick = (e) => {
-          if (!e.target.classList.contains("copy-btn")) {
-            e.stopPropagation();
-            selectToken('from', token);
-          }
-        };
-        fromDropdown.appendChild(fromOption);
-
-        // Untuk TO dropdown
-        const toOption = document.createElement('div');
-        toOption.className = 'token-option';
-        toOption.innerHTML = `
-          <img src="${token.logoURI || getDefaultLogo(token.symbol)}" 
-               alt="${token.symbol}" 
-               class="token-logo-sm"
-               onerror="this.src='${getDefaultLogo(token.symbol)}'">
-          <div class="token-info">
-            <span class="token-symbol">${token.symbol}</span>
-            <span class="token-name">${token.name || token.symbol} Token</span>
-          </div>
-          <button class="copy-btn" title="Salin alamat token" onclick="event.stopPropagation(); copyAddress('${token.address}')">📋</button>
-        `;
-        toOption.onclick = (e) => {
-          if (!e.target.classList.contains("copy-btn")) {
-            e.stopPropagation();
-            selectToken('to', token);
-          }
-        };
-        toDropdown.appendChild(toOption);
-      });
-
-      // Set default tokens
-      selectToken('from', selectedFromToken);
-      selectToken('to', selectedToToken);
-    }
-
-    function selectToken(type, token) {
-      const logoEl = document.getElementById(`selected${type.charAt(0).toUpperCase() + type.slice(1)}Logo`);
-      const symbolEl = document.getElementById(`selected${type.charAt(0).toUpperCase() + type.slice(1)}Symbol`);
-      const dropdownEl = document.getElementById(`${type}Dropdown`);
-
-      // Update selected token display
-      logoEl.src = token.logoURI || getDefaultLogo(token.symbol);
-      logoEl.onerror = function() {
-        this.src = getDefaultLogo(token.symbol);
-      };
-      symbolEl.textContent = token.symbol;
-
-      // Close dropdown
-      dropdownEl.style.display = 'none';
-
-      // Store selected tokens
-      if (type === 'from') {
-        selectedFromToken = token;
-      } else {
-        selectedToToken = token;
-      }
-
-      // ✅ UPDATE BUTTON SWAP/UNWRAP
-      updateSwapButton();
-
-      // Update balances dan compute output
-      updateBalances();
-      computeOutput();
-    }
-
     function setStatus(s) {
       if (statusEl) statusEl.innerText = s;
     }
@@ -899,9 +1172,12 @@
           const accounts = await provider.listAccounts();
           if (accounts && accounts.length > 0) {
             account = accounts[0];
+            window.account = account;
             connectBtn.innerText = account.substring(0, 6) + '...' + account.substring(38);
+            connectBtn.onclick = toggleWalletDropdown;
             setStatus('Connected');
             await updateBalances();
+            await updateDropdownBalances();
           } else {
             setStatus('Ready to connect');
           }
@@ -918,7 +1194,7 @@
     }
 
     // CONNECT BUTTON
-    connectBtn.onclick = async () => {
+    async function connectWallet() {
       if (!window.ethereum) {
         alert('MetaMask not detected. Please install MetaMask to connect your wallet.');
         return;
@@ -931,17 +1207,22 @@
 
         if (accounts && accounts.length > 0) {
           account = accounts[0];
+          window.account = account;
           provider = new providers.Web3Provider(window.ethereum);
           signer = provider.getSigner();
-          router = router.connect(signer);
+          router = new Contract(ROUTER, ROUTER_ABI, provider);
+          factory = new Contract(FACTORY, FACTORY_ABI, provider);
 
+          // Update UI untuk connected state
           connectBtn.innerText = account.substring(0, 6) + '...' + account.substring(38);
+          connectBtn.onclick = toggleWalletDropdown;
           setStatus('Connected');
 
           await updateBalances();
+          await updateDropdownBalances();
           await computeOutput();
 
-          console.log('Wallet connected successfully:', account);
+          showToast("Wallet connected successfully!");
         }
       } catch (error) {
         console.error('Connection failed:', error);
@@ -953,7 +1234,7 @@
           alert('Connection failed: ' + (error.message || error));
         }
       }
-    };
+    }
 
     addTokenBtn.onclick = async () => {
       const addr = prompt('Paste custom token address'); 
@@ -981,6 +1262,7 @@
           if (provider.listAccounts) {
             const accts = await provider.listAccounts();
             account = accts && accts[0];
+            window.account = account;
           }
         }
 
@@ -1126,13 +1408,13 @@
 
     fromAmountEl.addEventListener('input', debounce(computeOutput, 400));
 
-    flipBtn && (flipBtn.onclick = () => {
+    flipBtn.onclick = () => {
       const temp = selectedFromToken;
       selectedFromToken = selectedToToken;
       selectedToToken = temp;
       selectToken('from', selectedFromToken);
       selectToken('to', selectedToToken);
-    });
+    };
 
     async function hasAllowance(tokenAddr, owner, amount) {
       try {
@@ -1201,6 +1483,9 @@
     refreshSelectors();
     await updateBalances();
     computeOutput();
+
+    // Set event listener untuk connect button
+    connectBtn.onclick = connectWallet;
 
     // Navigation URLs
     const addLiquidityUrl = 'https://cozyswap.net/liquidity';
