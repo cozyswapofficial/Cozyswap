@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>CozySwap - Token Generator</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #6c63ff;
+      --accent: #00c6ff;
+      --text: #ffffff;
+      --background: #0b0b0f;
+      --card-bg: rgba(17, 18, 22, 0.85);
+      --muted: #9aa0a6;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: var(--background);
+      color: var(--text);
+      padding: 20px;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+      padding: 30px 0;
+    }
+
+    .logo {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      margin-bottom: 15px;
+    }
+
+    .header h1 {
+      font-size: 2.5rem;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 10px;
+    }
+
+    .header p {
+      color: var(--muted);
+      font-size: 1.1rem;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: 15px;
+      padding: 25px;
+      margin-bottom: 20px;
+      border: 1px solid rgba(108, 99, 255, 0.2);
+    }
+
+    .btn {
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: bold;
+      margin: 5px;
+      transition: all 0.3s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(108, 99, 255, 0.4);
+    }
+
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .btn-secondary {
+      background: transparent;
+      border: 1px solid var(--primary);
+      color: var(--primary);
+    }
+
+    .input {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid rgba(108, 99, 255, 0.3);
+      border-radius: 8px;
+      margin: 8px 0;
+      background: rgba(255,255,255,0.05);
+      color: white;
+      font-size: 16px;
+    }
+
+    .input:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+
+    .info {
+      margin: 10px 0;
+      padding: 15px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 8px;
+      border-left: 4px solid var(--primary);
+    }
+
+    .status {
+      color: var(--accent);
+      font-weight: bold;
+    }
+
+    .error {
+      color: #ff4444;
+      background: rgba(255,68,68,0.1);
+      padding: 12px;
+      border-radius: 8px;
+      margin: 10px 0;
+      border-left: 4px solid #ff4444;
+    }
+
+    .success {
+      color: var(--accent);
+      background: rgba(0,198,255,0.1);
+      padding: 12px;
+      border-radius: 8px;
+      margin: 10px 0;
+      border-left: 4px solid var(--accent);
+    }
+
+    .chain-selector {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin: 15px 0;
+    }
+
+    .chain-btn {
+      padding: 10px 20px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(108, 99, 255, 0.3);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .chain-btn.active {
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      border-color: transparent;
+    }
+
+    .chain-btn:hover {
+      border-color: var(--primary);
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin: 20px 0;
+    }
+
+    .stat-card {
+      background: rgba(255,255,255,0.03);
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+      border: 1px solid rgba(108, 99, 255, 0.1);
+    }
+
+    .stat-value {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: var(--accent);
+      margin: 10px 0;
+    }
+
+    .stat-label {
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 768px) {
+      .header h1 { font-size: 2rem; }
+      .chain-selector { flex-direction: column; }
+      .stats-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <div class="header">
+      <img src="https://cozyswap.net/assets/cozy.png" alt="CozySwap" class="logo">
+      <h1>CozySwap Token Generator</h1>
+      <p>Create your token with no code - Multi-chain Support</p>
+    </div>
+
+    <!-- Wallet Connection -->
+    <div class="card">
+      <h2><i class="fas fa-wallet"></i> Wallet Connection</h2>
+      <div id="walletInfo" class="info">
+        <i class="fas fa-plug"></i> Not connected
+      </div>
+      <button class="btn" id="connectBtn">
+        <i class="fas fa-plug"></i> Connect Wallet
+      </button>
+      <button class="btn btn-secondary" id="disconnectBtn" style="display:none">
+        <i class="fas fa-power-off"></i> Disconnect
+      </button>
+    </div>
+
+    <!-- Chain Selection -->
+    <div class="card">
+      <h2><i class="fas fa-link"></i> Select Network</h2>
+      <div class="chain-selector">
+        <button class="chain-btn" data-chain="plasma">
+          <i class="fas fa-bolt"></i> Plasma
+        </button>
+        <button class="chain-btn" data-chain="core">
+          <i class="fas fa-circle"></i> Core DAO
+        </button>
+        <button class="chain-btn" data-chain="vana">
+          <i class="fas fa-leaf"></i> Vana
+        </button>
+        <button class="chain-btn" data-chain="polygon">
+          <i class="fas fa-gem"></i> Polygon
+        </button>
+        <button class="chain-btn" data-chain="ethereum">
+          <i class="fab fa-ethereum"></i> Ethereum
+        </button>
+        <button class="chain-btn" data-chain="bsc">
+          <i class="fas fa-chart-line"></i> BNB Chain
+        </button>
+        <button class="chain-btn" data-chain="sonic">
+          <i class="fas fa-wave-square"></i> Sonic
+        </button>
+        <button class="chain-btn" data-chain="arbitrum">
+          <i class="fas fa-arrows-alt-h"></i> Arbitrum
+        </button>
+        <button class="chain-btn" data-chain="base">
+          <i class="fas fa-layer-group"></i> Base
+        </button>
+      </div>
+    </div>
+
+    <!-- Quick Stats -->
+    <div class="card">
+      <h2><i class="fas fa-chart-bar"></i> Factory Stats</h2>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-label">Current Fee</div>
+          <div class="stat-value" id="currentFee">-</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Contract Balance</div>
+          <div class="stat-value" id="contractBalance">-</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Total Tokens</div>
+          <div class="stat-value" id="totalTokens">-</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Your Role</div>
+          <div class="stat-value" id="userRole">-</div>
+        </div>
+      </div>
+      <button class="btn" id="refreshBtn">
+        <i class="fas fa-sync-alt"></i> Refresh Data
+      </button>
+    </div>
+
+    <!-- Contract Management -->
+    <div class="card">
+      <h2><i class="fas fa-cog"></i> Factory Management</h2>
+      
+      <!-- Change Fee -->
+      <div style="margin-bottom: 20px;">
+        <h3><i class="fas fa-money-bill-wave"></i> Update Deployment Fee</h3>
+        <input type="number" id="newFee" class="input" placeholder="New fee amount (e.g., 0.01)" step="0.001" min="0">
+        <button class="btn" id="changeFeeBtn">
+          <i class="fas fa-edit"></i> Update Fee
+        </button>
+      </div>
+
+      <!-- Withdraw Funds -->
+      <div style="margin-bottom: 20px;">
+        <h3><i class="fas fa-download"></i> Withdraw Funds</h3>
+        <button class="btn" id="withdrawBtn">
+          <i class="fas fa-coins"></i> Withdraw All Fees
+        </button>
+      </div>
+
+      <!-- Emergency Withdraw -->
+      <div>
+        <h3><i class="fas fa-exclamation-triangle"></i> Emergency ERC20 Withdraw</h3>
+        <input type="text" id="tokenAddress" class="input" placeholder="Token contract address (0x...)">
+        <button class="btn" id="withdrawTokenBtn">
+          <i class="fas fa-shield-alt"></i> Withdraw ERC20
+        </button>
+      </div>
+    </div>
+
+    <!-- Messages -->
+    <div id="messageArea"></div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.1/ethers.umd.min.js"></script>
+  <script>
+    // Multi-chain Configuration
+    const CHAINS = {
+      plasma: {
+        chainId: '0x2611',
+        chainName: 'Plasma Chain',
+        rpcUrls: ['https://plasma-mainnet.g.alchemy.com/v2/MuLXFm60Tsz3ntyrSC1O4'],
+        nativeCurrency: { name: 'XPL', symbol: 'XPL', decimals: 18 },
+        factory: '0xe95F65C6838f93D23b7bCe1076D9cA017196f050'
+      },
+      vana: {
+        chainId: '0x5C8',
+        chainName: 'Vana Chain',
+        rpcUrls: ['https://rpc.vana.org'],
+        nativeCurrency: { name: 'VANA', symbol: 'VANA', decimals: 18 },
+        factory: '0xe95F65C6838f93D23b7bCe1076D9cA017196f050'
+      },
+      core: {
+        chainId: '0xAE',
+        chainName: 'Core DAO',
+        rpcUrls: ['https://rpc.coredao.org'],
+        nativeCurrency: { name: 'CORE', symbol: 'CORE', decimals: 18 },
+        factory: '0xe95F65C6838f93D23b7bCe1076D9cA017196f050'
+      },
+      polygon: {
+        chainId: '0x89',
+        chainName: 'Polygon',
+        rpcUrls: ['https://polygon-rpc.com'],
+        nativeCurrency: { name: 'MATIC', symbol: 'MATIC', decimals: 18 },
+        factory: '0xe95F65C6838f93D23b7bCe1076D9cA017196f050'
+      },
+      ethereum: {
+        chainId: '0x1',
+        chainName: 'Ethereum',
+        rpcUrls: ['https://eth.llamarpc.com'],
+        nativeCurrency: { name: 'ETH', symbol: 'ETH', decimals: 18 },
+        factory: '0xe95F65C6838f93D23b7bCe1076D9cA017196f050'
+      },
+      bsc: {
+        chainId: '0x38',
+        chainName: 'BNB Chain',
+        rpcUrls: ['https://bsc-dataseed.binance.org/'],
+        nativeCurrency: { name: 'BNB', symbol: 'BNB', decimals: 18 },
+        factory: '0xe95F65C6838f93D23b7bCe1076D9cA017196f050'
+      },
+      sonic: {
+        chainId: '0x2B',
+        chainName: 'Sonic',
+        rpcUrls: ['https://rpc.soniclabs.com'],
+        nativeCurrency: { name: 'S', symbol: 'S', decimals: 18 },
+        factory: '0xe95F65C6838f93D23b7bCe1076D9cA017196f050'
+      },
+      arbitrum: {
+        chainId: '0xA4B1',
+        chainName: 'Arbitrum',
+        rpcUrls: ['https://arb1.arbitrum.io/rpc'],
+        nativeCurrency: { name: 'ETH', symbol: 'ETH', decimals: 18 },
+        factory: '0xe95F65C6838f93D23b7bCe1076D9cA017196f050'
+      },
+      base: {
+        chainId: '0x2105',
+        chainName: 'Base',
+        rpcUrls: ['https://mainnet.base.org'],
+        nativeCurrency: { name: 'ETH', symbol: 'ETH', decimals: 18 },
+        factory: '0xe95F65C6838f93D23b7bCe1076D9cA017196f050'
+      }
+    };
+
+    // Factory Contract ABI
+    const FACTORY_ABI = [
+      "function createFee() external view returns (uint256)",
+      "function updateFee(uint256 newFee) external",
+      "function withdrawFees() external",
+      "function withdrawERC20(address tokenAddress) external",
+      "function getTotalTokens() external view returns (uint256)",
+      "function owner() external view returns (address)"
+    ];
+
+    let provider, signer, factory, userAddress, currentChain;
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', function() {
+      initializeChainSelector();
+      checkConnection();
+    });
+
+    // Initialize chain selector
+    function initializeChainSelector() {
+      const chainButtons = document.querySelectorAll('.chain-btn');
+      chainButtons.forEach(btn => {
+        btn.addEventListener('click', function() {
+          // Remove active from all buttons
+          chainButtons.forEach(b => b.classList.remove('active'));
+          // Set active on clicked button
+          this.classList.add('active');
+          currentChain = this.dataset.chain;
+          
+          if (userAddress) {
+            switchChain(currentChain);
+          }
+        });
+      });
+
+      // Set Plasma as default
+      document.querySelector('[data-chain="plasma"]').classList.add('active');
+      currentChain = 'plasma';
+    }
+
+    // Check if already connected
+    async function checkConnection() {
+      if (window.ethereum) {
+        try {
+          const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+          if (accounts.length > 0) {
+            await setupWallet(accounts[0]);
+          }
+        } catch (error) {
+          showMessage('Error checking connection: ' + error.message, 'error');
+        }
+      }
+    }
+
+    // Connect Wallet
+    document.getElementById('connectBtn').addEventListener('click', async function() {
+      if (!window.ethereum) {
+        showMessage('Please install MetaMask!', 'error');
+        return;
+      }
+
+      try {
+        await switchChain(currentChain);
+        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+        await setupWallet(accounts[0]);
+        showMessage('Connected successfully!', 'success');
+      } catch (error) {
+        showMessage('Failed to connect: ' + error.message, 'error');
+      }
+    });
+
+    // Switch chain
+    async function switchChain(chainName) {
+      const chainConfig = CHAINS[chainName];
+      
+      try {
+        await window.ethereum.request({
+          method: 'wallet_switchEthereumChain',
+          params: [{ chainId: chainConfig.chainId }],
+        });
+      } catch (switchError) {
+        if (switchError.code === 4902) {
+          try {
+            await window.ethereum.request({
+              method: 'wallet_addEthereumChain',
+              params: [chainConfig],
+            });
+          } catch (addError) {
+            showMessage(`Failed to add ${chainConfig.chainName}: ` + addError.message, 'error');
+            return;
+          }
+        } else {
+          showMessage(`Failed to switch to ${chainConfig.chainName}: ` + switchError.message, 'error');
+          return;
+        }
+      }
+    }
+
+    // Setup wallet
+    async function setupWallet(address) {
+      userAddress = address;
+      const chainConfig = CHAINS[currentChain];
+
+      // Update UI
+      document.getElementById('walletInfo').innerHTML = `
+        <i class="fas fa-check-circle" style="color: #00c6ff"></i> 
+        Connected: ${address.substring(0, 6)}...${address.substring(38)}<br>
+        <i class="fas fa-network-wired"></i> Network: ${chainConfig.chainName}
+      `;
+      document.getElementById('connectBtn').style.display = 'none';
+      document.getElementById('disconnectBtn').style.display = 'inline-block';
+
+      // Setup provider and signer
+      provider = new ethers.providers.Web3Provider(window.ethereum);
+      signer = provider.getSigner();
+      factory = new ethers.Contract(chainConfig.factory, FACTORY_ABI, signer);
+
+      // Load contract data
+      await loadContractData();
+
+      // Listen for account changes
+      window.ethereum.on('accountsChanged', (accounts) => {
+        if (accounts.length > 0) {
+          setupWallet(accounts[0]);
+        } else {
+          disconnectWallet();
+        }
+      });
+
+      // Listen for chain changes
+      window.ethereum.on('chainChanged', (chainId) => {
+        const chain = Object.values(CHAINS).find(c => c.chainId === chainId);
+        if (chain) {
+          const chainName = Object.keys(CHAINS).find(key => CHAINS[key].chainId === chainId);
+          currentChain = chainName;
+          document.querySelectorAll('.chain-btn').forEach(btn => {
+            btn.classList.remove('active');
+            if (btn.dataset.chain === chainName) {
+              btn.classList.add('active');
+            }
+          });
+          setupWallet(userAddress);
+        }
+      });
+    }
+
+    // Disconnect wallet
+    document.getElementById('disconnectBtn').addEventListener('click', disconnectWallet);
+
+    function disconnectWallet() {
+      userAddress = null;
+      provider = null;
+      signer = null;
+      factory = null;
+
+      document.getElementById('walletInfo').innerHTML = '<i class="fas fa-plug"></i> Not connected';
+      document.getElementById('connectBtn').style.display = 'inline-block';
+      document.getElementById('disconnectBtn').style.display = 'none';
+      document.getElementById('currentFee').textContent = '-';
+      document.getElementById('contractBalance').textContent = '-';
+      document.getElementById('totalTokens').textContent = '-';
+      document.getElementById('userRole').textContent = '-';
+    }
+
+    // Load contract data
+    async function loadContractData() {
+      if (!factory) return;
+
+      try {
+        // Get contract owner
+        const owner = await factory.owner();
+        const isOwner = owner.toLowerCase() === userAddress.toLowerCase();
+        
+        // Get current fee
+        const fee = await factory.createFee();
+        const feeFormatted = ethers.utils.formatEther(fee);
+
+        // Get contract balance
+        const balance = await provider.getBalance(CHAINS[currentChain].factory);
+        const balanceFormatted = ethers.utils.formatEther(balance);
+
+        // Get total tokens
+        const totalTokens = await factory.getTotalTokens();
+
+        // Update UI
+        document.getElementById('currentFee').textContent = feeFormatted;
+        document.getElementById('contractBalance').textContent = balanceFormatted;
+        document.getElementById('totalTokens').textContent = totalTokens.toString();
+        document.getElementById('userRole').textContent = isOwner ? 'Owner' : 'User';
+        document.getElementById('userRole').style.color = isOwner ? '#00c6ff' : '#9aa0a6';
+
+      } catch (error) {
+        showMessage('Error loading contract data: ' + error.message, 'error');
+      }
+    }
+
+    // Change Fee
+    document.getElementById('changeFeeBtn').addEventListener('click', async function() {
+      if (!factory) {
+        showMessage('Please connect wallet first!', 'error');
+        return;
+      }
+
+      const newFee = document.getElementById('newFee').value;
+      if (!newFee) {
+        showMessage('Please enter new fee amount!', 'error');
+        return;
+      }
+
+      try {
+        this.disabled = true;
+        this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Updating...';
+
+        const feeWei = ethers.utils.parseEther(newFee);
+        const tx = await factory.updateFee(feeWei);
+
+        showMessage(`Fee update transaction sent: ${tx.hash}`, 'success');
+        await tx.wait();
+        showMessage('Fee updated successfully!', 'success');
+
+        await loadContractData();
+        document.getElementById('newFee').value = '';
+
+      } catch (error) {
+        showMessage('Error updating fee: ' + error.message, 'error');
+      } finally {
+        this.disabled = false;
+        this.innerHTML = '<i class="fas fa-edit"></i> Update Fee';
+      }
+    });
+
+    // Withdraw Funds
+    document.getElementById('withdrawBtn').addEventListener('click', async function() {
+      if (!factory) {
+        showMessage('Please connect wallet first!', 'error');
+        return;
+      }
+
+      try {
+        this.disabled = true;
+        this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Withdrawing...';
+
+        const tx = await factory.withdrawFees();
+        showMessage(`Withdrawal transaction sent: ${tx.hash}`, 'success');
+        await tx.wait();
+        showMessage('Funds withdrawn successfully!', 'success');
+        await loadContractData();
+
+      } catch (error) {
+        showMessage('Error withdrawing: ' + error.message, 'error');
+      } finally {
+        this.disabled = false;
+        this.innerHTML = '<i class="fas fa-coins"></i> Withdraw All Fees';
+      }
+    });
+
+    // Withdraw ERC20
+    document.getElementById('withdrawTokenBtn').addEventListener('click', async function() {
+      if (!factory) {
+        showMessage('Please connect wallet first!', 'error');
+        return;
+      }
+
+      const tokenAddress = document.getElementById('tokenAddress').value;
+      if (!tokenAddress) {
+        showMessage('Please enter token address!', 'error');
+        return;
+      }
+
+      try {
+        this.disabled = true;
+        this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Withdrawing...';
+
+        const tx = await factory.withdrawERC20(tokenAddress);
+        showMessage(`ERC20 withdrawal transaction sent: ${tx.hash}`, 'success');
+        await tx.wait();
+        showMessage('ERC20 token withdrawn successfully!', 'success');
+        document.getElementById('tokenAddress').value = '';
+
+      } catch (error) {
+        showMessage('Error withdrawing ERC20: ' + error.message, 'error');
+      } finally {
+        this.disabled = false;
+        this.innerHTML = '<i class="fas fa-shield-alt"></i> Withdraw ERC20';
+      }
+    });
+
+    // Refresh data
+    document.getElementById('refreshBtn').addEventListener('click', async function() {
+      if (!factory) {
+        showMessage('Please connect wallet first!', 'error');
+        return;
+      }
+
+      this.disabled = true;
+      this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Refreshing...';
+
+      await loadContractData();
+
+      this.disabled = false;
+      this.innerHTML = '<i class="fas fa-sync-alt"></i> Refresh Data';
+      showMessage('Data refreshed!', 'success');
+    });
+
+    // Show message
+    function showMessage(message, type) {
+      const messageArea = document.getElementById('messageArea');
+      const messageDiv = document.createElement('div');
+      messageDiv.className = type;
+      messageDiv.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i> ${message}`;
+      messageArea.appendChild(messageDiv);
+
+      setTimeout(() => {
+        messageDiv.remove();
+      }, 5000);
+    }
+  </script>
+</body>
+</html>
