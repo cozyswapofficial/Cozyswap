@@ -654,7 +654,7 @@
                 <i class="fas fa-bolt chain-icon"></i>
                 <div class="chain-info">
                   <div class="chain-name">Plasma</div>
-                  <div class="chain-fee">Fee: 0.001 XPL</div>
+                  <div class="chain-fee">Fee: 100 XPL</div>
                 </div>
               </div>
               <div class="chain-option" data-chain="ethereum">
@@ -767,14 +767,14 @@
             <div class="preview-item">
               <div class="preview-label">Token Address</div>
               <div class="token-address">
-                <span id="tokenAddressText"></span>
+                <span id="tokenAddressText">-</span>
                 <button class="copy-btn" id="copyAddressBtn">Copy</button>
               </div>
             </div>
             <div class="preview-item">
               <div class="preview-label">Transaction Hash</div>
               <div class="token-address">
-                <span id="txHashText"></span>
+                <span id="txHashText">-</span>
                 <button class="copy-btn" id="copyTxBtn">Copy</button>
               </div>
             </div>
@@ -850,7 +850,7 @@
         nativeCurrency: { name: 'XPL', symbol: 'XPL', decimals: 18 },
         blockExplorer: 'https://plasmascan.to',
         factory: '0xe95F65C6838f93D23b7bCe1076D9cA017196f050',
-        fee: '0.001',
+        fee: '100',
         icon: 'fas fa-bolt'
       },
       ethereum: {
@@ -953,6 +953,7 @@
       initializeChainSelector();
       initializeFormListeners();
       initializeWalletDropdown();
+      initializeCopyButtons();
       
       if (window.ethereum) {
         checkNetwork();
@@ -1011,6 +1012,17 @@
             chainSelectorDropdown.classList.remove('show');
           }
         });
+      });
+    }
+
+    // Initialize copy buttons
+    function initializeCopyButtons() {
+      document.getElementById('copyAddressBtn').addEventListener('click', function() {
+        copyToClipboard('tokenAddressText', this);
+      });
+
+      document.getElementById('copyTxBtn').addEventListener('click', function() {
+        copyToClipboard('txHashText', this);
       });
     }
 
@@ -1204,6 +1216,7 @@
         const initialSupplyWei = ethers.utils.parseUnits(supply, decimal);
         const fee = ethers.utils.parseEther(chain.fee);
 
+        console.log('Sending transaction...');
         const tx = await factory.createToken(
           name, 
           symbol, 
@@ -1212,21 +1225,32 @@
           { value: fee }
         );
 
+        console.log('Transaction sent:', tx.hash);
         document.getElementById('txHashText').textContent = tx.hash;
 
+        console.log('Waiting for confirmation...');
         const receipt = await tx.wait();
-        const event = receipt.events.find(e => e.event === 'TokenCreated');
+        console.log('Transaction confirmed:', receipt);
+
+        // Cari event TokenCreated
+        const event = receipt.events?.find(e => e.event === 'TokenCreated');
         
         if (!event) {
-          throw new Error('Token creation event not found');
+          console.error('Token creation event not found in receipt:', receipt);
+          throw new Error('Token creation event not found. Please check transaction details.');
         }
 
         const tokenAddress = event.args.tokenAddress;
+        console.log('Token created at address:', tokenAddress);
+        
         document.getElementById('tokenAddressText').textContent = tokenAddress;
         document.getElementById('explorerLink').href = 
           `${chain.blockExplorer}/address/${tokenAddress}#code`;
         
-        showSuccess('Token created successfully!');
+        // Tampilkan success message
+        document.getElementById('successMessage').style.display = 'block';
+        
+        // Reset form
         document.getElementById('tokenForm').reset();
         updatePreview();
 
@@ -1333,22 +1357,24 @@
     }
 
     // Copy functions
-    document.getElementById('copyAddressBtn').addEventListener('click', function() {
-      copyToClipboard('tokenAddressText', this);
-    });
-
-    document.getElementById('copyTxBtn').addEventListener('click', function() {
-      copyToClipboard('txHashText', this);
-    });
-
     function copyToClipboard(elementId, button) {
       const text = document.getElementById(elementId).textContent;
+      if (!text || text === '-') {
+        alert('No content to copy!');
+        return;
+      }
+      
       navigator.clipboard.writeText(text).then(() => {
         const originalText = button.textContent;
         button.textContent = 'Copied!';
+        button.style.background = 'var(--success)';
         setTimeout(() => {
           button.textContent = originalText;
+          button.style.background = 'var(--primary)';
         }, 2000);
+      }).catch(err => {
+        console.error('Failed to copy: ', err);
+        alert('Failed to copy to clipboard');
       });
     }
 
