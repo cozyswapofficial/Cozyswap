@@ -1,0 +1,1263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>CozySwap Token Generator - Create Your Token in Minutes</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #6c63ff;
+      --primary-dark: #5a52d5;
+      --accent: #00c6ff;
+      --accent-dark: #00a8e1;
+      --text: #ffffff;
+      --text-muted: #9aa0a6;
+      --background: #0b0b0f;
+      --card-bg: #111216;
+      --card-border: rgba(108, 99, 255, 0.2);
+      --success: #00d97e;
+      --warning: #ffd166;
+      --error: #ff6b6b;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--background);
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    /* Header */
+    .header {
+      background: rgba(11, 11, 15, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 15px 0;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--text);
+    }
+
+    .logo-img {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+    }
+
+    .logo-text {
+      font-size: 24px;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* Wallet Dropdown */
+    .wallet-container {
+      position: relative;
+    }
+
+    .wallet-btn {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.3s ease;
+    }
+
+    .wallet-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(108, 99, 255, 0.4);
+    }
+
+    .wallet-dropdown {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 10px 0;
+      min-width: 200px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      display: none;
+      z-index: 1001;
+    }
+
+    .wallet-dropdown.show {
+      display: block;
+    }
+
+    .wallet-option {
+      padding: 12px 20px;
+      cursor: pointer;
+      transition: background 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .wallet-option:hover {
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .wallet-option i {
+      width: 20px;
+      text-align: center;
+    }
+
+    /* Main Content */
+    .main {
+      margin-top: 80px;
+      padding: 40px 0;
+    }
+
+    .hero {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+
+    .hero h1 {
+      font-size: 3.5rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero p {
+      font-size: 1.2rem;
+      color: var(--text-muted);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* Generator Card */
+    .generator-grid {
+      display: grid;
+      grid-template-columns: 1fr 400px;
+      gap: 30px;
+      align-items: start;
+    }
+
+    @media (max-width: 968px) {
+      .generator-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .generator-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+
+    .card-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 25px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* Form Styles */
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 25px;
+    }
+
+    @media (max-width: 768px) {
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-label {
+      display: block;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+      font-weight: 500;
+      font-size: 14px;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 15px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text);
+      font-size: 16px;
+      transition: all 0.3s ease;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--primary);
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .form-select {
+      width: 100%;
+      padding: 15px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text);
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .form-select:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+
+    /* Chain Selector */
+    .chain-selector {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 12px;
+      margin-bottom: 25px;
+    }
+
+    .chain-btn {
+      padding: 15px 12px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .chain-btn.active {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      border-color: transparent;
+      color: white;
+    }
+
+    .chain-btn:hover {
+      border-color: var(--primary);
+      color: var(--text);
+    }
+
+    .chain-icon {
+      font-size: 20px;
+    }
+
+    .chain-name {
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .chain-fee {
+      font-size: 10px;
+      opacity: 0.8;
+    }
+
+    /* Create Button */
+    .create-btn {
+      width: 100%;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      color: white;
+      border: none;
+      padding: 18px;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .create-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(108, 99, 255, 0.4);
+    }
+
+    .create-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    /* Fee Notice */
+    .fee-notice {
+      text-align: center;
+      color: var(--warning);
+      font-size: 14px;
+      margin-top: 15px;
+      padding: 12px;
+      background: rgba(255, 209, 102, 0.1);
+      border: 1px solid rgba(255, 209, 102, 0.3);
+      border-radius: 8px;
+      font-weight: 600;
+    }
+
+    /* Preview Card */
+    .preview-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      position: sticky;
+      top: 100px;
+    }
+
+    .preview-header {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .preview-icon {
+      width: 50px;
+      height: 50px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+    }
+
+    .preview-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+
+    .preview-item {
+      margin-bottom: 15px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .preview-label {
+      color: var(--text-muted);
+      font-size: 14px;
+      margin-bottom: 5px;
+    }
+
+    .preview-value {
+      font-weight: 600;
+      font-size: 16px;
+    }
+
+    /* Status Messages */
+    .status-message {
+      padding: 20px;
+      border-radius: 12px;
+      margin-top: 20px;
+      display: none;
+    }
+
+    .status-success {
+      background: rgba(0, 217, 126, 0.1);
+      border: 1px solid rgba(0, 217, 126, 0.3);
+      color: var(--success);
+    }
+
+    .status-error {
+      background: rgba(255, 107, 107, 0.1);
+      border: 1px solid rgba(255, 107, 107, 0.3);
+      color: var(--error);
+    }
+
+    .status-title {
+      font-weight: 600;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .token-address {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 12px;
+      border-radius: 8px;
+      font-family: monospace;
+      word-break: break-all;
+      margin: 10px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .copy-btn {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .copy-btn:hover {
+      background: var(--primary-dark);
+    }
+
+    .explorer-link {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .explorer-link:hover {
+      text-decoration: underline;
+    }
+
+    /* Network Status */
+    .network-status {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 12px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      display: none;
+      font-size: 14px;
+    }
+
+    .wallet-status {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 12px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      display: none;
+      font-size: 14px;
+    }
+
+    .status-connected {
+      color: var(--success);
+    }
+
+    .status-disconnected {
+      color: var(--error);
+    }
+
+    .switching-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+      flex-direction: column;
+      gap: 20px;
+      color: white;
+    }
+
+    .switching-spinner {
+      width: 50px;
+      height: 50px;
+      border: 4px solid rgba(255, 255, 255, 0.3);
+      border-top: 4px solid var(--accent);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <!-- Switching Overlay -->
+  <div class="switching-overlay" id="switchingOverlay">
+    <div class="switching-spinner"></div>
+    <div>Switching network...</div>
+  </div>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="container">
+      <nav class="nav">
+        <a href="/" class="logo">
+          <img src="https://cozyswap.net/assets/cozy.png" alt="CozySwap" class="logo-img">
+          <span class="logo-text">CozySwap</span>
+        </a>
+        
+        <div class="wallet-container">
+          <button class="wallet-btn" id="walletBtn">
+            <i class="fas fa-wallet"></i>
+            <span id="walletText">Connect Wallet</span>
+          </button>
+          <div class="wallet-dropdown" id="walletDropdown">
+            <div class="wallet-option" onclick="connectWallet('injected')">
+              <i class="fab fa-metamask"></i>
+              <span>MetaMask</span>
+            </div>
+            <div class="wallet-option" onclick="connectWallet('walletconnect')">
+              <i class="fas fa-wallet"></i>
+              <span>WalletConnect</span>
+            </div>
+            <div class="wallet-option" onclick="connectWallet('coinbase')">
+              <i class="fab fa-bitcoin"></i>
+              <span>Coinbase Wallet</span>
+            </div>
+            <div class="wallet-option" id="disconnectOption" style="display: none;" onclick="disconnectWallet()">
+              <i class="fas fa-power-off"></i>
+              <span>Disconnect</span>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="main">
+    <div class="container">
+      <!-- Hero Section -->
+      <section class="hero">
+        <h1>Create Your Token in Minutes</h1>
+        <p>No coding required. Deploy your custom ERC20 token on multiple chains with CozySwap's easy-to-use token generator.</p>
+      </section>
+
+      <!-- Generator Section -->
+      <div class="generator-grid">
+        <!-- Token Form -->
+        <div class="generator-card">
+          <h2 class="card-title">
+            <i class="fas fa-rocket"></i>
+            Token Configuration
+          </h2>
+
+          <!-- Network Status -->
+          <div class="network-status" id="networkStatus">
+            <i class="fas fa-network-wired"></i>
+            Network: <span id="networkName">-</span> | Chain ID: <span id="chainId">-</span>
+          </div>
+
+          <!-- Wallet Status -->
+          <div class="wallet-status" id="walletStatus">
+            <i class="fas fa-wallet"></i>
+            Connected: <span id="walletAddress" class="status-connected">-</span>
+          </div>
+
+          <!-- Chain Selector -->
+          <div class="chain-selector">
+            <button class="chain-btn active" data-chain="plasma">
+              <i class="fas fa-bolt chain-icon"></i>
+              <span class="chain-name">Plasma</span>
+              <span class="chain-fee">100 XPL</span>
+            </button>
+            <button class="chain-btn" data-chain="ethereum">
+              <i class="fab fa-ethereum chain-icon"></i>
+              <span class="chain-name">Ethereum</span>
+              <span class="chain-fee">0.01 ETH</span>
+            </button>
+            <button class="chain-btn" data-chain="bsc">
+              <i class="fas fa-chart-line chain-icon"></i>
+              <span class="chain-name">BNB Chain</span>
+              <span class="chain-fee">0.1 BNB</span>
+            </button>
+            <button class="chain-btn" data-chain="polygon">
+              <i class="fas fa-gem chain-icon"></i>
+              <span class="chain-name">Polygon</span>
+              <span class="chain-fee">1 MATIC</span>
+            </button>
+            <button class="chain-btn" data-chain="arbitrum">
+              <i class="fas fa-arrows-alt-h chain-icon"></i>
+              <span class="chain-name">Arbitrum</span>
+              <span class="chain-fee">0.005 ETH</span>
+            </button>
+            <button class="chain-btn" data-chain="base">
+              <i class="fas fa-layer-group chain-icon"></i>
+              <span class="chain-name">Base</span>
+              <span class="chain-fee">0.005 ETH</span>
+            </button>
+            <button class="chain-btn" data-chain="core">
+              <i class="fas fa-circle chain-icon"></i>
+              <span class="chain-name">Core DAO</span>
+              <span class="chain-fee">1 CORE</span>
+            </button>
+            <button class="chain-btn" data-chain="vana">
+              <i class="fas fa-leaf chain-icon"></i>
+              <span class="chain-name">Vana</span>
+              <span class="chain-fee">10 VANA</span>
+            </button>
+            <button class="chain-btn" data-chain="sonic">
+              <i class="fas fa-wave-square chain-icon"></i>
+              <span class="chain-name">Sonic</span>
+              <span class="chain-fee">1 S</span>
+            </button>
+          </div>
+
+          <!-- Token Form -->
+          <form id="tokenForm">
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label">Token Name</label>
+                <input type="text" id="tokenName" class="form-input" placeholder="My Awesome Token" required>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Token Symbol</label>
+                <input type="text" id="tokenSymbol" class="form-input" placeholder="MAT" maxlength="11" required>
+              </div>
+            </div>
+
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label">Decimals</label>
+                <select id="tokenDecimal" class="form-select" required>
+                  <option value="18">18 (Standard)</option>
+                  <option value="9">9 (Like SHIB)</option>
+                  <option value="6">6 (Like USDC)</option>
+                  <option value="0">0 (Integer)</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Total Supply</label>
+                <input type="number" id="tokenSupply" class="form-input" placeholder="1000000" min="1" required>
+              </div>
+            </div>
+
+            <button type="submit" id="createBtn" class="create-btn">
+              <i class="fas fa-plus-circle"></i>
+              Create Token
+            </button>
+
+            <div class="fee-notice">
+              <i class="fas fa-info-circle"></i>
+              *Deployment fee required (varies by network)
+            </div>
+          </form>
+
+          <!-- Status Messages -->
+          <div id="successMessage" class="status-message status-success">
+            <div class="status-title">
+              <i class="fas fa-check-circle"></i>
+              Token Created Successfully!
+            </div>
+            <div class="preview-item">
+              <div class="preview-label">Token Address</div>
+              <div class="token-address">
+                <span id="tokenAddressText"></span>
+                <button class="copy-btn" id="copyAddressBtn">Copy</button>
+              </div>
+            </div>
+            <div class="preview-item">
+              <div class="preview-label">Transaction Hash</div>
+              <div class="token-address">
+                <span id="txHashText"></span>
+                <button class="copy-btn" id="copyTxBtn">Copy</button>
+              </div>
+            </div>
+            <a href="#" id="explorerLink" class="explorer-link" target="_blank">
+              <i class="fas fa-external-link-alt"></i>
+              View on Explorer
+            </a>
+          </div>
+
+          <div id="errorMessage" class="status-message status-error">
+            <div class="status-title">
+              <i class="fas fa-exclamation-triangle"></i>
+              <span id="errorTitle">Error</span>
+            </div>
+            <div id="errorText"></div>
+          </div>
+        </div>
+
+        <!-- Token Preview -->
+        <div class="preview-card">
+          <div class="preview-header">
+            <div class="preview-icon">
+              <i class="fas fa-coins"></i>
+            </div>
+            <div>
+              <div class="preview-title">Token Preview</div>
+              <div class="preview-label">Live preview of your token</div>
+            </div>
+          </div>
+
+          <div class="preview-item">
+            <div class="preview-label">Name</div>
+            <div class="preview-value" id="previewName">-</div>
+          </div>
+
+          <div class="preview-item">
+            <div class="preview-label">Symbol</div>
+            <div class="preview-value" id="previewSymbol">-</div>
+          </div>
+
+          <div class="preview-item">
+            <div class="preview-label">Decimals</div>
+            <div class="preview-value" id="previewDecimal">-</div>
+          </div>
+
+          <div class="preview-item">
+            <div class="preview-label">Total Supply</div>
+            <div class="preview-value" id="previewSupply">-</div>
+          </div>
+
+          <div class="preview-item">
+            <div class="preview-label">Network</div>
+            <div class="preview-value" id="previewNetwork">-</div>
+          </div>
+
+          <div class="preview-item">
+            <div class="preview-label">Deployment Fee</div>
+            <div class="preview-value" id="previewFee">-</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.1/ethers.umd.min.js"></script>
+  <script>
+    // Multi-chain Configuration - SAMA DENGAN ADMIN DEPLOYER
+    const CHAINS = {
+      plasma: {
+        chainId: '0x2611',
+        chainName: 'Plasma Chain',
+        rpcUrls: ['https://plasma-mainnet.g.alchemy.com/v2/MuLXFm60Tsz3ntyrSC1O4'],
+        nativeCurrency: { name: 'XPL', symbol: 'XPL', decimals: 18 },
+        blockExplorer: 'https://plasmascan.to',
+        factory: '0xe95F65C6838f93D23b7bCe1076D9cA017196f050',
+        fee: '100'
+      },
+      ethereum: {
+        chainId: '0x1',
+        chainName: 'Ethereum',
+        rpcUrls: ['https://eth.llamarpc.com'],
+        nativeCurrency: { name: 'ETH', symbol: 'ETH', decimals: 18 },
+        blockExplorer: 'https://etherscan.io',
+        factory: '0xe95F65C6838f93D23b7bCe1076D9cA017196f050',
+        fee: '0.01'
+      },
+      bsc: {
+        chainId: '0x38',
+        chainName: 'BNB Chain',
+        rpcUrls: ['https://bsc-dataseed.binance.org/'],
+        nativeCurrency: { name: 'BNB', symbol: 'BNB', decimals: 18 },
+        blockExplorer: 'https://bscscan.com',
+        factory: '0xe95F65C6838f93D23b7bCe1076D9cA017196f050',
+        fee: '0.1'
+      },
+      polygon: {
+        chainId: '0x89',
+        chainName: 'Polygon',
+        rpcUrls: ['https://polygon-rpc.com'],
+        nativeCurrency: { name: 'MATIC', symbol: 'MATIC', decimals: 18 },
+        blockExplorer: 'https://polygonscan.com',
+        factory: '0xe95F65C6838f93D23b7bCe1076D9cA017196f050',
+        fee: '1'
+      },
+      arbitrum: {
+        chainId: '0xA4B1',
+        chainName: 'Arbitrum',
+        rpcUrls: ['https://arb1.arbitrum.io/rpc'],
+        nativeCurrency: { name: 'ETH', symbol: 'ETH', decimals: 18 },
+        blockExplorer: 'https://arbiscan.io',
+        factory: '0xe95F65C6838f93D23b7bCe1076D9cA017196f050',
+        fee: '0.005'
+      },
+      base: {
+        chainId: '0x2105',
+        chainName: 'Base',
+        rpcUrls: ['https://mainnet.base.org'],
+        nativeCurrency: { name: 'ETH', symbol: 'ETH', decimals: 18 },
+        blockExplorer: 'https://basescan.org',
+        factory: '0xe95F65C6838f93D23b7bCe1076D9cA017196f050',
+        fee: '0.005'
+      },
+      core: {
+        chainId: '0xAE',
+        chainName: 'Core DAO',
+        rpcUrls: ['https://rpc.coredao.org'],
+        nativeCurrency: { name: 'CORE', symbol: 'CORE', decimals: 18 },
+        blockExplorer: 'https://scan.coredao.org',
+        factory: '0xe95F65C6838f93D23b7bCe1076D9cA017196f050',
+        fee: '1'
+      },
+      vana: {
+        chainId: '0x5C8',
+        chainName: 'Vana Chain',
+        rpcUrls: ['https://rpc.vana.org'],
+        nativeCurrency: { name: 'VANA', symbol: 'VANA', decimals: 18 },
+        blockExplorer: 'https://vanascan.io',
+        factory: '0xe95F65C6838f93D23b7bCe1076D9cA017196f050',
+        fee: '10'
+      },
+      sonic: {
+        chainId: '0x2B',
+        chainName: 'Sonic',
+        rpcUrls: ['https://rpc.soniclabs.com'],
+        nativeCurrency: { name: 'S', symbol: 'S', decimals: 18 },
+        blockExplorer: 'https://sonicscan.org',
+        factory: '0xe95F65C6838f93D23b7bCe1076D9cA017196f050',
+        fee: '1'
+      }
+    };
+
+    // Factory Contract ABI
+    const FACTORY_ABI = [
+      "function createToken(string name, string symbol, uint8 decimals, uint256 initialSupply) external payable returns (address)",
+      "function createFee() external view returns (uint256)",
+      "function getTotalTokens() external view returns (uint256)",
+      "event TokenCreated(address indexed user, address tokenAddress, string name, string symbol, uint8 decimals, uint256 initialSupply)"
+    ];
+
+    let provider, signer, factory;
+    let userAddress = '';
+    let currentChain = 'plasma';
+    let isSwitchingNetwork = false;
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', function() {
+      initializeChainSelector();
+      initializeFormListeners();
+      initializeWalletDropdown();
+      
+      if (window.ethereum) {
+        checkNetwork();
+        checkConnection();
+        
+        // Event listeners
+        window.ethereum.on('chainChanged', handleChainChanged);
+        window.ethereum.on('accountsChanged', handleAccountsChanged);
+      }
+    });
+
+    // Initialize chain selector dengan auto-switch
+    function initializeChainSelector() {
+      const chainButtons = document.querySelectorAll('.chain-btn');
+      chainButtons.forEach(btn => {
+        btn.addEventListener('click', async function() {
+          if (isSwitchingNetwork) return;
+          
+          const selectedChain = this.dataset.chain;
+          if (selectedChain === currentChain) return;
+
+          chainButtons.forEach(b => b.classList.remove('active'));
+          this.classList.add('active');
+          
+          // Show switching overlay
+          showSwitchingOverlay();
+          
+          try {
+            await switchChain(selectedChain);
+            currentChain = selectedChain;
+            updatePreview();
+            
+            // Re-initialize contract dengan chain baru
+            if (userAddress) {
+              await initializeContract();
+            }
+          } catch (error) {
+            showError('Failed to switch network: ' + error.message);
+            // Revert to previous chain
+            chainButtons.forEach(b => {
+              if (b.dataset.chain === currentChain) {
+                b.classList.add('active');
+              }
+            });
+          } finally {
+            hideSwitchingOverlay();
+          }
+        });
+      });
+    }
+
+    // Initialize form listeners for live preview
+    function initializeFormListeners() {
+      const formInputs = ['tokenName', 'tokenSymbol', 'tokenDecimal', 'tokenSupply'];
+      formInputs.forEach(id => {
+        document.getElementById(id).addEventListener('input', updatePreview);
+      });
+    }
+
+    // Initialize wallet dropdown
+    function initializeWalletDropdown() {
+      const walletBtn = document.getElementById('walletBtn');
+      const walletDropdown = document.getElementById('walletDropdown');
+
+      walletBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        walletDropdown.classList.toggle('show');
+      });
+
+      // Close dropdown when clicking outside
+      document.addEventListener('click', function() {
+        walletDropdown.classList.remove('show');
+      });
+    }
+
+    // Switch chain dengan auto-connect
+    async function switchChain(chainName) {
+      if (!window.ethereum) {
+        throw new Error('Please install a Web3 wallet!');
+      }
+
+      const chainConfig = CHAINS[chainName];
+      
+      try {
+        await window.ethereum.request({
+          method: 'wallet_switchEthereumChain',
+          params: [{ chainId: chainConfig.chainId }],
+        });
+      } catch (switchError) {
+        if (switchError.code === 4902) {
+          try {
+            await window.ethereum.request({
+              method: 'wallet_addEthereumChain',
+              params: [chainConfig],
+            });
+          } catch (addError) {
+            throw new Error('Failed to add network: ' + addError.message);
+          }
+        } else {
+          throw new Error('Failed to switch network: ' + switchError.message);
+        }
+      }
+    }
+
+    // Initialize contract dengan chain current
+    async function initializeContract() {
+      if (!userAddress) return;
+      
+      try {
+        provider = new ethers.providers.Web3Provider(window.ethereum);
+        signer = provider.getSigner();
+        factory = new ethers.Contract(CHAINS[currentChain].factory, FACTORY_ABI, signer);
+      } catch (error) {
+        console.error('Error initializing contract:', error);
+      }
+    }
+
+    // Wallet connection functions
+    async function connectWallet(walletType) {
+      if (!window.ethereum) {
+        showError('Please install a Web3 wallet like MetaMask!');
+        return;
+      }
+
+      try {
+        // Pastikan di network yang benar sebelum connect
+        await switchChain(currentChain);
+        
+        const accounts = await window.ethereum.request({ 
+          method: 'eth_requestAccounts' 
+        });
+        await setupWallet(accounts[0]);
+        showSuccess('Wallet connected successfully!');
+        
+        // Update dropdown
+        document.getElementById('disconnectOption').style.display = 'block';
+        document.getElementById('walletDropdown').classList.remove('show');
+      } catch (error) {
+        showError('Failed to connect wallet: ' + error.message);
+      }
+    }
+
+    function disconnectWallet() {
+      userAddress = '';
+      provider = null;
+      signer = null;
+      factory = null;
+
+      document.getElementById('walletText').textContent = 'Connect Wallet';
+      document.getElementById('walletStatus').style.display = 'none';
+      document.getElementById('disconnectOption').style.display = 'none';
+      document.getElementById('walletDropdown').classList.remove('show');
+      
+      showSuccess('Wallet disconnected');
+    }
+
+    // Setup wallet
+    async function setupWallet(address) {
+      userAddress = address;
+      const shortAddress = address.substring(0, 6) + '...' + address.substring(38);
+
+      document.getElementById('walletText').textContent = shortAddress;
+      document.getElementById('walletAddress').textContent = shortAddress;
+      document.getElementById('walletStatus').style.display = 'block';
+
+      await initializeContract();
+      hideError();
+    }
+
+    // Update live preview
+    function updatePreview() {
+      const name = document.getElementById('tokenName').value || '-';
+      const symbol = document.getElementById('tokenSymbol').value || '-';
+      const decimal = document.getElementById('tokenDecimal').value || '18';
+      const supply = document.getElementById('tokenSupply').value || '-';
+      const chain = CHAINS[currentChain];
+
+      document.getElementById('previewName').textContent = name;
+      document.getElementById('previewSymbol').textContent = symbol;
+      document.getElementById('previewDecimal').textContent = decimal;
+      document.getElementById('previewSupply').textContent = supply ? Number(supply).toLocaleString() : '-';
+      document.getElementById('previewNetwork').textContent = chain.chainName;
+      document.getElementById('previewFee').textContent = `${chain.fee} ${chain.nativeCurrency.symbol}`;
+    }
+
+    // Handle form submission
+    document.getElementById('tokenForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+
+      if (!userAddress) {
+        showError('Please connect your wallet first!');
+        return;
+      }
+
+      const name = document.getElementById('tokenName').value.trim();
+      const symbol = document.getElementById('tokenSymbol').value.trim().toUpperCase();
+      const decimal = parseInt(document.getElementById('tokenDecimal').value);
+      const supply = document.getElementById('tokenSupply').value;
+      const chain = CHAINS[currentChain];
+
+      // Validation
+      if (!name || !symbol || !supply) {
+        showError('Please fill all fields!');
+        return;
+      }
+
+      if (symbol.length > 11) {
+        showError('Symbol must be 11 characters or less!');
+        return;
+      }
+
+      if (parseFloat(supply) <= 0) {
+        showError('Supply must be greater than 0!');
+        return;
+      }
+
+      try {
+        const createBtn = document.getElementById('createBtn');
+        createBtn.disabled = true;
+        createBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating Token...';
+        hideError();
+        hideSuccess();
+
+        const initialSupplyWei = ethers.utils.parseUnits(supply, decimal);
+        const fee = ethers.utils.parseEther(chain.fee);
+
+        const tx = await factory.createToken(
+          name, 
+          symbol, 
+          decimal, 
+          initialSupplyWei,
+          { value: fee }
+        );
+
+        document.getElementById('txHashText').textContent = tx.hash;
+
+        const receipt = await tx.wait();
+        const event = receipt.events.find(e => e.event === 'TokenCreated');
+        
+        if (!event) {
+          throw new Error('Token creation event not found');
+        }
+
+        const tokenAddress = event.args.tokenAddress;
+        document.getElementById('tokenAddressText').textContent = tokenAddress;
+        document.getElementById('explorerLink').href = 
+          `${chain.blockExplorer}/address/${tokenAddress}#code`;
+        
+        showSuccess('Token created successfully!');
+        document.getElementById('tokenForm').reset();
+        updatePreview();
+
+      } catch (error) {
+        console.error('Error creating token:', error);
+        
+        if (error.code === 'INSUFFICIENT_FUNDS') {
+          showError(`Insufficient ${chain.nativeCurrency.symbol} balance! Need ${chain.fee} ${chain.nativeCurrency.symbol} fee + gas.`);
+        } else if (error.code === 'ACTION_REJECTED') {
+          showError('Transaction cancelled by user.');
+        } else {
+          showError('Failed to create token: ' + error.message);
+        }
+      } finally {
+        const createBtn = document.getElementById('createBtn');
+        createBtn.disabled = false;
+        createBtn.innerHTML = '<i class="fas fa-plus-circle"></i> Create Token';
+      }
+    });
+
+    // Event handlers
+    async function handleChainChanged(chainId) {
+      await checkNetwork();
+      await checkConnection();
+      updatePreview();
+    }
+
+    async function handleAccountsChanged(accounts) {
+      if (accounts.length > 0) {
+        await setupWallet(accounts[0]);
+      } else {
+        disconnectWallet();
+      }
+    }
+
+    // Network and connection checks
+    async function checkNetwork() {
+      if (!window.ethereum) return;
+
+      try {
+        const chainId = await window.ethereum.request({ method: 'eth_chainId' });
+        const network = Object.values(CHAINS).find(c => c.chainId === chainId);
+        
+        document.getElementById('networkName').textContent = network ? network.chainName : 'Unknown';
+        document.getElementById('chainId').textContent = chainId;
+        document.getElementById('networkStatus').style.display = 'block';
+
+        // Update current chain if recognized
+        if (network) {
+          currentChain = Object.keys(CHAINS).find(key => CHAINS[key].chainId === chainId);
+          document.querySelectorAll('.chain-btn').forEach(btn => {
+            btn.classList.remove('active');
+            if (btn.dataset.chain === currentChain) {
+              btn.classList.add('active');
+            }
+          });
+          updatePreview();
+        }
+
+      } catch (error) {
+        console.error('Error checking network:', error);
+      }
+    }
+
+    async function checkConnection() {
+      if (window.ethereum) {
+        try {
+          const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+          if (accounts.length > 0) {
+            await setupWallet(accounts[0]);
+          }
+        } catch (error) {
+          console.error('Error checking connection:', error);
+        }
+      }
+    }
+
+    // Switching overlay functions
+    function showSwitchingOverlay() {
+      isSwitchingNetwork = true;
+      document.getElementById('switchingOverlay').style.display = 'flex';
+    }
+
+    function hideSwitchingOverlay() {
+      isSwitchingNetwork = false;
+      document.getElementById('switchingOverlay').style.display = 'none';
+    }
+
+    // Utility functions
+    function showError(message) {
+      document.getElementById('errorText').textContent = message;
+      document.getElementById('errorMessage').style.display = 'block';
+      document.getElementById('successMessage').style.display = 'none';
+    }
+
+    function showSuccess(message) {
+      // For simple success messages without token details
+      if (!document.getElementById('tokenAddressText').textContent) {
+        alert(message); // Simple alert for now
+      }
+    }
+
+    function hideError() {
+      document.getElementById('errorMessage').style.display = 'none';
+    }
+
+    function hideSuccess() {
+      document.getElementById('successMessage').style.display = 'none';
+    }
+
+    // Copy functions
+    document.getElementById('copyAddressBtn').addEventListener('click', function() {
+      copyToClipboard('tokenAddressText', this);
+    });
+
+    document.getElementById('copyTxBtn').addEventListener('click', function() {
+      copyToClipboard('txHashText', this);
+    });
+
+    function copyToClipboard(elementId, button) {
+      const text = document.getElementById(elementId).textContent;
+      navigator.clipboard.writeText(text).then(() => {
+        const originalText = button.textContent;
+        button.textContent = 'Copied!';
+        setTimeout(() => {
+          button.textContent = originalText;
+        }, 2000);
+      });
+    }
+
+    // Initialize preview
+    updatePreview();
+  </script>
+</body>
+</html>
