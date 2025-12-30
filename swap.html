@@ -73,466 +73,645 @@
 
   <link rel="icon" href="https://photos.pinksale.finance/file/pinksale-logo-upload/1760207026339-3c980e075709984d5362d951f45695a5.png" />
   <style>
-    /* Tombol aktif gradien nyala */
-    .active-btn {
-      background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+    /* Modern Variable Definitions */
+    :root {
+      --bg-color: #0d1117;
+      --card-bg: #161b22;
+      --card-border: #30363d;
+      --input-bg: #0d1117;
+      --input-border: #30363d;
+      --text-main: #c9d1d9;
+      --text-muted: #8b949e;
+      --primary-color: #7a00ff;
+      --primary-hover: #9e47ff;
+      --secondary-color: #238636;
+      --danger-color: #da3633;
+      --highlight: #58a6ff;
+      --radius-l: 24px;
+      --radius-m: 16px;
+      --radius-s: 12px;
+      --shadow-card: 0 16px 32px rgba(1, 4, 9, 0.85);
+      --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    
+    html, body {
+      height: 100%;
+      margin: 0;
+      background: var(--bg-color);
+      color: var(--text-main);
+      font-family: var(--font-family);
+    }
+
+    .wrap {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 420px;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 20px;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    .small {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      position: relative;
+    }
+
+    .btn {
+      background: var(--primary-color);
       color: #fff;
       border: none;
-      border-radius: 10px;
-      padding: 8px 16px;
+      padding: 8px 12px;
+      border-radius: var(--radius-m);
       font-weight: 600;
       cursor: pointer;
-      transition: all 0.2s ease-in-out;
-      box-shadow: 0 0 10px rgba(139, 92, 246, 0.5);
+      transition: background 0.2s ease;
+      font-size: 13px;
     }
 
-    /* Efek hover glowing */
-    .active-btn:hover {
-      transform: scale(1.03);
-      box-shadow: 0 0 16px rgba(59, 130, 246, 0.8);
+    .btn:hover {
+      background: var(--primary-hover);
     }
 
-    /* Tombol ghost (tetap gelap untuk yg lain, misal Staking) */
-    .ghost {
-      background: rgba(255, 255, 255, 0.08);
-      color: #ccc;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 10px;
-      padding: 8px 16px;
-      cursor: pointer;
-      transition: all 0.2s ease-in-out;
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-l);
+      padding: 8px;
+      box-shadow: var(--shadow-card);
+      margin-bottom: 20px;
     }
 
-    .ghost:hover {
-      background: rgba(255, 255, 255, 0.15);
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 12px 20px;
     }
 
-    /* Tombol Unwrap (kuning) */
-    .unwrap-btn {
-      background: #f59e0b;
-      color: #fff;
+    .settings-btn {
+      background: transparent;
       border: none;
-      border-radius: 10px;
-      padding: 12px 24px;
-      font-weight: 600;
+      color: var(--text-muted);
       cursor: pointer;
-      transition: all 0.2s ease-in-out;
-      box-shadow: 0 0 10px rgba(245, 158, 11, 0.5);
     }
 
-    .unwrap-btn:hover {
-      transform: scale(1.03);
-      box-shadow: 0 0 16px rgba(245, 158, 11, 0.8);
+    /* Input Panels */
+    .swap-panel {
+      background: var(--input-bg);
+      border: 1px solid var(--input-border);
+      border-radius: var(--radius-m);
+      padding: 12px;
+      transition: border-color 0.2s;
     }
 
-    :root{--bg:#0b0b0f;--card:#111216;--muted:#9aa0a6;--accent1:#6c63ff;--accent2:#00c6ff}
-    *{box-sizing:border-box}
-    html,body{height:100%;margin:0;background:var(--bg);color:#e6eef8;font-family:Inter,system-ui,Arial}
-    .wrap{min-height:100%;display:flex;align-items:center;justify-content:center;padding:20px}
-    .app{width:100%;max-width:980px}
-    header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
-    .brand{display:flex;align-items:center;gap:12px}
-    .logo{width:48px;height:48px;border-radius:50%;object-fit:cover}
-    .actions{display:flex;gap:10px;align-items:center;position:relative}
-    .btn{background:linear-gradient(90deg,var(--accent1),var(--accent2));border:0;color:#fff;padding:10px 14px;border-radius:10px;cursor:pointer;transition:all 0.2s ease}
-    .ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);padding:8px 12px;border-radius:10px;color:var(--muted)}
-    .container{display:grid;grid-template-columns:1fr;gap:16px}
-    .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:14px;padding:18px;border:1px solid rgba(255,255,255,0.03)}
-    label{font-size:13px;color:var(--muted);display:block;margin-bottom:8px}
-    .row{display:flex;gap:10px}
-    input[type=text], input[type=number], select{background:transparent;border:1px solid rgba(255,255,255,0.06);color:#e6eef8;padding:10px;border-radius:10px;width:100%}
-    .amount{font-size:20px;color:#fff;padding:6px 0}
-    .muted{color:var(--muted);font-size:13px}
-    .footer{display:flex;justify-content:space-between;align-items:center;margin-top:8px}
-    .small{font-size:12px;color:var(--muted)}
-    .link{color:var(--accent2);text-decoration:none}
-    .status{font-size:13px;color:var(--muted);margin-left:8px}
-    .green{color:#6ee7b7}
-    .yellow{color:#fbbf24}
-    .red{color:#fb7185}
-    @media(min-width:900px){.container{grid-template-columns:480px 1fr}}
-    .maxbtn{background:transparent;border:1px dashed rgba(255,255,255,0.08);padding:6px 8px;border-radius:8px;color:var(--muted);cursor:pointer}
-    .smallbtn{background:transparent;border:1px solid rgba(255,255,255,0.04);padding:6px 8px;border-radius:8px;color:var(--muted);cursor:pointer}
-    .txhash{word-break:break-all;color:var(--muted);margin-top:8px}
+    .swap-panel:hover, .swap-panel:focus-within {
+      border-color: #58a6ff;
+    }
 
-    /* ==================== TOKEN SELECTOR STYLES ==================== */
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 4px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .panel-content {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .amount-input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: #fff;
+      font-size: 24px;
+      font-weight: 500;
+      width: 100%;
+      outline: none;
+      padding: 0;
+    }
+
+    .amount-input::placeholder {
+      color: #484f58;
+    }
+
+    .max-btn {
+      color: var(--highlight);
+      background: transparent;
+      border: none;
+      font-size: 11px;
+      cursor: pointer;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    /* Token Selector */
     .token-select-container {
       position: relative;
-      width: 100%;
     }
 
     .selected-token {
       display: flex;
       align-items: center;
-      padding: 10px 12px;
-      border: 1px solid rgba(255,255,255,0.06);
-      border-radius: 10px;
+      background: #21262d;
+      padding: 4px 8px 4px 6px;
+      border-radius: 16px;
       cursor: pointer;
-      background: transparent;
+      border: 1px solid transparent;
       transition: all 0.2s;
-      min-height: 44px;
+      min-width: 90px;
+      justify-content: space-between;
     }
 
     .selected-token:hover {
-      border-color: rgba(255,255,255,0.1);
-      background: rgba(255,255,255,0.02);
+      background: #30363d;
     }
 
     .token-logo-sm {
-      width: 24px;
-      height: 24px;
+      width: 20px;
+      height: 20px;
       border-radius: 50%;
-      margin-right: 10px;
-      object-fit: cover;
-    }
-
-    /* Scrollable Dropdown */
-    .token-dropdown {
-      position: absolute;
-      top: 100%;
-      left: 0;
-      right: 0;
-      background: #111216;
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 12px;
-      max-height: 320px;
-      overflow-y: auto;
-      overflow-x: hidden;
-      display: none;
-      z-index: 1000;
-      box-shadow: 0 8px 25px rgba(0,0,0,0.4);
-      margin-top: 5px;
-    }
-
-    /* Custom Scrollbar */
-    .token-dropdown::-webkit-scrollbar {
-      width: 6px;
-    }
-
-    .token-dropdown::-webkit-scrollbar-track {
-      background: rgba(255,255,255,0.05);
-      border-radius: 3px;
-    }
-
-    .token-dropdown::-webkit-scrollbar-thumb {
-      background: rgba(255,255,255,0.2);
-      border-radius: 3px;
-    }
-
-    .token-dropdown::-webkit-scrollbar-thumb:hover {
-      background: rgba(255,255,255,0.3);
-    }
-
-    /* Token List Items */
-    .token-option {
-      display: flex;
-      align-items: center;
-      padding: 12px 15px;
-      cursor: pointer;
-      border-bottom: 1px solid rgba(255,255,255,0.03);
-      transition: all 0.2s ease;
-    }
-
-    .token-option:last-child {
-      border-bottom: none;
-    }
-
-    .token-option:hover {
-      background: rgba(255,255,255,0.05);
-    }
-
-    .token-option.active {
-      background: rgba(59, 130, 246, 0.1);
-      border-left: 3px solid #3b82f6;
-    }
-
-    .token-info {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-      flex: 1;
-      margin-left: 10px;
-      min-width: 0;
+      margin-right: 6px;
     }
 
     .token-symbol {
       font-weight: 600;
+      color: #fff;
       font-size: 14px;
-      color: #fff;
-    }
-
-    .token-name {
-      font-size: 11px;
-      color: #9aa0a6;
-    }
-
-    .token-balance {
-      font-size: 12px;
-      color: #9aa0a6;
-      text-align: right;
-      margin-left: 10px;
-    }
-
-    .copy-btn {
-      background: none;
-      border: none;
-      color: #6b7280;
-      font-size: 12px;
-      cursor: pointer;
-      padding: 4px 6px;
-      border-radius: 4px;
-      transition: all 0.2s ease;
-      margin-left: 8px;
-    }
-
-    .copy-btn:hover {
-      background: rgba(255,255,255,0.1);
-      color: #fff;
+      margin-right: 6px;
     }
 
     .dropdown-arrow {
-      margin-left: auto;
-      font-size: 12px;
-      color: #9aa0a6;
-      transition: transform 0.2s ease;
+      font-size: 10px;
     }
 
-    .token-select-container.open .dropdown-arrow {
-      transform: rotate(180deg);
+    /* Swap Arrow */
+    .swap-arrow-container {
+      position: relative;
+      height: 10px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 2;
     }
 
-    /* Search Bar for Tokens */
+    .swap-arrow-btn {
+      background: var(--card-bg);
+      border: 4px solid var(--bg-color); /* Creates gap effect */
+      border-radius: 10px;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--text-muted);
+      transition: all 0.2s;
+    }
+
+    .swap-arrow-btn:hover {
+      color: #fff;
+      transform: scale(1.1);
+    }
+
+    /* Dropdown */
+    .token-dropdown {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      background: #1c2128;
+      border: 1px solid #30363d;
+      border-radius: 12px;
+      width: 280px;
+      max-height: 350px;
+      overflow-y: auto;
+      z-index: 1000;
+      display: none;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+      margin-top: 8px;
+    }
+
     .token-search {
-      padding: 10px 12px;
-      border-bottom: 1px solid rgba(255,255,255,0.05);
-      background: rgba(255,255,255,0.02);
+      padding: 8px;
+      border-bottom: 1px solid #30363d;
     }
 
     .token-search input {
       width: 100%;
-      padding: 6px 10px;
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 6px;
+      background: #0d1117;
+      border: 1px solid #30363d;
+      padding: 8px;
+      border-radius: 8px;
       color: #fff;
       font-size: 13px;
     }
 
-    .token-search input::placeholder {
-      color: #6b7280;
+    /* Compact token option styling */
+    .token-option {
+      padding: 6px 12px;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      transition: background 0.2s;
     }
 
-    .token-search input:focus {
-      outline: none;
-      border-color: rgba(59, 130, 246, 0.5);
+    .token-option:hover {
+      background: #21262d;
     }
 
-    /* No tokens found message */
-    .no-tokens {
-      padding: 15px;
-      text-align: center;
-      color: #6b7280;
-      font-size: 13px;
-    }
-
-    /* Token list header */
-    .token-list-header {
+    /* Price Display */
+    .price-display-container {
       padding: 8px 12px;
-      font-size: 11px;
-      color: #6b7280;
-      border-bottom: 1px solid rgba(255,255,255,0.05);
-      background: rgba(255,255,255,0.02);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+    
+    .price-value {
+      color: var(--text-main);
+      font-weight: 500;
     }
 
-    /* Wallet Dropdown Styles */
+    /* Main Action Button */
+    .action-btn {
+      width: 100%;
+      background: var(--primary-color);
+      color: #fff;
+      border: none;
+      padding: 14px;
+      border-radius: var(--radius-m);
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 8px;
+      transition: background 0.2s;
+    }
+
+    .action-btn:hover {
+      background: var(--primary-hover);
+    }
+
+    .unwrap-btn {
+      background: #f59e0b;
+      color: #fff;
+      border: none;
+      border-radius: var(--radius-m);
+      padding: 14px;
+      font-size: 16px;
+      font-weight: 600;
+      width: 100%;
+      cursor: pointer;
+      margin-top: 8px;
+    }
+    .unwrap-btn:hover { background: #d97706; }
+
+    /* Footer / Settings */
+    .swap-details {
+      margin-top: 12px;
+      padding: 10px;
+      border-radius: 12px;
+      border: 1px solid var(--card-border);
+      background: var(--input-bg);
+      font-size: 12px;
+    }
+    
+    .detail-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 4px;
+      color: var(--text-muted);
+    }
+    .detail-row:last-child { margin-bottom: 0; }
+
+    .green { color: #2ea043; }
+    .yellow { color: #db8e0d; }
+    .red { color: #f85149; }
+
+    /* Nav Menu Dropdown */
+    .menu-dropdown {
+      position: absolute;
+      top: 100%;
+      right: 0; /* Align right to avoid overflow */
+      background: #1c2128;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      padding: 4px 0;
+      min-width: 120px;
+      display: none;
+      z-index: 1001;
+      margin-top: 8px;
+    }
+    .menu-option {
+      padding: 8px 16px;
+      cursor: pointer;
+      color: var(--text-main);
+      font-size: 13px;
+      display: block;
+      text-decoration: none;
+    }
+    .menu-option:hover { background: #30363d; color: #fff; }
+
+    .menu-btn {
+      background: #21262d;
+      border: 1px solid #30363d;
+      color: var(--text-main);
+      padding: 8px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+    }
+    .menu-btn:hover { background: #30363d; color: #fff; }
+
+    /* Wallet Dropdown */
     .wallet-dropdown {
       position: absolute;
       top: 100%;
       right: 0;
-      background: #111216;
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 12px;
-      padding: 8px 0;
-      min-width: 180px;
-      box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+      background: #1c2128;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      padding: 4px 0;
+      min-width: 160px;
       display: none;
       z-index: 1000;
-      margin-top: 5px;
+      margin-top: 8px;
     }
-
     .wallet-option {
-      padding: 10px 15px;
+      padding: 8px 16px;
       cursor: pointer;
-      transition: background 0.2s ease;
+      color: var(--text-main);
+      font-size: 13px;
       display: flex;
       align-items: center;
       gap: 8px;
-      font-size: 14px;
+    }
+    .wallet-option:hover { background: #30363d; }
+    .wallet-option.disconnect { color: #f85149; }
+
+    /* Add Token Button inside dropdown */
+    .add-token-container {
+      padding: 6px;
+      border-top: 1px solid #30363d;
+      text-align: center;
+    }
+    .add-token-btn {
+      width: 100%;
+      background: #21262d;
+      border: 1px solid #30363d;
+      color: var(--text-muted);
+      padding: 6px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 12px;
+      transition: all 0.2s;
+    }
+    .add-token-btn:hover {
+      background: #30363d;
+      color: #fff;
     }
 
-    .wallet-option:hover {
-      background: rgba(255,255,255,0.05);
-    }
-
-    .wallet-option.disconnect {
-      color: #ef4444;
-    }
-
-    .wallet-option.disconnect:hover {
-      background: rgba(239, 68, 68, 0.1);
-    }
-
-    /* Toast Styles */
+    /* Toast */
     .toast {
       position: fixed;
       bottom: 24px;
       left: 50%;
       transform: translateX(-50%);
-      padding: 10px 18px;
-      background: rgba(40, 167, 69, 0.9);
+      padding: 10px 20px;
+      background: #238636;
       color: #fff;
-      font-size: 14px;
+      font-size: 13px;
       border-radius: 8px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
       z-index: 9999;
       opacity: 0;
-      transition: opacity 0.3s ease;
+      transition: opacity 0.3s;
     }
+    .toast.error { background: #da3633; }
 
-    .toast.error {
-      background: rgba(220, 53, 69, 0.9);
+    /* Custom Scrollbar for token list */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #30363d; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #484f58; }
+
+    .token-info { display: flex; flex-direction: column; }
+    .token-name { font-size: 10px; color: var(--text-muted); }
+    .token-balance { margin-left: auto; font-size: 12px; text-align: right; }
+    .token-usd { font-size: 10px; color: var(--text-muted); display: block; text-align: right; }
+    .copy-btn { margin-left: 8px; background: transparent; border: none; cursor: pointer; color: var(--text-muted); }
+    
+    .usd-price-display {
+        font-size: 11px;
+        color: var(--text-muted);
+        margin-top: 4px;
+        height: 14px;
     }
   </style>
 </head>
 <body>
   <div class="wrap">
-    <div class="app">
-      <header>
-        <div class="brand">
-          <img id="logoImg" class="logo" src="https://photos.pinksale.finance/file/pinksale-logo-upload/1760207026339-3c980e075709984d5362d951f45695a5.png" alt="Cozy" />
-          <div>
-            <h1 style="margin:0">CozySwap</h1>
-            <div class="small">Plasma Chain (9745)</div>
-          </div>
-        </div>
-        <div class="actions">
-          <div class="small">@CozySwap</div>
-          <div style="position:relative">
-            <button id="connectBtn" class="btn">Connect Wallet</button>
-            <div id="walletDropdown" class="wallet-dropdown">
-              <div class="wallet-option" onclick="copyAddress(window.account)">
-                <span>📋</span>
-                <span>Copy Address</span>
-              </div>
-              <div class="wallet-option disconnect" onclick="disconnectWallet()">
-                <span>🚪</span>
-                <span>Disconnect</span>
-              </div>
-            </div>
-          </div>
-          <span id="status" class="status">init</span>
-        </div>
-      </header>
-
-      <div class="container">
-        <div class="card">
-          <div style="display:flex;justify-content:space-between;align-items:center">
-            <div><strong>Swap</strong><div class="small">Token to token</div></div>
-            <div style="text-align:right">
-              <button id="toLiquidity" class="active-btn">Add Liquidity</button> 
-              <button id="toStaking" class="active-btn">Staking</button>
-            </div>
-          </div>
-
-          <div style="margin-top:12px">
-            <label>From</label>
-            <div class="row">
-              <div style="flex:1">
-                <input id="fromAmount" type="text" placeholder="0.0" />
-                <div class="muted amount" id="fromReadable">—</div>
-                <div class="small">Balance: <span id="fromBalance">—</span> <button id="maxFrom" class="maxbtn">Max</button></div>
-              </div>
-              <div style="width:220px;display:flex;gap:8px">
-                <div class="token-select-container">
-                  <div class="selected-token" onclick="toggleDropdown('from')">
-                    <img id="selectedFromLogo" src="" class="token-logo-sm">
-                    <span id="selectedFromSymbol">XPL</span>
-                    <span class="dropdown-arrow">▼</span>
-                  </div>
-                  <div id="fromDropdown" class="token-dropdown"></div>
-                </div>
-                <button id="addTokenBtn" class="smallbtn" title="Add custom token">＋</button>
-              </div>
-            </div>
-
-            <div style="height:8px"></div>
-            <div style="text-align:center"><button id="flip" class="ghost">⇅</button></div>
-
-            <div style="height:8px"></div>
-            <label>To</label>
-            <div class="row">
-              <div style="flex:1">
-                <div class="muted amount" id="toReadable">—</div>
-                <div class="small">Balance: <span id="toBalance">—</span></div>
-              </div>
-              <div style="width:220px">
-                <div class="token-select-container">
-                  <div class="selected-token" onclick="toggleDropdown('to')">
-                    <img id="selectedToLogo" src="" class="token-logo-sm">
-                    <span id="selectedToSymbol">COZY</span>
-                    <span class="dropdown-arrow">▼</span>
-                  </div>
-                  <div id="toDropdown" class="token-dropdown"></div>
-                </div>
-              </div>
-            </div>
-
-            <div style="margin-top:12px;display:flex;gap:10px;align-items:center">
-              <div style="flex:1">
-                <label>Slippage tolerance (%)</label>
-                <input id="slippage" type="text" value="0.5" />
-              </div>
-              <div style="width:160px">
-                <label>Deadline (min)</label>
-                <input id="deadline" type="number" value="10" />
-              </div>
-            </div>
-
-            <div style="margin-top:12px">
-              <div class="muted small" id="priceImpact">Price impact: —</div>
-              <div class="muted small" id="liquidityInfo">Pool: —</div>
-            </div>
-
-            <div style="margin-top:14px">
-              <button id="approveOrSwap" class="btn">Swap</button>
-              <div id="txHash" class="txhash"></div>
-            </div>
-
-            <div class="footer">
-              <div class="small">Estimated output updates live</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="card">
-          <div><strong>About</strong><div class="small">CozySwap — Decentralized Exchange<br>Powered by Plasma • @CozySwap</div></div>
+    <!-- Header -->
+    <header class="app">
+      <div class="brand">
+        <img id="logoImg" class="logo" src="https://photos.pinksale.finance/file/pinksale-logo-upload/1760207026339-3c980e075709984d5362d951f45695a5.png" alt="Cozy" />
+        <div>
+          <h1 style="margin:0">CozySwap</h1>
         </div>
       </div>
+      <div class="actions">
+        <!-- New Menu Dropdown (Compact) -->
+        <div style="position:relative">
+          <button class="menu-btn" onclick="toggleMenuDropdown()">
+             <span>⋮</span>
+          </button>
+          <div id="menuDropdown" class="menu-dropdown">
+             <a href="https://cozyswap.net/liquidity" class="menu-option">Liquidity</a>
+             <a href="https://cozyswap.net/staking" class="menu-option">Staking</a>
+          </div>
+        </div>
+
+        <div style="position:relative">
+          <button id="connectBtn" class="btn">Connect</button>
+          <div id="walletDropdown" class="wallet-dropdown">
+            <div class="wallet-option" onclick="copyAddress(window.account)">
+              <span>📋</span> Copy Address
+            </div>
+            <div class="wallet-option disconnect" onclick="disconnectWallet()">
+              <span>🚪</span> Disconnect
+            </div>
+          </div>
+        </div>
+        <span id="status" style="display:none"></span>
+      </div>
+    </header>
+
+    <!-- Main Swap Card -->
+    <div class="app">
+      <div class="card">
+        <div class="card-header">
+          <strong style="color: #fff; font-size: 16px;">Swap</strong>
+          <div class="small" style="display:flex; gap:8px;">
+             <!-- Settings Icon could go here -->
+          </div>
+        </div>
+
+        <!-- FROM PANEL -->
+        <div class="swap-panel">
+          <div class="panel-header">
+            <label>From</label>
+            <div class="small">Balance: <span id="fromBalance">—</span> <button id="maxFrom" class="max-btn">Max</button></div>
+          </div>
+          <div class="panel-content">
+            <input id="fromAmount" type="text" class="amount-input" placeholder="0.0" />
+            
+            <div class="token-select-container">
+              <div class="selected-token" onclick="toggleDropdown('from')">
+                <div style="display:flex;align-items:center;">
+                  <img id="selectedFromLogo" src="" class="token-logo-sm">
+                  <span id="selectedFromSymbol" class="token-symbol">XPL</span>
+                </div>
+                <span class="dropdown-arrow">▼</span>
+              </div>
+              <div id="fromDropdown" class="token-dropdown"></div>
+            </div>
+          </div>
+          <div class="usd-price-display" id="fromUsdDisplay"></div>
+        </div>
+
+        <!-- ARROW -->
+        <div class="swap-arrow-container">
+           <div id="flip" class="swap-arrow-btn">
+             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><polyline points="19 12 12 19 5 12"></polyline></svg>
+           </div>
+        </div>
+
+        <!-- TO PANEL -->
+        <div class="swap-panel">
+          <div class="panel-header">
+            <label>To</label>
+            <div class="small">Balance: <span id="toBalance">—</span></div>
+          </div>
+          <div class="panel-content">
+             <div class="amount-input" id="toReadable" style="padding-top:2px;">—</div>
+             <div class="token-select-container">
+                <div class="selected-token" onclick="toggleDropdown('to')">
+                  <div style="display:flex;align-items:center;">
+                    <img id="selectedToLogo" src="" class="token-logo-sm">
+                    <span id="selectedToSymbol" class="token-symbol">COZY</span>
+                  </div>
+                  <span class="dropdown-arrow">▼</span>
+                </div>
+                <div id="toDropdown" class="token-dropdown"></div>
+             </div>
+          </div>
+          <div class="usd-price-display" id="toUsdDisplay"></div>
+        </div>
+
+        <!-- PRICE DISPLAY (New) -->
+        <div class="price-display-container">
+           <div id="priceDisplay" class="price-value"></div>
+           <div id="priceImpactContainer" class="small"></div>
+        </div>
+
+        <!-- DETAILS (Slippage etc) -->
+        <div class="swap-details">
+           <div class="detail-row">
+             <span>Slippage Tolerance</span>
+             <span><input id="slippage" type="text" value="0.5" style="background:transparent;border:none;color:var(--highlight);width:30px;text-align:right;">%</span>
+           </div>
+           <div class="detail-row">
+             <span>Deadline</span>
+             <span><input id="deadline" type="number" value="10" style="background:transparent;border:none;color:var(--highlight);width:30px;text-align:right;"> min</span>
+           </div>
+           <div class="detail-row">
+              <span>Price Impact</span>
+              <span id="priceImpact" class="muted">—</span>
+           </div>
+           <div class="detail-row">
+              <span>Route</span>
+              <span id="liquidityInfo">Plasma Router</span>
+           </div>
+        </div>
+
+        <!-- MAIN BUTTON -->
+        <button id="approveOrSwap" class="action-btn">Connect Wallet</button>
+        
+        <div id="txHash" class="txhash" style="text-align:center; margin-top:12px; font-size:12px;"></div>
+      </div>
+
+      <!-- Footer Links -->
+      <footer style="text-align:center; font-size:11px; color:var(--text-muted); padding-bottom:40px;">
+        <a href="terms.html" style="color:var(--text-muted); text-decoration:none;">Terms</a> &nbsp;•&nbsp;
+        <a href="disclaimer.html" style="color:var(--text-muted); text-decoration:none;">Disclaimer</a> &nbsp;•&nbsp;
+        <a href="privacy.html" style="color:var(--text-muted); text-decoration:none;">Privacy</a>
+        <div style="margin-top:8px;">© 2025 CozySwap</div>
+      </footer>
     </div>
   </div>
-
-  <footer style="background-color:#0d1117; color:#ccc; text-align:center; padding:25px 10px; font-family:'Inter',sans-serif; font-size:14px;">
-    <p>
-      © 2025 CozySwap &nbsp;|&nbsp;
-      <a href="terms.html" style="color:#58a6ff; text-decoration:none;">Terms of Use</a> &nbsp;|&nbsp;
-      <a href="disclaimer.html" style="color:#58a6ff; text-decoration:none;">Disclaimer</a> &nbsp;|&nbsp;
-      <a href="privacy.html" style="color:#58a6ff; text-decoration:none;">Privacy Policy</a>
-    </p>
-  </footer>
 
   <script>
   // ==================== FUNGSI GLOBAL ====================
   let account = null;
+
+  // Fungsi global untuk toggle menu dropdown
+  function toggleMenuDropdown() {
+    const dropdown = document.getElementById('menuDropdown');
+    if (dropdown.style.display === 'block') {
+      dropdown.style.display = 'none';
+    } else {
+      dropdown.style.display = 'block';
+    }
+  }
 
   // Fungsi global untuk toggle dropdown
   function toggleDropdown(type) {
@@ -576,6 +755,9 @@
     }
     if (!e.target.closest('#connectBtn') && !e.target.closest('#walletDropdown')) {
       document.getElementById('walletDropdown').style.display = 'none';
+    }
+    if (!e.target.closest('.menu-btn') && !e.target.closest('#menuDropdown')) {
+      document.getElementById('menuDropdown').style.display = 'none';
     }
   });
 
@@ -683,6 +865,9 @@
     const ROUTER = '0x89E695B38610e78a77Fb310458Dfd855505AD239';
     const FACTORY = '0xa252e44D3478CeBb1a3D59C9146CD860cb09Ec93';
     const WXPL = '0x6100E367285b01F48D07953803A2d8dCA5D19873';
+    
+    // Stablecoin for pricing (USDT0)
+    const USDT_ADDRESS = '0xB8CE59FC3717ada4C02eaDF9682A9e934F625ebb';
 
     const ERC20 = [
       'function decimals() view returns (uint8)',
@@ -713,17 +898,19 @@
     const connectBtn = document.getElementById('connectBtn');
     const statusEl = document.getElementById('status');
     const fromAmountEl = document.getElementById('fromAmount');
-    const fromReadable = document.getElementById('fromReadable');
+    const fromReadable = document.getElementById('fromReadable'); // This was used for something else, but we now have fromUsdDisplay
     const toReadable = document.getElementById('toReadable');
     const priceImpactEl = document.getElementById('priceImpact');
     const liquidityInfoEl = document.getElementById('liquidityInfo');
     const approveOrSwapBtn = document.getElementById('approveOrSwap');
     const txHashEl = document.getElementById('txHash');
     const maxFromBtn = document.getElementById('maxFrom');
-    const addTokenBtn = document.getElementById('addTokenBtn');
     const flipBtn = document.getElementById('flip');
     const fromBalanceEl = document.getElementById('fromBalance');
     const toBalanceEl = document.getElementById('toBalance');
+    const priceDisplay = document.getElementById('priceDisplay');
+    const fromUsdDisplay = document.getElementById('fromUsdDisplay');
+    const toUsdDisplay = document.getElementById('toUsdDisplay');
 
     let provider = null;
     let signer = null;
@@ -783,7 +970,6 @@
           <input type="text" placeholder="Search token..." 
                  oninput="filterTokens('${'from'}', this.value)">
         </div>
-        <div class="token-list-header">Select Token (${tokens.length})</div>
       `;
 
       fromDropdown.innerHTML = searchHTML;
@@ -791,8 +977,8 @@
 
       // Create token options untuk kedua dropdown dengan balance
       tokens.forEach(token => {
-        const displayAddress = token.address === 'XPL_NATIVE' ? 'Native Token' : 
-                              `${token.address.substring(0, 6)}...${token.address.substring(38)}`;
+        const displayAddress = token.address === 'XPL_NATIVE' ? 'Native' : 
+                              `${token.address.substring(0, 4)}...${token.address.substring(38)}`;
 
         const tokenHTML = `
           <div class="token-option" data-address="${token.address}">
@@ -804,7 +990,10 @@
               <span class="token-symbol">${token.symbol}</span>
               <span class="token-name">${displayAddress}</span>
             </div>
-            <div class="token-balance" id="dropdownBalance-${token.symbol}-${token.address.substring(0, 6)}">—</div>
+            <div style="text-align:right; margin-left:auto;">
+              <div class="token-balance" id="dropdownBalance-${token.symbol}-${token.address.substring(0, 6)}">—</div>
+              <div class="token-usd" id="dropdownUsd-${token.symbol}-${token.address.substring(0, 6)}"></div>
+            </div>
             <button class="copy-btn" title="Copy address" 
                     onclick="event.stopPropagation(); copyAddress('${token.address}')">📋</button>
           </div>
@@ -813,6 +1002,15 @@
         fromDropdown.innerHTML += tokenHTML;
         toDropdown.innerHTML += tokenHTML;
       });
+
+      // Add custom token button at the bottom
+      const addTokenHTML = `
+        <div class="add-token-container">
+           <button class="add-token-btn" onclick="addCustomToken()">+ Manage / Add Token</button>
+        </div>
+      `;
+      fromDropdown.innerHTML += addTokenHTML;
+      toDropdown.innerHTML += addTokenHTML;
 
       // Add no tokens message
       fromDropdown.innerHTML += '<div class="no-tokens" style="display: none;">No tokens found</div>';
@@ -827,7 +1025,111 @@
 
       // Update dropdown balances
       updateDropdownBalances();
+      // Update USD prices
+      updateUsdPrices();
     }
+
+    // ✅ FUNGSI: Get USD Price
+    async function getUsdPrice(tokenAddress) {
+      if (!router) return 0;
+      // If token is USDT, price is 1
+      if (tokenAddress.toLowerCase() === USDT_ADDRESS.toLowerCase()) return 1;
+
+      const path = [];
+      const tokenIn = tokenAddress === 'XPL_NATIVE' ? WXPL : tokenAddress;
+      
+      try {
+         // Try direct path: Token -> USDT
+         const path1 = [tokenIn, USDT_ADDRESS];
+         
+         const dec = tokenAddress === 'XPL_NATIVE' ? 18 : await (new Contract(tokenIn, ERC20, provider)).decimals();
+         const unitAmount = utils.parseUnits("1", dec);
+         
+         const amounts = await router.getAmountsOut(unitAmount, path1);
+         // USDT usually has 6 or 18 decimals. USDT0 on Plasma? 
+         // We check decimals of USDT0
+         const usdtContract = new Contract(USDT_ADDRESS, ERC20, provider);
+         const usdtDec = await usdtContract.decimals();
+         
+         return parseFloat(utils.formatUnits(amounts[amounts.length-1], usdtDec));
+      } catch(e) {
+         try {
+            // Try path: Token -> WXPL -> USDT
+            if (tokenIn.toLowerCase() !== WXPL.toLowerCase()) {
+               const path2 = [tokenIn, WXPL, USDT_ADDRESS];
+               const dec = tokenAddress === 'XPL_NATIVE' ? 18 : await (new Contract(tokenIn, ERC20, provider)).decimals();
+               const unitAmount = utils.parseUnits("1", dec);
+               
+               const amounts = await router.getAmountsOut(unitAmount, path2);
+               const usdtContract = new Contract(USDT_ADDRESS, ERC20, provider);
+               const usdtDec = await usdtContract.decimals();
+               return parseFloat(utils.formatUnits(amounts[amounts.length-1], usdtDec));
+            }
+         } catch(e2) {
+            return 0;
+         }
+      }
+      return 0;
+    }
+
+    async function updateUsdPrices() {
+       if (!provider || !router) return;
+       
+       // Update dropdown prices
+       for (const token of tokens) {
+          const price = await getUsdPrice(token.address);
+          if (price > 0) {
+             const priceEls = document.querySelectorAll(`#dropdownUsd-${token.symbol}-${token.address.substring(0, 6)}`);
+             priceEls.forEach(el => {
+                // If price < 0.01 show more decimals
+                el.innerText = price < 0.01 ? `$${price.toFixed(6)}` : `$${price.toFixed(2)}`;
+             });
+          }
+       }
+
+       // Update Panel Prices
+       updatePanelUsdPrices();
+    }
+
+    async function updatePanelUsdPrices() {
+        if (!provider || !router) return;
+        
+        // From Price
+        const priceFrom = await getUsdPrice(selectedFromToken.address);
+        if (priceFrom > 0) {
+            fromUsdDisplay.innerText = priceFrom < 0.01 ? `~$${priceFrom.toFixed(6)}` : `~$${priceFrom.toFixed(2)}`;
+        } else {
+            fromUsdDisplay.innerText = '';
+        }
+
+        // To Price
+        const priceTo = await getUsdPrice(selectedToToken.address);
+        if (priceTo > 0) {
+            toUsdDisplay.innerText = priceTo < 0.01 ? `~$${priceTo.toFixed(6)}` : `~$${priceTo.toFixed(2)}`;
+        } else {
+            toUsdDisplay.innerText = '';
+        }
+    }
+
+    // Function to add custom token (globally accessible)
+    window.addCustomToken = async () => {
+      const addr = prompt('Paste custom token address'); 
+      if (!addr) return; 
+      if (!utils.isAddress(addr)) return alert('Invalid address');
+
+      const c = new Contract(addr, ERC20, provider || new providers.JsonRpcProvider(RPC));
+      let sym = 'TOKEN'; 
+      try { 
+        sym = await c.symbol(); 
+      } catch (e) {}
+
+      if (!confirm('Add custom token ' + sym + '\nAddress: ' + addr + '\nWarning: adding custom tokens can be risky. Proceed?')) return;
+
+      tokens.push({symbol: sym, address: addr, logoURI: ''}); 
+      saveTokens(tokens); 
+      refreshSelectors(); 
+      alert('Token added: ' + sym);
+    };
 
     // ✅ FUNGSI: Update balances di dropdown
     async function updateDropdownBalances() {
@@ -839,12 +1141,14 @@
 
           if (token.address === 'XPL_NATIVE') {
             const bal = await provider.getBalance(account);
+            // Format to 4 decimals
             balance = parseFloat(utils.formatUnits(bal, 18)).toFixed(4);
           } else {
             try {
               const c = new Contract(token.address, ERC20, provider);
               const dec = await c.decimals();
               const bal = await c.balanceOf(account);
+              // Format to 4 decimals
               balance = parseFloat(utils.formatUnits(bal, dec)).toFixed(4);
             } catch (e) {
               balance = '0';
@@ -854,7 +1158,7 @@
           // Update balance di kedua dropdown
           const balanceEls = document.querySelectorAll(`#dropdownBalance-${token.symbol}-${token.address.substring(0, 6)}`);
           balanceEls.forEach(el => {
-            el.textContent = balance;
+            el.innerText = balance;
           });
         }
       } catch (e) {
@@ -936,6 +1240,7 @@
 
       // Update balances dan compute output
       updateBalances();
+      updatePanelUsdPrices();
       computeOutput();
     }
 
@@ -955,7 +1260,7 @@
         swapBtn.onclick = executeUnwrap;
       } else {
         swapBtn.textContent = 'Swap';
-        swapBtn.className = 'btn';
+        swapBtn.className = 'action-btn';
         swapBtn.onclick = executeSwap;
       }
     }
@@ -1178,6 +1483,7 @@
             setStatus('Connected');
             await updateBalances();
             await updateDropdownBalances();
+            await updateUsdPrices();
           } else {
             setStatus('Ready to connect');
           }
@@ -1220,6 +1526,7 @@
 
           await updateBalances();
           await updateDropdownBalances();
+          await updateUsdPrices();
           await computeOutput();
 
           showToast("Wallet connected successfully!");
@@ -1235,25 +1542,6 @@
         }
       }
     }
-
-    addTokenBtn.onclick = async () => {
-      const addr = prompt('Paste custom token address'); 
-      if (!addr) return; 
-      if (!utils.isAddress(addr)) return alert('Invalid address');
-
-      const c = new Contract(addr, ERC20, provider || new providers.JsonRpcProvider(RPC));
-      let sym = 'TOKEN'; 
-      try { 
-        sym = await c.symbol(); 
-      } catch (e) {}
-
-      if (!confirm('Add custom token ' + sym + '\nAddress: ' + addr + '\nWarning: adding custom tokens can be risky. Proceed?')) return;
-
-      tokens.push({symbol: sym, address: addr, logoURI: ''}); 
-      saveTokens(tokens); 
-      refreshSelectors(); 
-      alert('Token added: ' + sym);
-    };
 
     async function updateBalances() {
       try {
@@ -1276,24 +1564,24 @@
         const f = selectedFromToken.address;
         if (f === 'XPL_NATIVE') {
           const bal = await provider.getBalance(account);
-          fromBalanceEl.innerText = utils.formatUnits(bal, 18);
+          fromBalanceEl.innerText = parseFloat(utils.formatUnits(bal, 18)).toFixed(4);
         } else {
           const c = new Contract(f, ERC20, provider);
           const dec = await c.decimals();
           const bal = await c.balanceOf(account);
-          fromBalanceEl.innerText = utils.formatUnits(bal, dec);
+          fromBalanceEl.innerText = parseFloat(utils.formatUnits(bal, dec)).toFixed(4);
         }
 
         // To balance
         const t = selectedToToken.address;
         if (t === 'XPL_NATIVE') {
           const bal = await provider.getBalance(account);
-          toBalanceEl.innerText = utils.formatUnits(bal, 18);
+          toBalanceEl.innerText = parseFloat(utils.formatUnits(bal, 18)).toFixed(4);
         } else {
           const c2 = new Contract(t, ERC20, provider);
           const dec2 = await c2.decimals();
           const bal2 = await c2.balanceOf(account);
-          toBalanceEl.innerText = utils.formatUnits(bal2, dec2);
+          toBalanceEl.innerText = parseFloat(utils.formatUnits(bal2, dec2)).toFixed(4);
         }
       } catch (e) {
         console.warn('Balance error', e);
@@ -1345,6 +1633,7 @@
         if (!amtStr) {
           toReadable.innerText = '—';
           priceImpactEl.innerText = 'Price impact: —';
+          priceDisplay.innerText = '';
           return;
         }
 
@@ -1364,15 +1653,30 @@
           toReadable.innerText = '—';
           liquidityInfoEl.innerText = 'Pool: insufficient liquidity or pair missing';
           priceImpactEl.innerText = 'Price impact: —';
+          priceDisplay.innerText = '';
           return;
         }
 
         const out = amounts[amounts.length - 1];
-        toReadable.innerText = utils.formatUnits(out, decTo);
+        
+        // Format to max 6 decimals
+        const formatted = utils.formatUnits(out, decTo);
+        const [integerPart, decimalPart] = formatted.split('.');
+        if (decimalPart && decimalPart.length > 6) {
+           toReadable.innerText = `${integerPart}.${decimalPart.substring(0, 6)}`;
+        } else {
+           toReadable.innerText = formatted;
+        }
+
+        // PRICE UPDATE LOGIC
+        const realPrice = Number(utils.formatUnits(out, decTo)) / Number(utils.formatUnits(amountIn, decFrom));
+        if (priceDisplay && !isNaN(realPrice)) {
+          priceDisplay.innerText = `1 ${selectedFromToken.symbol} = ${realPrice.toFixed(6)} ${selectedToToken.symbol}`;
+        }
 
         const pair = await getPairReserves(from, to);
         if (!pair) {
-          priceImpactEl.innerText = 'Price impact: —';
+          priceImpactEl.innerText = '—';
           liquidityInfoEl.innerText = 'Pool not found';
           return;
         }
@@ -1387,7 +1691,7 @@
         const reserveInFloat = Number(utils.formatUnits(reserveIn, decFrom));
         const reserveOutFloat = Number(utils.formatUnits(reserveOut, decTo));
         if (reserveInFloat === 0 || reserveOutFloat === 0) {
-          priceImpactEl.innerText = 'Price impact: —';
+          priceImpactEl.innerText = '—';
           return;
         }
 
@@ -1396,11 +1700,11 @@
         const impact = Math.abs((ideal - real) / ideal) * 100;
         const impactFixed = impact.toFixed(2) + '%';
 
-        if (impact < 1) priceImpactEl.innerHTML = `Price impact: <span class="green">${impactFixed}</span>`;
-        else if (impact < 5) priceImpactEl.innerHTML = `Price impact: <span class="yellow">${impactFixed}</span>`;
-        else priceImpactEl.innerHTML = `Price impact: <span class="red">${impactFixed}</span>`;
+        if (impact < 1) priceImpactEl.innerHTML = `<span class="green">${impactFixed}</span>`;
+        else if (impact < 5) priceImpactEl.innerHTML = `<span class="yellow">${impactFixed}</span>`;
+        else priceImpactEl.innerHTML = `<span class="red">${impactFixed}</span>`;
 
-        liquidityInfoEl.innerText = 'Pool: reserves OK';
+        liquidityInfoEl.innerText = 'Pool reserves OK';
       } catch (e) {
         console.error('computeOutput', e);
       }
@@ -1483,29 +1787,13 @@
     refreshSelectors();
     await updateBalances();
     computeOutput();
+    // updateUsdPrices called in ensureProvider
 
     // Set event listener untuk connect button
     connectBtn.onclick = connectWallet;
 
     // Navigation URLs
-    const addLiquidityUrl = 'https://cozyswap.net/liquidity';
-    const stakingUrl = 'https://cozyswap.net/staking';
-
-    document.getElementById('toLiquidity').onclick = () => {
-      if (!addLiquidityUrl.startsWith('https')) {
-        alert('Add Liquidity link invalid.');
-      } else {
-        window.location.href = addLiquidityUrl;
-      }
-    };
-
-    document.getElementById('toStaking').onclick = () => {
-      if (!stakingUrl.startsWith('http')) {
-        alert('Staking link invalid.');
-      } else {
-        window.location.href = stakingUrl;
-      }
-    };
+    // Removed direct click handlers for toLiquidity/toStaking as they are now links
 
     function debounce(fn, ms) {
       let t;
