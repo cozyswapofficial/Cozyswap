@@ -615,7 +615,7 @@
             <input id="fromAmount" type="text" class="amount-input" placeholder="0.0" />
             
             <div class="token-select-container">
-              <div class="selected-token" onclick="toggleDropdown('from')">
+              <div class="selected-token" onclick="toggleTokenDropdown('from')">
                 <div style="display:flex;align-items:center;">
                   <img id="selectedFromLogo" src="" class="token-logo-sm">
                   <span id="selectedFromSymbol" class="token-symbol">XPL</span>
@@ -644,7 +644,7 @@
           <div class="panel-content">
              <div class="amount-input" id="toReadable" style="padding-top:2px;">—</div>
              <div class="token-select-container">
-                <div class="selected-token" onclick="toggleDropdown('to')">
+                <div class="selected-token" onclick="toggleTokenDropdown('to')">
                   <div style="display:flex;align-items:center;">
                     <img id="selectedToLogo" src="" class="token-logo-sm">
                     <span id="selectedToSymbol" class="token-symbol">COZY</span>
@@ -714,7 +714,7 @@
   }
 
   // Fungsi global untuk toggle dropdown
-  function toggleDropdown(type) {
+  function toggleTokenDropdown(type) {
     const dropdown = document.getElementById(`${type}Dropdown`);
     const container = dropdown.closest('.token-select-container');
     const allDropdowns = document.querySelectorAll('.token-dropdown');
@@ -928,7 +928,7 @@
     ];
 
     // Token management
-    const TOKENS_KEY = 'cozy_tokens_v2';
+    const TOKENS_KEY = 'cozy_tokens_v3';
     function loadTokens() {
       try {
         const raw = localStorage.getItem(TOKENS_KEY);
@@ -1629,6 +1629,9 @@
 
     async function computeOutput() {
       try {
+        // Safe check for provider
+        if (!provider) return;
+
         const amtStr = (fromAmountEl.value || '').trim();
         if (!amtStr) {
           toReadable.innerText = '—';
@@ -1783,8 +1786,8 @@
     }, 1500);
 
     // Initialize
+    refreshSelectors(); // Moved this UP to run before ensureProvider
     await ensureProvider();
-    refreshSelectors();
     await updateBalances();
     computeOutput();
     // updateUsdPrices called in ensureProvider
